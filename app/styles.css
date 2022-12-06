@@ -1,0 +1,12 @@
+@media (min-width: 1200px) {
+    .container{
+        max-width: 1500px;
+    }
+}
+
+body {
+    display: flex; 
+    min-height: 100vh;
+    flex-direction: column;
+    margin: 0; 
+}
