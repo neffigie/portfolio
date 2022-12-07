@@ -1,19 +1,23 @@
 "use client"
+import { useRouter } from "next/router";
 import { Typography } from "@mui/material";
-import CodeBlock from "app/components/CodeBlock";
-import PostTags from "app/components/PostTags";
-import { getFirstListItem, getFileUrl } from "app/globals/PocketBaseClient";
+import CodeBlock from "components/CodeBlock";
+import PostTags from "components/PostTags";
+import { getFirstListItem, getFileUrl } from "globals/PocketBaseClient";
 import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
 import Box from "@mui/material/Box";
 import { Record } from "pocketbase";
+import Markdown from "markdown-to-jsx";
+import Image from "next/image";
 
-export default function PostPage({ params }: any) {
+export default function PostPage() {
+    const router = useRouter(); 
     const [post, setPost] = useState<Record>(); 
     useEffect(() => {
-        const fetch = async() => setPost(await getFirstListItem('posts', `slug="${params.slug}"`, { expand: 'categories' })); 
+        if (!router.query.slug) return; 
+        const fetch = async() => setPost(await getFirstListItem('posts', `slug="${router.query.slug}"`, { expand: 'categories' })); 
         fetch().catch(console.log); 
-    }, []); 
+    }, [router]); 
     return (
         <>
             {post && post.expand && (
@@ -22,13 +26,26 @@ export default function PostPage({ params }: any) {
                         <PostTags tags={post.expand.categories}/>
                     </Box>
                     <Typography variant="h1">{post.title}</Typography>
-                    <img src={getFileUrl(post, post.image)}/>
+                    <Image src={getFileUrl(post, post.image)} alt={post.alt} height={100} width={100}/>
                     <Typography variant="h5">{post.date}</Typography>
                     <hr/>
-                    <ReactMarkdown
-                        children={post.body}
-                        components={{
-                            code({node, className, children, ...props}) {
+                    <Markdown
+                        options={{
+                            overrides: {
+                                code: { component: CodeBlock }
+                            }
+                        }}
+                    >
+                        {post.body}
+                    </Markdown>
+                </>
+            )}
+        </>
+    );
+}
+
+/* 
+code({node, className, children, ...props}) {
                                 const match = /language-(\w+)/.exec(className || ''); 
                                 return match ? (
                                 <CodeBlock
@@ -40,11 +57,4 @@ export default function PostPage({ params }: any) {
                                         {children}
                                     </code>
                                 )
-                            }
-                        }}
-                    />
-                </>
-            )}
-        </>
-    );
-}
+                            }*/

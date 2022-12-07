@@ -2,14 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  experimental: { appDir: true }, 
-  exportPathMap: function() {
-    return {
-      '': { page: '/' }, 
-      '/posts': { page: '/posts' }, 
-      '/projects': { page: '/projects' }
-    };
-  }
+  images: {
+    loader: 'akamai',
+    path: '/',
+    domains: ['media-exp1.licdn.com', 'pocketbase-docker.fly.dev']
+  },
+  // experimental: { appDir: true }
 }
 
 module.exports = nextConfig

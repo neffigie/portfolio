@@ -8,7 +8,7 @@ import { grey } from '@mui/material/colors';
  */
 export default function Footer({ socials }: { socials: Map<string, React.ReactElement> }) {
     return (
-        <Box sx={{ pt: 5, p: 3, mt: "auto" }}>
+        <Box sx={{ pt: 5, p: 3, mt: "auto", backgroundColor: grey[50] }}>
             <hr/>
             <Grid container justifyContent="flex-end" spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                 <Grid item xs>

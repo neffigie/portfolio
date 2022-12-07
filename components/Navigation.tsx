@@ -1,5 +1,5 @@
 "use client"; 
-import { getList, getFullList, getFileUrl } from "app/globals/PocketBaseClient";
+import { getList, getFullList, getFileUrl } from "globals/PocketBaseClient";
 import React, { useState, useEffect } from "react";
 
 import { Skeleton, CardMedia, Box, Autocomplete, TextField, Typography, Chip, Checkbox, FormGroup, FormControlLabel, Stack, Grid, Container } from '@mui/material';
