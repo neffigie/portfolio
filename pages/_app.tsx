@@ -37,6 +37,7 @@ export default function RootLayout({ Component, pageProps }: AppProps & { Compon
         toggleColorMode: () => { setMode(prevMode => prevMode === 'light' ? 'dark' : 'light') }
     }), []); 
 
+    console.log(process.env.NEXT_PUBLIC_DB_ENDPOINT); 
     const theme = useMemo(() => createTheme({
         palette: { mode }, 
         components: {
