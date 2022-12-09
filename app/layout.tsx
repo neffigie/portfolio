@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo, createContext } from 'react';
-import Navbar from 'components/Navbar';
-import Footer from 'components/Footer';
+import Navbar from 'app/components/Navbar';
+import Footer from 'app/components/Footer';
 import { Container, Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
@@ -30,7 +30,7 @@ const socials = new Map<string, React.ReactElement>([
 
 const ColorModeContext = createContext({ toggleColorMode: () => {} }); 
 
-export default function RootLayout({ Component, pageProps }: AppProps & { Component: React.ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
     const [mode, setMode] = useState<'light' | 'dark'>('light');  
 
     const colorMode = useMemo(() => ({ 
@@ -51,18 +51,20 @@ export default function RootLayout({ Component, pageProps }: AppProps & { Compon
     }), [mode]); 
 
     return (
-        <main className={roboto.className}>
-            <ColorModeContext.Provider value={colorMode}>
-                <ThemeProvider theme={theme}>
-                    <Navbar pages={['posts', 'projects', '']}/>
-                    <Container maxWidth="xl">
-                        <Box sx={{ flex: 1, m: 2 }}>
-                            <Component {...pageProps}/>
-                        </Box>
-                    </Container>
-                    <Footer socials={socials}/>
-                </ThemeProvider>
-            </ColorModeContext.Provider>
-        </main>
+        <html lang='en'>
+            <body className={roboto.className}>
+                <ColorModeContext.Provider value={colorMode}>
+                    <ThemeProvider theme={theme}>
+                        <Navbar pages={['posts', 'projects', '']}/>
+                        <Container maxWidth="xl">
+                            <Box sx={{ flex: 1, m: 2 }}>
+                                {children}
+                            </Box>
+                        </Container>
+                        <Footer socials={socials}/>
+                    </ThemeProvider>
+                </ColorModeContext.Provider>
+            </body>
+        </html>
     );
 }

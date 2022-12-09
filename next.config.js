@@ -3,11 +3,16 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    loader: 'akamai',
-    path: '/',
-    domains: ['media-exp1.licdn.com', 'pocketbase-docker.fly.dev']
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'https://pocketbase-docker.fly.dev/', 
+        port: '', 
+        pathname: 'api/**'
+      }
+    ]
   },
-  // experimental: { appDir: true }
+  experimental: { appDir: true }
 }
 
 module.exports = nextConfig

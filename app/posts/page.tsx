@@ -1,5 +1,5 @@
-import NavigationHeader from "components/NavigationHeader";
-import Navigation from "components/Navigation";
+import NavigationHeader from "app/components/NavigationHeader";
+import Navigation from "app/components/Navigation";
 
 export default function PostsPage() {
     return (
