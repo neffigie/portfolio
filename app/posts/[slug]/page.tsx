@@ -1,8 +1,8 @@
 "use client"
 import { Typography } from "@mui/material";
-import CodeBlock from "app/components/CodeBlock";
-import PostTags from "app/components/PostTags";
-import { getFirstListItem, getFileUrl } from "app/globals/PocketBaseClient";
+import CodeBlock from "components/CodeBlock";
+import PostTags from "components/PostTags";
+import { getFirstListItem, getFileUrl } from "globals/PocketBaseClient";
 import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { Record } from "pocketbase";

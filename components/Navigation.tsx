@@ -1,11 +1,12 @@
 "use client"; 
-import { getList, getFullList, getFileUrl } from "app/globals/PocketBaseClient";
+import { getList, getFullList, getFileUrl } from "globals/PocketBaseClient";
 import React, { useState, useEffect } from "react";
 
 import { Skeleton, CardMedia, Box, Autocomplete, TextField, Typography, Chip, Checkbox, FormGroup, FormControlLabel, Stack, Grid, Container } from '@mui/material';
 import PostTags from "./PostTags";
 import { Record } from "pocketbase";
 import NavigationCard from "./NavigationCard";
+import Link from "next/link";
 
 
 class TagFilter {
@@ -100,8 +101,9 @@ export default function Navigation({ postTypes }: { postTypes: ('blog' | 'projec
                         sx={{ mt: 2, mb: 2 }}
                     />
                     <FormGroup>
-                        <Stack direction="row" spacing={2}>
+                        <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
                             {categories.map(x => <FormControlLabel key={x.id} control={<Checkbox/>} label={x.name}/>)}
+                            <Link href="/posts/tags">All tags...</Link>
                         </Stack>
                     </FormGroup>
                     <hr/>

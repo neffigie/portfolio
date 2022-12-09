@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo, createContext } from 'react';
-import Navbar from 'app/components/Navbar';
-import Footer from 'app/components/Footer';
+import Navbar from 'components/Navbar';
+import Footer from 'components/Footer';
 import { Container, Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';

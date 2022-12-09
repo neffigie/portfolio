@@ -1,6 +1,6 @@
 import PocketBase, { ListResult, Record } from 'pocketbase';
 
-const PocketBaseClient = new PocketBase("https://pocketbase-docker.fly.dev/"); 
+const PocketBaseClient = new PocketBase("https://pocketbase-docker.fly.dev/"); // TODO - use env var
 
 /**
  * Performs a query on PocketBase
