@@ -1,42 +1,49 @@
-"use client"
-import { Typography } from "@mui/material";
-import CodeBlock from "components/CodeBlock";
-import PostTags from "components/PostTags";
-import { getFirstListItem, getFileUrl } from "globals/PocketBaseClient";
-import { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import { Record } from "pocketbase";
-import Markdown from "markdown-to-jsx";
-import Image from "next/image";
+import { fetchPocketBase, getFileUrl } from "src/utils/pocketbase/PocketBaseClient";
+import { HTMLParser } from "src/components/parsing/HTMLParser";
 
-export default function PostPage({ params }: any) {
-    const [post, setPost] = useState<Record>(); 
-    useEffect(() => {
-        const fetch = async() => setPost(await getFirstListItem('posts', `slug="${params.slug}"`, { expand: 'categories' })); 
-        fetch().catch(console.log); 
-    }, []); 
-    return (
-        <>
-            {post && post.expand && (
-                <>
-                    <Box sx={{mt: 2, mb: 2}}>
-                        <PostTags tags={post.expand.categories}/>
-                    </Box>
-                    <Typography variant="h1">{post.title}</Typography>
-                    <img src={getFileUrl(post, post.image)} alt={post.alt} width="100%"/>
-                    <Typography variant="h5">{post.date}</Typography>
-                    <hr/>
-                    <Markdown
-                        options={{
-                            overrides: {
-                                code: { component: CodeBlock }
-                            }
-                        }}
-                    >
-                        {post.body}
-                    </Markdown>
-                </>
-            )}
-        </>
-    );
+import { notFound } from 'next/navigation'
+import { Record } from "pocketbase";
+import { Giscus } from "src/components/Giscus";
+
+interface PostPageProps {
+    params: {
+
+        /** The slug associated with the post in the database. */
+        slug: string; 
+    }
 }
+
+const PostPage = async ({ params }: PostPageProps) => {
+    
+    const res = await fetch(`https://neffigie.pockethost.io/api/collections/posts/records/?slug=${params.slug}?perPage=1??expand=categories.name`, { 
+        next: { revalidate: 0 }, 
+        method: 'GET', 
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+    const json = await res.json() as Record;
+    const post = json.items[0];
+    if (!post) notFound();
+    // console.log(post); // TODO - post name not id??
+    
+    const darkTheme = false; 
+
+    return (post ? (
+        <>
+            {post.title}
+            {`${post.categories}`}
+            <img src={getFileUrl(post, post.image)} alt={post.alt} width="100%"/>
+            {post.date}
+            <hr/>
+            <HTMLParser body={post.body} darkTheme={darkTheme}/>
+            <Giscus darkTheme={darkTheme}/>
+        </>
+    ) : (
+        <>
+            Loading...
+        </>
+    ));
+}
+
+export { PostPage as default }; 

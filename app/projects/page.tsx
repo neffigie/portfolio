@@ -1,3 +1,9 @@
-export default function ProjectsPage(){
-    return <p>Projects</p>;
+const ProjectNavigationpage = () => {
+    return (
+        <>
+            Full Navigation here.
+        </>
+    ); 
 }
+
+export { ProjectNavigationpage as default };
