@@ -1,28 +1,87 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# neffigie.com
+Anna Noelle's portfolio at [https://muhakushi.com]() built with [Next.js](https://nextjs.org/) and hosted by  [AWS Amplify](https://aws.amazon.com/amplify/). 
 
-## Getting Started
+## 🐈 Installation using Yarn
 
-First, run the development server:
+1. Install Next.js
 
-```bash
-npm run dev
-# or
-yarn dev
+```bash 
+yarn add next@latest react@latest react-dom@latest
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash 
+yarn 
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+3. Run the development server
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```bash
+yarn dev
+```
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result. 
 
-## Learn More
+## ⚙️ Environment
+You need to create a `.env.local` file in the root directory with the following configuration: 
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# POCKETBASE (https://pocketbase.io/)
+NEXT_PUBLIC_POCKETBASE_URL="https://..."
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# GISCUS (https://github.com/giscus/giscus-component)
+NEXT_PUBLIC_GISCUS_REPOSITORY="Username/repository"
+NEXT_PUBLIC_GISCUS_REPOSITORY_ID="id"
+NEXT_PUBLIC_GISCUS_CATEGORY="category"
+NEXT_PUBLIC_GISCUS_CATEGORY_ID="id"
+NEXT_PUBLIC_GISCUS_MAPPING="url, title, specific, number, or pathname"
+NEXT_PUBLIC_GISCUS_STRICT="0 or 1"
+NEXT_PUBLIC_GISCUS_REACTIONS_ENABLED="0 or 1"
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+The validation for `NEXT_PUBLIC_...` variables are located in [environment.ts](src/environment/environment.ts). The validation schema is powered by [Zod](https://github.com/colinhacks/zod).
+
+## 🚀 Deploy on AWS Amplify
+
+See [this](https://docs.amplify.aws/guides/hosting/nextjs/q/platform/js/#deploy-and-host-a-hybrid-app-ssg-and-ssr) AWS Amplify hosting tutorial. An [amplify.yml](amplify.yml) file is already configured for this app. 
+
+There are currently limitations of hosting a Next.js app on Amplify: 
+
+> Unsupported features
+> * Edge API Routes (Edge middleware is not supported)
+> * On-Demand Incremental Static Regeneration (ISR)
+> * Internationalized (i18n) automatic locale detection 
+>
+> https://docs.aws.amazon.com/amplify/latest/userguide/ssr-Amplify-support.html. 
+
+## ❓ Miscellaneous
+
+### Pocketbase Type Generation
+
+When modifying the source, you may optionally create this `.env` file in the root directory to use [Pocketbase Typegen](https://github.com/patmood/pocketbase-typegen). 
+
+```bash
+PB_TYPEGEN_URL="https://..."
+PB_TYPEGEN_EMAIL="email"
+PB_TYPEGEN_PASSWORD="password"
+```
+
+Then, run `yarn typegen` to generate a Pocketbase types `pocketbase-types.ts` file in the same directory.
+
+### Linting on Visual Studio Code
+
+This project uses [Prettier](https://github.com/prettier/prettier) in combination with [ESLint](https://github.com/eslint/eslint) to format TypeScript code. A [.eslintrc.json](.eslintrc.json) and [settings.json](.vscode/settings.json) file (for Prettier) has already been created in the root directory. To get started **using Visual Studio Code**, install the Prettier and ESLint extensions, then edit and save a file.
+
+You may also edit the `.eslintrc.json` **as long as `"prettier"` is not removed from the `"extends"` array**. To ensure any added rules are neccessary and do not conflict with Prettier, run the [CLI helper tool](https://github.com/prettier/eslint-config-prettier#cli-helper-tool). For example: 
+
+```bash 
+npx eslint-config-prettier src/app/page.tsx
+```
+
+Note: 
+> Usually you’ll have about the same rules for all files, so it is good enough to run the command on one file. But if you use multiple configuration files or overrides, you can provide several files
+https://github.com/prettier/eslint-config-prettier#cli-helper-tool
+
+## ✍️ Contributions 
+
+Your feedback and contributions are welcome! Feel free to fork this repository with **proper attribution**.

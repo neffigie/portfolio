@@ -1,4 +1,18 @@
 {
-  "typescript.tsdk": "node_modules\\typescript\\lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+	"typescript.tsdk": "node_modules\\typescript\\lib",
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"eslint.validate": ["typescript"],
+
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"prettier.semi": true,
+	"prettier.tabWidth": 4,
+	"prettier.useTabs": true,
+	"prettier.printWidth": 160,
+
+	"javascript.suggestionActions.enabled": false
 }

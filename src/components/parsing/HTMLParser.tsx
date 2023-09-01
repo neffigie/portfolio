@@ -1,40 +1,75 @@
-import parse, { Element, domToReact } from 'html-react-parser';
-import { CodeBlock, CodeBlockBaseProps, InlineCodeBlock, PreBlock } from './CodeBlock';
+import PreBlock from "./PreBlock";
+import InlineCodeBlock from "./InlineCodeBlock";
+import { CodeBlockBaseProps } from "./types";
+import { NavLink, Text } from "components";
+import { generateSlug } from "shared/parsing";
+
+import parse, { DOMNode, Element, attributesToProps, domToReact } from "html-react-parser";
+import { ColorMode } from "@chakra-ui/react";
+import { HeaderLink } from "components/link";
 
 interface MarkdownProps {
+    /** The HTML. */
+    body: string;
 
-    /** The markdown body. */
-    body: string; 
-
-    /** Whether or not to render in a dark theme. */
-    darkTheme: boolean; 
+    /** The current color mode. */
+    colorMode: ColorMode;
 }
 
-/**
- * Renders HTML with custom settings.
- */
-const HTMLParser = ({ body, darkTheme }: MarkdownProps) => {
-    return parse(body, {
-        replace:  node => {
-            if (node instanceof Element && node.attribs) {
-                const children = domToReact(node.children) as React.ReactElement;
-                switch (node.name) {
-                    case 'pre':
-                        return <PreBlock 
-                            darkTheme={darkTheme}
-                            className={node.attribs.class as CodeBlockBaseProps['className']}
-                            children={children}
-                        />
-                    case 'code': 
-                        return <InlineCodeBlock
-                            darkTheme={darkTheme}
-                            children={children}
-                        />
-                    default: return node;
-                }
+/** Renders HTML. */
+const HTMLParser = ({ body, colorMode }: MarkdownProps) => {
+    if (!body) return "";
+
+    /** replaces a {@link DOMNode} with the appropriate element or `undefined` if the `node` is an instance of the domhandler's `Element`. */
+    const replace = (node: DOMNode) => {
+        if (node instanceof Element && node.attribs) {
+            const props = attributesToProps(node.attribs) as any;
+            switch (node.name as keyof HTMLElementTagNameMap) {
+                case "pre":
+                    return (
+                        <PreBlock colorMode={colorMode} className={node.attribs.class as CodeBlockBaseProps["className"]} {...props}>
+                            {domToReact(node.children) as React.ReactElement}
+                        </PreBlock>
+                    );
+                case "code":
+                    return (
+                        <InlineCodeBlock colorMode={colorMode} {...props}>
+                            {domToReact(node.children)}
+                        </InlineCodeBlock>
+                    );
+                case "h2":
+                    const children = domToReact(node.children);
+                    if (children === "\xa0" /** &nbsp */) return <></>;
+                    return (
+                        // @ts-ignore TODO - Argument of type ChildNode is not assignable to parameter of type ChildNode | Node | ParentNode
+                        <HeaderLink slugSource={generateSlug(node.children[0])} text={children} {...props} />
+                    );
+                case "p":
+                    return (
+                        <Text as="div" fontSize="md" lineHeight={6} {...props}>
+                            {domToReact(node.children, { replace: replace })}
+                        </Text>
+                    );
+                case "sub":
+                    return (
+                        <Text as="sub" {...props}>
+                            {domToReact(node.children)}
+                        </Text>
+                    );
+                case "a":
+                    return (
+                        <NavLink {...props} isExternal={true}>
+                            {domToReact(node.children)}
+                        </NavLink>
+                    );
+                case "blockquote":
+                default:
+                    return node;
             }
         }
-    });
-}
+    };
 
-export { HTMLParser };
+    return parse(body, { replace: replace });
+};
+
+export { HTMLParser as default };

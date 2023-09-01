@@ -1,106 +1,43 @@
-'use client'
+"use client";
 
-import SyntaxHighlighter from 'react-syntax-highlighter';  
-  
-import { gruvboxDark, atelierEstuaryLight } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
-import { Badge } from '@chakra-ui/react';
+import { Box, Card, CardBody } from "@chakra-ui/react";
+import { type CodeBlockBaseProps } from "./types";
 
-/**
- * Languages supported by the {@link CodeBlock} component. 
- * 
- * @remarks Source: 
- * https://github.com/react-syntax-highlighter/react-syntax-highlighter/blob/master/AVAILABLE_LANGUAGES_PRISM.MD
- * or
- * node_modules\react-syntax-highlighter\AVAILABLE_LANGUAGES_PRISM.MD
- */
-type CodeBlockLanguages = 'abap'|'abnf'|'actionscript'|'ada'|'agda'|'al'|'antlr4'|'apacheconf'|'apex'|'apl'|'applescript'|'aql'|'arduino'|'arff'|'asciidoc'|'asm6502'|
-'asmatmel'|'aspnet'|'autohotkey'|'autoit'|'avisynth'|'avro-idl'|'bash'|'basic'|'batch'|'bbcode'|'bicep'|'birb'|'bison'|'bnf'|'brainfuck'|'brightscript'|'bro'|'bsl'|'c'|
-'cfscript'|'chaiscript'|'cil'|'clike'|'clojure'|'cmake'|'cobol'|'coffeescript'|'concurnas'|'coq'|'cpp'|'crystal'|'csharp'|'cshtml'|'csp'|'css-extras'|'css'|'csv'|'cypher'|
-'d'|'dart'|'dataweave'|'dax'|'dhall'|'diff'|'django'|'dns-zone-file'|'docker'|'dot'|'ebnf'|'editorconfig'|'eiffel'|'ejs'|'elixir'|'elm'|'erb'|'erlang'|'etlua'|'excel-formula'|
-'factor'|'false'|'firestore-security-rules'|'flow'|'fortran'|'fsharp'|'ftl'|'gap'|'gcode'|'gdscript'|'gedcom'|'gherkin'|'git'|'glsl'|'gml'|'gn'|'go-module'|'go'|'graphql'|
-'groovy'|'haml'|'handlebars'|'haskell'|'haxe'|'hcl'|'hlsl'|'hoon'|'hpkp'|'hsts'|'http'|'ichigojam'|'icon'|'icu-message-format'|'idris'|'iecst'|'ignore'|'inform7'|'ini'|
-'io'|'j'|'java'|'javadoc'|'javadoclike'|'javascript'|'javastacktrace'|'jexl'|'jolie'|'jq'|'js-extras'|'js-templates'|'jsdoc'|'json'|'json5'|'jsonp'|'jsstacktrace'|'jsx'|
-'julia'|'keepalived'|'keyman'|'kotlin'|'kumir'|'kusto'|'latex'|'latte'|'less'|'lilypond'|'liquid'|'lisp'|'livescript'|'llvm'|'log'|'lolcode'|'lua'|'magma'|'makefile'|'markdown'|
-'markup-templating'|'markup'|'matlab'|'maxscript'|'mel'|'mermaid'|'mizar'|'mongodb'|'monkey'|'moonscript'|'n1ql'|'n4js'|'nand2tetris-hdl'|'naniscript'|'nasm'|'neon'|'nevod'|
-'nginx'|'nim'|'nix'|'nsis'|'objectivec'|'ocaml'|'opencl'|'openqasm'|'oz'|'parigp'|'parser'|'pascal'|'pascaligo'|'pcaxis'|'peoplecode'|'perl'|'php-extras'|'php'|'phpdoc'|'plsql'|
-'powerquery'|'powershell'|'processing'|'prolog'|'promql'|'properties'|'protobuf'|'psl'|'pug'|'puppet'|'pure'|'purebasic'|'purescript'|'python'|'q'|'qml'|'qore'|'qsharp'|'r'|
-'racket'|'reason'|'regex'|'rego'|'renpy'|'rest'|'rip'|'roboconf'|'robotframework'|'ruby'|'rust'|'sas'|'sass'|'scala'|'scheme'|'scss'|'shell-session'|'smali'|'smalltalk'|'smarty'|
-'sml'|'solidity'|'solution-file'|'soy'|'sparql'|'splunk-spl'|'sqf'|'sql'|'squirrel'|'stan'|'stylus'|'swift'|'systemd'|'t4-cs'|'t4-templating'|'t4-vb'|'tap'|'tcl'|'textile'|'toml'|
-'tremor'|'tsx'|'tt2'|'turtle'|'twig'|'typescript'|'typoscript'|'unrealscript'|'uorazor'|'uri'|'v'|'vala'|'vbnet'|'velocity'|'verilog'|'vhdl'|'vim'|'visual-basic'|'warpscript'|
-'wasm'|'web-idl'|'wiki'|'wolfram'|'wren'|'xeora'|'xml-doc'|'xojo'|'xquery'|'yaml'|'yang'|'zig';
-
-
-interface CodeBlockBaseProps {
-
-    /** Whether or not to render in a dark theme. */
-    darkTheme: boolean; 
-
-    /** 
-     * The programming language prepended by `lang-` or `language-`.
-     * @example ```lang-ts````
-     * */
-    className: `${'lang' | 'language'}-${CodeBlockLanguages}` | undefined; 
-    
-    children: React.ReactNode; 
-}
-
-interface PreBlockProps extends CodeBlockBaseProps {
-
-    /** 
-     * The children of the pre block, the first of which should be a code block. 
-     * If found the props of the code block are forwarded to a {@link CodeBlock} -- 
-     * otherwise, this component is rendered as `<pre>{childre}</pre>`.
-     * */
-    children: React.ReactElement; 
-
-    /** Any additional props. */
-    [key: string]: any;
-}
-
-/**
- * Renders a {@link CodeBlock} given its parent's `<pre>` block.
- * @privateremarks Modified from: https://stackoverflow.com/a/68179028/20697358
- */
-const PreBlock = ({ className, children, darkTheme, ...props }: PreBlockProps) => { 
-    return ('type' in children && children['type'] === 'code') 
-        ? <CodeBlock darkTheme={darkTheme} className={className} children={children.props.children} {...props}/>
-        : <pre {...props}>{children.props.children}</pre>;
-}
+import SyntaxHighlighter from "react-syntax-highlighter"; // Uses HLJS. Replace with { Prism as SyntaxHighlighter } for Prism.
+import { gruvboxDark, vs } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 
 interface CodeBlockProps extends CodeBlockBaseProps {
+	/** The code. */
+	children: React.ReactNode;
 
-    /** The code. */
-    children: React.ReactNode; 
-
-    /** Any additional, arbitrary props. */
-    [key: string]: any; 
-}   
+	/** Any additional, arbitrary props. */
+	[key: string]: any;
+}
 
 /**
- * Creates a syntax-highlighted code block. 
+ * Creates a syntax-highlighted code block.
  * @privateremarks modified from: https://github.com/remarkjs/react-markdown#use-custom-components-syntax-highlight
  */
-// TODO - https://stackoverflow.com/questions/64392199/highlight-line-in-react-syntax-highlighter
-const CodeBlock = ({ className, children, darkTheme, ...props }: CodeBlockProps) => {
-    const language = /lang(uage)?-(\w+)/.exec(className || ''); 
-    return <SyntaxHighlighter 
-        language={language ? language[2] : ''} 
-        style={darkTheme ? gruvboxDark : atelierEstuaryLight} 
-        showLineNumbers={true}
-        PreTag="div"
-        children={String(children).replace(/\n$/, '')}
-        {...props}
-    />;
-}
-
-const InlineCodeBlock = ({ children, darkTheme, props }: Omit<CodeBlockProps, 'className'>) => {
-    return (
-        <Badge variant='subtle' color={darkTheme ? 'darkgray' : undefined} {...props}>{children}</Badge>
-    );
-}
-
-export { 
-    PreBlock, type PreBlockProps, 
-    CodeBlock, InlineCodeBlock, type CodeBlockProps, 
-    type CodeBlockLanguages, type CodeBlockBaseProps 
+// TODO - https://stackoverflow.com/questions/64392199/highlight-line-in-react-syntax-highlighter and figure out how to add file name.
+const CodeBlock = ({ className, children, colorMode, ...props }: CodeBlockProps) => {
+	const language = /lang(uage)?-(\w+)/.exec(className ?? "");
+	return (
+		<Card width="100%" boxShadow="xl" padding="8" margin="8">
+			<CardBody>
+				<Box>
+					<SyntaxHighlighter
+						language={language ? language[2] : ""}
+						style={colorMode === "dark" ? gruvboxDark : vs}
+						PreTag="div"
+						{...props}
+						wrapLongLines
+					>
+						{String(children).replace(/\n$/, "")}
+					</SyntaxHighlighter>
+				</Box>
+			</CardBody>
+		</Card>
+	);
 };
+
+export { CodeBlock as default, type CodeBlockProps };
