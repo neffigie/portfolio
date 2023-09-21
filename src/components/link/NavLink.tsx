@@ -11,6 +11,7 @@ export interface NavLinkProps extends LinkProps {
     href: string;
 }
 
+/** A link intended to be used in-line with text. */
 export function NavLink({ href, children, isExternal }: React.PropsWithChildren<NavLinkProps>) {
     const pathname = usePathname();
     return (

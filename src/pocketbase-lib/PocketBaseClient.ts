@@ -1,5 +1,10 @@
 import { environment } from "environment";
-import { type NarrowCollectionExpand, type Collections, type CustomRecordListQueryParams, type RecordNames } from "pocketbase-lib";
+import {
+    type NarrowCollectionExpand,
+    type Collections,
+    type CustomRecordListQueryParams,
+    type RecordNames,
+} from "pocketbase-lib";
 import { omit } from "shared/object-util";
 
 import PocketBase, { type FileQueryParams, type RecordListQueryParams } from "pocketbase";
@@ -12,10 +17,10 @@ pocketbase.autoCancellation(false);
 
 /** Converts the `expand` property of a {@link CustomRecordListQueryParams} to a space-delimited string, if it exists. */
 function convertParamsToPBParams(queryParams: CustomRecordListQueryParams<any> | undefined) {
-	if (!queryParams) return {} as RecordListQueryParams;
-	let res: RecordListQueryParams = omit(queryParams, "expand");
-	res.expand = queryParams.expand?.join(" ");
-	return res;
+    if (!queryParams) return {} as RecordListQueryParams;
+    let res: RecordListQueryParams = omit(queryParams, "expand");
+    res.expand = queryParams.expand?.join(" ");
+    return res;
 }
 
 /**
@@ -32,12 +37,14 @@ function convertParamsToPBParams(queryParams: CustomRecordListQueryParams<any> |
  * @param queryParams The query parameters.
  */
 export async function getList<T extends RecordNames, Q extends CustomRecordListQueryParams<T> | undefined>(
-	collection: T,
-	page?: number,
-	perPage?: number,
-	queryParams?: Q
+    collection: T,
+    page?: number,
+    perPage?: number,
+    queryParams?: Q,
 ) {
-	return await pocketbase.collection(collection).getList<NarrowCollectionExpand<T, Q>>(page, perPage, convertParamsToPBParams(queryParams));
+    return await pocketbase
+        .collection(collection)
+        .getList<NarrowCollectionExpand<T, Q>>(page, perPage, convertParamsToPBParams(queryParams));
 }
 
 /**
@@ -50,8 +57,13 @@ export async function getList<T extends RecordNames, Q extends CustomRecordListQ
  *
  * @param queryParams The query parameters.
  */
-export async function getFullList<T extends RecordNames, Q extends CustomRecordListQueryParams<T> | undefined>(collection: T, queryParams?: Q) {
-	return await pocketbase.collection(collection).getFullList<NarrowCollectionExpand<T, Q>>(convertParamsToPBParams(queryParams));
+export async function getFullList<T extends RecordNames, Q extends CustomRecordListQueryParams<T> | undefined>(
+    collection: T,
+    queryParams?: Q,
+) {
+    return await pocketbase
+        .collection(collection)
+        .getFullList<NarrowCollectionExpand<T, Q>>(convertParamsToPBParams(queryParams));
 }
 
 /**
@@ -63,8 +75,14 @@ export async function getFullList<T extends RecordNames, Q extends CustomRecordL
  *
  * @param queryParams The query parameters.
  */
-export async function getOne<T extends RecordNames, Q extends CustomRecordListQueryParams<T> | undefined>(collection: T, id: string, queryParams?: Q) {
-	return pocketbase.collection(collection).getOne<NarrowCollectionExpand<T, Q>>(id, convertParamsToPBParams(queryParams));
+export async function getOne<T extends RecordNames, Q extends CustomRecordListQueryParams<T> | undefined>(
+    collection: T,
+    id: string,
+    queryParams?: Q,
+) {
+    return pocketbase
+        .collection(collection)
+        .getOne<NarrowCollectionExpand<T, Q>>(id, convertParamsToPBParams(queryParams));
 }
 
 /**
@@ -78,12 +96,12 @@ export async function getOne<T extends RecordNames, Q extends CustomRecordListQu
  *
  * @param queryParams The file query parameters.
  */
-export function getFileUrl<T extends RecordNames>(
-	record: Pick<Collections[T], "id" | "collectionId" | "collectionName">,
-	filename: string,
-	queryParams?: FileQueryParams
+export function getUrl<T extends RecordNames>(
+    record: Pick<Collections[T], "id" | "collectionId" | "collectionName">,
+    filename: string,
+    queryParams?: FileQueryParams,
 ) {
-	return pocketbase.files.getUrl(record, filename, queryParams);
+    return pocketbase.files.getUrl(record, filename, queryParams);
 }
 
 /**
@@ -104,11 +122,13 @@ export function getFileUrl<T extends RecordNames>(
  * `ClientResponseError` if no item was found.
  */
 export async function getFirstListItem<T extends RecordNames, Q extends CustomRecordListQueryParams<T> | undefined>(
-	collection: T,
-	filter: string,
-	queryParams?: Q
+    collection: T,
+    filter: string,
+    queryParams?: Q,
 ) {
-	return pocketbase.collection(collection).getFirstListItem<NarrowCollectionExpand<T, Q>>(filter, convertParamsToPBParams(queryParams));
+    return pocketbase
+        .collection(collection)
+        .getFirstListItem<NarrowCollectionExpand<T, Q>>(filter, convertParamsToPBParams(queryParams));
 }
 
 export { pocketbase };

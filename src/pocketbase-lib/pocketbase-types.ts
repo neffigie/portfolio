@@ -4,7 +4,9 @@ import { type Exactly, type RemoveIndexSignatures } from "shared/types";
 import { type ListQueryParams, type Record, type RecordQueryParams, type RecordListQueryParams } from "pocketbase";
 
 /** The expandable fields of each Record */
-export type ExpandableRecords<T extends RecordNames> = "expand" extends keyof Collections[T] ? Collections[T]["expand"] : undefined;
+export type ExpandableRecords<T extends RecordNames> = "expand" extends keyof Collections[T]
+    ? Collections[T]["expand"]
+    : undefined;
 
 /**
  * Query parameters for record list query service.
@@ -12,7 +14,9 @@ export type ExpandableRecords<T extends RecordNames> = "expand" extends keyof Co
  * @remarks Contrary to PocketBase's {@link RecordListQueryParams},
  * this app's {@link CustomRecordListQueryParams} uses an array to represent it's `expand` in order to enforce maximal type safety.
  */
-export interface CustomRecordListQueryParams<T extends RecordNames> extends ListQueryParams, Omit<RecordQueryParams, "expand"> {
+export interface CustomRecordListQueryParams<T extends RecordNames>
+    extends ListQueryParams,
+        Omit<RecordQueryParams, "expand"> {
     /** The record to expand. */
     expand?: (keyof ExpandableRecords<T> & string)[];
 }
@@ -27,6 +31,62 @@ export type BaseSystemRecord = {
     created: IsoDateString;
     updated: IsoDateString;
 } & Omit<RemoveIndexSignatures<Record>, "expand">;
+
+/**
+ * From a {@link BaseSystemRecord}, `T`, add an `expand` property with its expanded from, `TRelationship`, if any.
+ *
+ * @template T The record.
+ *
+ * @template TRelationship the relationship(s) of the `T`.
+ * The key is name of property on `T` that is expanded. ⚠️ You cannot expand keys of {@link BaseSystemRecord} (e.g. `collectionId`),
+ * and the value is the type of the expanded record.
+ */
+export type Expand<
+    T extends BaseSystemRecord,
+    TRelationship extends Exactly<
+        { [field in keyof Omit<T, keyof BaseSystemRecord>]?: BaseSystemRecord },
+        TRelationship
+    > = never,
+> = T & {
+    expand: [TRelationship] extends [never] ? undefined : TRelationship;
+};
+
+/**
+ * Narrows the `expand` property of `Collection[T]` to only include properties that are included in `E["expand"]`.
+ *
+ * @template T The name of the record.
+ *
+ * @template E The expanded fields of `T`.
+ *
+ * @remarks If `Collection[T]` has no expandable fields, returns as is. Similarly, if `E` is undefined, `Collection[T]["expand"]` will be too.
+ */
+export type NarrowCollectionExpand<
+    T extends RecordNames,
+    E extends { expand?: (keyof ExpandableRecords<T>)[] } | undefined,
+> = Omit<Collections[T], "expand"> & {
+    expand: Collections[T]["expand"] extends undefined
+        ? undefined
+        : "expand" extends keyof E
+        ? {
+              [P in E["expand"][keyof E["expand"]] as P extends string
+                  ? P
+                  : never]: P extends keyof Collections[T]["expand"] ? Collections[T]["expand"][P] : never;
+          }
+        : undefined;
+};
+
+/** The available record names. */
+export type RecordNames = keyof Collections;
+
+/** The available records. */
+export type Records = Collections[RecordNames];
+
+// Alias types for improved usability
+export type IsoDateString = string;
+export type RecordIdString = string;
+export type HTMLString = string;
+
+/***************************** Record Types for each collection *****************************/
 
 /** Maps {@link RecordNames} to their {@link Records} with all their relationships expanded. */
 export type Collections = {
@@ -45,59 +105,6 @@ export type Collections = {
     >;
     unity_webgl: Expand<UnityWebglRecord>;
 };
-
-/**
- * From a {@link BaseSystemRecord}, `T`, add an `expand` property with its expanded from, `TRelationship`, if any.
- *
- * @template T The record.
- *
- * @template TRelationship the relationship(s) of the `T`.
- * The key is name of property on `T` that is expanded. ⚠️ You cannot expand keys of {@link BaseSystemRecord} (e.g. `collectionId`),
- * and the value is the type of the expanded record.
- */
-export type Expand<
-    T extends BaseSystemRecord,
-    TRelationship extends Exactly<{ [field in keyof Omit<T, keyof BaseSystemRecord>]?: BaseSystemRecord }, TRelationship> = never,
-> = T & {
-    expand: [TRelationship] extends [never] ? undefined : TRelationship;
-};
-
-/**
- * Narrows the `expand` property of `Collection[T]` to only include properties that are included in `E["expand"]`.
- *
- * @template T The name of the record.
- *
- * @template E The expanded fields of `T`.
- *
- * @remarks If `Collection[T]` has no expandable fields, returns as is. Similarly, if `E` is undefined, `Collection[T]["expand"]` will be too.
- */
-export type NarrowCollectionExpand<T extends RecordNames, E extends { expand?: (keyof ExpandableRecords<T>)[] } | undefined> = Omit<
-    Collections[T],
-    "expand"
-> & {
-    expand: Collections[T]["expand"] extends undefined
-        ? undefined
-        : "expand" extends keyof E
-        ? {
-              [P in E["expand"][keyof E["expand"]] as P extends string ? P : never]: P extends keyof Collections[T]["expand"]
-                  ? Collections[T]["expand"][P]
-                  : never;
-          }
-        : undefined;
-};
-
-/** The available record names. */
-export type RecordNames = keyof Collections;
-
-/** The available records. */
-export type Records = Collections[RecordNames];
-
-// Alias types for improved usability
-export type IsoDateString = string;
-export type RecordIdString = string;
-export type HTMLString = string;
-
-// Record Types for each collection
 
 export type FilesRecord = {
     name: string;

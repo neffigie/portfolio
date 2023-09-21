@@ -6,7 +6,7 @@ import { generateSlug } from "shared/parsing";
 
 import parse, { DOMNode, Element, attributesToProps, domToReact } from "html-react-parser";
 import { ColorMode } from "@chakra-ui/react";
-import { HeaderLink } from "components/link";
+import { HeadingLink } from "components/link";
 
 interface MarkdownProps {
     /** The HTML. */
@@ -42,7 +42,7 @@ const HTMLParser = ({ body, colorMode }: MarkdownProps) => {
                     if (children === "\xa0" /** &nbsp */) return <></>;
                     return (
                         // @ts-ignore TODO - Argument of type ChildNode is not assignable to parameter of type ChildNode | Node | ParentNode
-                        <HeaderLink slugSource={generateSlug(node.children[0])} text={children} {...props} />
+                        <HeadingLink slugSource={generateSlug(node.children[0])} text={children} {...props} />
                     );
                 case "p":
                     return (

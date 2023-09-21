@@ -2,7 +2,7 @@
 
 import { Center, Flex, Spacer, useColorMode } from "@chakra-ui/react";
 import { Giscus, Image, Text, Tags, HTMLParser } from "components";
-import { getFileUrl, convertPBDateToDate, Collections } from "pocketbase-lib";
+import { getUrl, convertPBDateToDate, Collections } from "pocketbase-lib";
 
 export interface PostProps {
     /** The post. */
@@ -13,7 +13,7 @@ export function Post({ post }: PostProps) {
     const { colorMode } = useColorMode();
     return (
         <>
-            <Image src={getFileUrl(post, post.image)} alt={post.image_alt} priority />
+            <Image src={getUrl(post, post.image)} alt={post.image_alt} priority />
             <Text fontSize="6xl">{post.title}</Text>
             <Flex>
                 <Center>

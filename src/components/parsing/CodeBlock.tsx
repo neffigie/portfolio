@@ -7,11 +7,11 @@ import SyntaxHighlighter from "react-syntax-highlighter"; // Uses HLJS. Replace 
 import { gruvboxDark, vs } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 
 interface CodeBlockProps extends CodeBlockBaseProps {
-	/** The code. */
-	children: React.ReactNode;
+    /** The code. */
+    children: React.ReactNode;
 
-	/** Any additional, arbitrary props. */
-	[key: string]: any;
+    /** Any additional, arbitrary props. */
+    [key: string]: any;
 }
 
 /**
@@ -20,24 +20,26 @@ interface CodeBlockProps extends CodeBlockBaseProps {
  */
 // TODO - https://stackoverflow.com/questions/64392199/highlight-line-in-react-syntax-highlighter and figure out how to add file name.
 const CodeBlock = ({ className, children, colorMode, ...props }: CodeBlockProps) => {
-	const language = /lang(uage)?-(\w+)/.exec(className ?? "");
-	return (
-		<Card width="100%" boxShadow="xl" padding="8" margin="8">
-			<CardBody>
-				<Box>
-					<SyntaxHighlighter
-						language={language ? language[2] : ""}
-						style={colorMode === "dark" ? gruvboxDark : vs}
-						PreTag="div"
-						{...props}
-						wrapLongLines
-					>
-						{String(children).replace(/\n$/, "")}
-					</SyntaxHighlighter>
-				</Box>
-			</CardBody>
-		</Card>
-	);
+    const language = /lang(uage)?-(\w+)/.exec(className ?? "");
+    return (
+        <Box margin="8">
+            <Card width="100%" boxShadow="xl" padding="8">
+                <CardBody>
+                    <Box>
+                        <SyntaxHighlighter
+                            language={language ? language[2] : ""}
+                            style={colorMode === "dark" ? gruvboxDark : vs}
+                            PreTag="div"
+                            {...props}
+                            wrapLongLines
+                        >
+                            {String(children).replace(/\n$/, "")}
+                        </SyntaxHighlighter>
+                    </Box>
+                </CardBody>
+            </Card>
+        </Box>
+    );
 };
 
 export { CodeBlock as default, type CodeBlockProps };
