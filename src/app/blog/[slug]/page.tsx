@@ -6,7 +6,7 @@ import { type Metadata } from "next";
 import { Post } from "./Post";
 
 interface PostPageProps {
-    params: { slug: string };
+    params?: { slug: string };
 }
 
 /** Gets a post by its `slug` defined in the database. */
@@ -25,14 +25,16 @@ export const fetchCache = "force-no-store";
 
 // see: https://nextjs.org/docs/app/building-your-application/optimizing/metadata#dynamic-metadata
 export const generateMetadata = async ({ params }: PostPageProps): Promise<Metadata> => {
-    const post = await getPost(params.slug);
+    const post = await getPost(params?.slug ?? "");
     return {
         title: post?.title,
         description: post?.description,
     };
 };
 
-export default async function PostPage({ params }: Partial<PostPageProps>) {
+const PostPage = async ({ params }: PostPageProps) => {
     const post = await getPost(params?.slug ?? "");
     return post ? <Post post={convertToPlainObject(post)} /> : <>Loading...</>;
-}
+};
+
+export default PostPage;
