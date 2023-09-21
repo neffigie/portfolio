@@ -1,4 +1,4 @@
-version: 1
+version: 2
 frontend:
     phases:
         preBuild:
@@ -6,7 +6,6 @@ frontend:
                 - yarn install
         build:
             commands:
-                - env | grep -e NEXT_PUBLIC_ >> .env.production
                 - yarn run build
     artifacts:
         baseDirectory: .next
