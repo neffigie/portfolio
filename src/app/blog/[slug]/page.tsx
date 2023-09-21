@@ -32,7 +32,7 @@ export const generateMetadata = async ({ params }: PostPageProps): Promise<Metad
     };
 };
 
-export default async function PostPage({ params }: PostPageProps) {
-    const post = await getPost(params.slug);
+export default async function PostPage({ params }: Partial<PostPageProps>) {
+    const post = await getPost(params?.slug ?? "");
     return post ? <Post post={convertToPlainObject(post)} /> : <>Loading...</>;
 }
