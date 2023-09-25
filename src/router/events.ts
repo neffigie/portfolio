@@ -1,4 +1,4 @@
-import { menuItems } from "menu-items";
+import { isLoadingRoute } from "config";
 import NProgress from "nprogress";
 
 /**
@@ -6,10 +6,10 @@ import NProgress from "nprogress";
  * @param href The route href.
  */
 export function onStart(href: string) {
-	if (menuItems.get(href)?.useNProgress) NProgress.start();
+    if (isLoadingRoute(href)) NProgress.start();
 }
 
 /** Callback on route complete. */
 export function onComplete() {
-	NProgress.done();
+    NProgress.done();
 }

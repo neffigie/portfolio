@@ -14,7 +14,7 @@ export interface IconButtonLinkProps extends IconButtonProps {
 
 /** An `IconButton` that can link to other pages using the `href` prop. */
 export const IconButtonLink = ({ href, ...props }: IconButtonLinkProps) => (
-    <Link href={href} passHref target="_blank">
+    <Link href={href} passHref target="_blank" legacyBehavior>
         <IconButton {...props} as="a" />
     </Link>
 );

@@ -1,11 +1,10 @@
 "use client";
 
 import { generateSlug } from "shared/parsing";
-import { Heading } from "components";
 import { useRouter } from "router";
 
 import { FiLink2 } from "react-icons/fi";
-import { Stack, Flex, IconButton, Box } from "@chakra-ui/react";
+import { Stack, Flex, IconButton, Box, Heading } from "@chakra-ui/react";
 import { useState } from "react";
 
 export interface HeadingLinkProps {
@@ -32,7 +31,14 @@ export function HeadingLink({ slugSource, text, ...props }: HeadingLinkProps) {
             <Stack direction="row" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                 <Heading size="lg">{text}</Heading>
                 <Flex alignItems="center">
-                    {hover && <IconButton onClick={onClick} icon={<FiLink2 />} aria-label={`Link for ${text}`} display="contents" />}
+                    {hover && (
+                        <IconButton
+                            onClick={onClick}
+                            icon={<FiLink2 />}
+                            aria-label={`Link for ${text}`}
+                            display="contents"
+                        />
+                    )}
                 </Flex>
             </Stack>
         </Box>

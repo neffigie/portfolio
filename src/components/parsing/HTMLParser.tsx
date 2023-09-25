@@ -1,12 +1,11 @@
 import PreBlock from "./PreBlock";
 import InlineCodeBlock from "./InlineCodeBlock";
 import { CodeBlockBaseProps } from "./types";
-import { NavLink, Text } from "components";
+import { NavLink, Text, HeadingLink } from "components";
 import { generateSlug } from "shared/parsing";
 
 import parse, { DOMNode, Element, attributesToProps, domToReact } from "html-react-parser";
 import { ColorMode } from "@chakra-ui/react";
-import { HeadingLink } from "components/link";
 
 interface MarkdownProps {
     /** The HTML. */
@@ -27,7 +26,11 @@ const HTMLParser = ({ body, colorMode }: MarkdownProps) => {
             switch (node.name as keyof HTMLElementTagNameMap) {
                 case "pre":
                     return (
-                        <PreBlock colorMode={colorMode} className={node.attribs.class as CodeBlockBaseProps["className"]} {...props}>
+                        <PreBlock
+                            colorMode={colorMode}
+                            className={node.attribs.class as CodeBlockBaseProps["className"]}
+                            {...props}
+                        >
                             {domToReact(node.children) as React.ReactElement}
                         </PreBlock>
                     );

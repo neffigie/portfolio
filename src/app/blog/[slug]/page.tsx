@@ -1,23 +1,9 @@
-import { getFirstListItem, convertToPlainObject } from "pocketbase-lib";
-
-import { notFound } from "next/navigation";
-import { ClientResponseError } from "pocketbase";
 import { type Metadata } from "next";
 import { Post } from "./Post";
+import { getPost } from "config/database";
 
 interface PostPageProps {
     params: { slug: string };
-}
-
-/** Gets a post by its `slug` defined in the database. */
-async function getPost(slug: string) {
-    try {
-        return await getFirstListItem("posts", `slug="${slug}"`, { expand: ["categories"] });
-    } catch (error) {
-        if (error instanceof ClientResponseError && error.status === 404) notFound();
-        // TODO: else ... ? show error page
-    }
-    return null;
 }
 
 // see: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#fetchcache
@@ -32,9 +18,7 @@ export const generateMetadata = async ({ params }: PostPageProps): Promise<Metad
     };
 };
 
-const PostPage = async ({ params }: PostPageProps) => {
+export default async function PostPage({ params }: PostPageProps) {
     const post = await getPost(params.slug);
-    return post ? <Post post={convertToPlainObject(post)} /> : <>Loading...</>;
-};
-
-export default PostPage;
+    return post ? <Post post={post} /> : <>Loading...</>;
+}

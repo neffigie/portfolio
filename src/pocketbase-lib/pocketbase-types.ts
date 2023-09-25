@@ -3,7 +3,7 @@
 import { type Exactly, type RemoveIndexSignatures } from "shared/types";
 import { type ListQueryParams, type Record, type RecordQueryParams, type RecordListQueryParams } from "pocketbase";
 
-/** The expandable fields of each Record */
+/** A type containing all expandable fields of every Record */
 export type ExpandableRecords<T extends RecordNames> = "expand" extends keyof Collections[T]
     ? Collections[T]["expand"]
     : undefined;
@@ -39,7 +39,7 @@ export type BaseSystemRecord = {
  *
  * @template TRelationship the relationship(s) of the `T`.
  * The key is name of property on `T` that is expanded. ⚠️ You cannot expand keys of {@link BaseSystemRecord} (e.g. `collectionId`),
- * and the value is the type of the expanded record.
+ * and the value is the type of the expanded `BaseSystemRecord` record.
  */
 export type Expand<
     T extends BaseSystemRecord,
@@ -58,9 +58,10 @@ export type Expand<
  *
  * @template E The expanded fields of `T`.
  *
- * @remarks If `Collection[T]` has no expandable fields, returns as is. Similarly, if `E` is undefined, `Collection[T]["expand"]` will be too.
+ * @remarks If `Collection[T]` has no expandable fields, returns as is.
+ * Similarly, if `E` is undefined, `Collection[T]["expand"]` will be too.
  */
-export type NarrowCollectionExpand<
+export type ExpandCollection<
     T extends RecordNames,
     E extends { expand?: (keyof ExpandableRecords<T>)[] } | undefined,
 > = Omit<Collections[T], "expand"> & {
@@ -70,7 +71,7 @@ export type NarrowCollectionExpand<
         ? {
               [P in E["expand"][keyof E["expand"]] as P extends string
                   ? P
-                  : never]: P extends keyof Collections[T]["expand"] ? Collections[T]["expand"][P] : never;
+                  : never]: P extends keyof Collections[T]["expand"] ? Collections[T]["expand"][P][] : never;
           }
         : undefined;
 };

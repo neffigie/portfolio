@@ -1,6 +1,6 @@
 import { environment } from "environment";
 import {
-    type NarrowCollectionExpand,
+    type ExpandCollection,
     type Collections,
     type CustomRecordListQueryParams,
     type RecordNames,
@@ -44,7 +44,7 @@ export async function getList<T extends RecordNames, Q extends CustomRecordListQ
 ) {
     return await pocketbase
         .collection(collection)
-        .getList<NarrowCollectionExpand<T, Q>>(page, perPage, convertParamsToPBParams(queryParams));
+        .getList<ExpandCollection<T, Q>>(page, perPage, convertParamsToPBParams(queryParams));
 }
 
 /**
@@ -63,7 +63,7 @@ export async function getFullList<T extends RecordNames, Q extends CustomRecordL
 ) {
     return await pocketbase
         .collection(collection)
-        .getFullList<NarrowCollectionExpand<T, Q>>(convertParamsToPBParams(queryParams));
+        .getFullList<ExpandCollection<T, Q>>(convertParamsToPBParams(queryParams));
 }
 
 /**
@@ -80,9 +80,7 @@ export async function getOne<T extends RecordNames, Q extends CustomRecordListQu
     id: string,
     queryParams?: Q,
 ) {
-    return pocketbase
-        .collection(collection)
-        .getOne<NarrowCollectionExpand<T, Q>>(id, convertParamsToPBParams(queryParams));
+    return pocketbase.collection(collection).getOne<ExpandCollection<T, Q>>(id, convertParamsToPBParams(queryParams));
 }
 
 /**
@@ -128,7 +126,7 @@ export async function getFirstListItem<T extends RecordNames, Q extends CustomRe
 ) {
     return pocketbase
         .collection(collection)
-        .getFirstListItem<NarrowCollectionExpand<T, Q>>(filter, convertParamsToPBParams(queryParams));
+        .getFirstListItem<ExpandCollection<T, Q>>(filter, convertParamsToPBParams(queryParams));
 }
 
 export { pocketbase };
