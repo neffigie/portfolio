@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { urlWithoutTrailingSlash, repository, boolean01 } from "./refiners";
+import { urlWithoutTrailingSlash, url, repository, boolean01 } from "./refiners";
 
 /** Contains the environment variables from the `.env.local` file. */
 const environment = {
@@ -82,6 +82,18 @@ const environment = {
 
     /** The Itch.io url. */
     NEXT_PUBLIC_ITCH_URL: z.string().url("The Itch.io url is not valid!").parse(process.env.NEXT_PUBLIC_ITCH_URL),
+
+    /** The name of the author of the blog posts. */
+    NEXT_PUBLIC_METADATA_BASE: url().parse(process.env.NEXT_PUBLIC_METADATA_BASE),
+
+    /** The name of the author of the blog posts. */
+    NEXT_PUBLIC_METADATA_AUTHOR: z.string().parse(process.env.NEXT_PUBLIC_METADATA_AUTHOR),
+
+    /** The name of the site as it should appear in metadata. */
+    NEXT_PUBLIC_METADATA_SITE_NAME: z.string().parse(process.env.NEXT_PUBLIC_METADATA_SITE_NAME),
+
+    /** The description of the site as it should appear in metadata. */
+    NEXT_PUBLIC_METADATA_DESCRIPTION: z.string().parse(process.env.NEXT_PUBLIC_METADATA_DESCRIPTION),
 };
 
 export { environment as default };

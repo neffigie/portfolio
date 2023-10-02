@@ -89,22 +89,22 @@ export type HTMLString = string;
 
 /***************************** Record Types for each collection *****************************/
 
-/** Maps {@link RecordNames} to their {@link Records} with all their relationships expanded. */
+/** Maps record names to their {@link Records} with all their relationships expanded. */
 export type Collections = {
-    // system collections
     files: Expand<FilesRecord>;
-    users: Expand<UsersRecord>;
-
-    // user-created collections
-    post_categories: Expand<PostCategoriesRecord>;
-    post_types: Expand<PostTypesRecord>;
+    categories: Expand<CategoriesRecord>;
     posts: Expand<
         PostsRecord,
         {
-            categories: PostCategoriesRecord;
+            categories: CategoriesRecord;
         }
     >;
-    unity_webgl: Expand<UnityWebglRecord>;
+    projects: Expand<
+        ProjectsRecord,
+        {
+            categories: CategoriesRecord;
+        }
+    >;
 };
 
 export type FilesRecord = {
@@ -112,15 +112,10 @@ export type FilesRecord = {
     field: string;
 } & BaseSystemRecord;
 
-export type PostCategoriesRecord = {
+export type CategoriesRecord = {
     name: string;
     short_description: string;
     long_description: HTMLString;
-} & BaseSystemRecord;
-
-export type PostTypesRecord = {
-    name: string;
-    short_description: string;
 } & BaseSystemRecord;
 
 export type PostsRecord = {
@@ -134,24 +129,14 @@ export type PostsRecord = {
     categories: RecordIdString[];
 } & BaseSystemRecord;
 
-export type UnityWebglRecord = {
-    slug: string;
+export type ProjectsRecord = {
     title: string;
-    date: IsoDateString;
-    text_color: string;
-    background_color: string;
-    link_color: string;
-    long_description: HTMLString;
-    controls: HTMLString;
+    date: string;
+    description: HTMLString;
     banner: string;
-    background: string;
-    tile_background?: boolean;
-    itch_page?: string;
-    github_page?: string;
-    loader: string;
-    framework: string;
-    data: string;
-    code: string;
+    url: string;
+    github_page: string;
+    categories: RecordIdString[];
 } & BaseSystemRecord;
 
 export type UsersRecord = {

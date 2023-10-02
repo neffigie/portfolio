@@ -48,6 +48,12 @@ NEXT_PUBLIC_EMAIL="email"
 NEXT_PUBLIC_LINKEDIN_URL="url"
 NEXT_PUBLIC_GITHUB_URL="url"
 NEXT_PUBLIC_ITCH_URL="url"
+
+# SITE CONFIG
+NEXT_PUBLIC_METADATA_BASE="url"
+NEXT_PUBLIC_METADATA_AUTHOR="Your name"
+NEXT_PUBLIC_METADATA_SITE_NAME="name"
+NEXT_PUBLIC_METADATA_DESCRIPTION="description"
 ```
 
 The validation for `NEXT_PUBLIC_...` variables are located in [environment.ts](src/environment/environment.ts). The validation schema is powered by [Zod](https://github.com/colinhacks/zod).
@@ -67,18 +73,6 @@ There are currently limitations of hosting a Next.js app on Amplify:
 > https://docs.aws.amazon.com/amplify/latest/userguide/ssr-Amplify-support.html.
 
 ## ❓ Miscellaneous
-
-### Pocketbase Type Generation
-
-When modifying the source, you may optionally create this `.env` file in the root directory to use [Pocketbase Typegen](https://github.com/patmood/pocketbase-typegen).
-
-```bash
-PB_TYPEGEN_URL="https://..."
-PB_TYPEGEN_EMAIL="email"
-PB_TYPEGEN_PASSWORD="password"
-```
-
-Then, run `yarn typegen` to generate a Pocketbase types `pocketbase-types.ts` file in the same directory.
 
 ### Linting on Visual Studio Code
 

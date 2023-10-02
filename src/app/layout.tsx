@@ -24,9 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <StyleJsxGlobal />
                 <Providers>
                     <Header />
-                    <MainContainer flex={1} height="100%" display="table">
-                        {children}
-                    </MainContainer>
+                    <MainContainer>{children}</MainContainer>
                     <Footer />
                 </Providers>
             </body>

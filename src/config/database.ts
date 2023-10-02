@@ -1,12 +1,16 @@
 import { Tag } from "components";
-
-// user imports
+import { BlogPathName } from "config";
 import { notFound } from "next/navigation";
+
+// pocketbase
 import { ClientResponseError } from "pocketbase";
 import { ExpandCollection, convertPBDateToDate, getFirstListItem, getFullList, getUrl } from "pocketbase-lib";
 
 /** A blog post. */
 export interface PostDetails {
+    /** The id of the post. */
+    id: string;
+
     /** The title of the post. */
     title: string;
 
@@ -25,8 +29,8 @@ export interface PostDetails {
     /** The post tag(s). */
     tags: Tag[];
 
-    /** The post slug. */
-    slug: string;
+    /** The post url. */
+    url: string;
 }
 
 export interface PostBody {
@@ -63,9 +67,33 @@ export async function getPosts(): Promise<PostDetails[] | null> {
 /** Gets all post tags. */
 export async function getPostTags(): Promise<Tag[] | null> {
     try {
-        const tags = await getFullList("post_categories", { sort: "+name" });
+        const tags = await getFullList("categories", { sort: "+name" });
         let res = [] as Tag[];
         tags.forEach((tag) => res.push({ id: tag.id, name: tag.name }));
+        return res;
+    } catch (error) {
+        handleError(error);
+    }
+    return null;
+}
+
+/** Gets all the projects. */
+export async function getProjects(): Promise<PostDetails[] | null> {
+    try {
+        const projects = await getFullList("projects", { sort: "-date", expand: ["categories"] });
+        let res = [] as PostDetails[];
+        projects.forEach((project) =>
+            res.push({
+                id: project.url,
+                title: project.title,
+                description: project.description,
+                image_src: getUrl(project, project.banner),
+                image_alt: `Image of ${project.title}`,
+                date: convertPBDateToDate(project.date) ?? "",
+                tags: project.expand.categories.map((category) => ({ id: category.id, name: category.name })),
+                url: project.url,
+            }),
+        );
         return res;
     } catch (error) {
         handleError(error);
@@ -85,13 +113,15 @@ function convertPBPostToPost(post: ExpandCollection<"posts", { expand: ["categor
 
 /** Converts a PB Post to a `PostDetails`. */
 function convertPBPostToPostDetails(post: ExpandCollection<"posts", { expand: ["categories"] }>) {
+    const image_src = getUrl(post, post.image);
     return {
+        id: image_src,
         title: post.title,
         description: post.description,
-        image_src: getUrl(post, post.image),
+        image_src: image_src,
         image_alt: post.image_alt,
         date: convertPBDateToDate(post.date) ?? "",
         tags: post.expand.categories.map((category) => ({ id: category.id, name: category.name })),
-        slug: post.slug,
+        url: `${BlogPathName}/${post.slug}`,
     };
 }

@@ -9,3 +9,4 @@ export * from "components/header";
 export * from "components/main-container";
 export * from "components/footer";
 export * from "components/feed";
+export * from "components/post";

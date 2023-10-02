@@ -2,7 +2,7 @@
 
 import { Center, Flex, Spacer, useColorMode } from "@chakra-ui/react";
 import { Giscus, Image, Text, Tags, HTMLParser } from "components";
-import { Post } from "config/database";
+import { Post } from "config";
 
 export interface PostProps {
     /** The post. */

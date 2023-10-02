@@ -8,6 +8,7 @@ import {
     Heading,
     LinkBox,
     LinkOverlay,
+    Skeleton,
     Stack,
     StackProps,
     Text,
@@ -15,10 +16,17 @@ import {
 import { Tag, Tags } from "components/tags";
 import Image from "next/image";
 import NextLink from "next/link";
+import { Suspense } from "react";
 import { FiExternalLink } from "react-icons/fi";
-import { isExternal } from "util/types";
 
 export interface FeedProps extends StackProps {
+    /** The title of the feed. */
+    title: string;
+
+    /** The feed subtitle. */
+    subtitle: string;
+
+    /** The items that make up the feed. */
     items: FeedItem[] | undefined;
 }
 
@@ -50,48 +58,56 @@ export interface FeedItem {
 }
 
 /** Creates a feed with items that link to their content. */
-export function Feed({ items, ...props }: FeedProps) {
+export function Feed({ title, subtitle, items, ...props }: FeedProps) {
     return (
-        <Stack {...props}>
-            {items ? (
-                items.map((item) => (
-                    <LinkBox key={item.id}>
-                        <Card direction={{ base: "column", sm: "row" }} overflow="hidden" boxShadow="lg">
-                            <Image
-                                width={0}
-                                height={0}
-                                sizes="100vw"
-                                style={{ width: "30%", height: "auto", objectFit: "cover" }}
-                                src={item.image_src}
-                                alt={item.image_alt}
-                            />
-                            <Stack width="100%">
-                                <CardBody>
-                                    <Stack direction="row">
-                                        <Heading size="md">
-                                            <LinkOverlay as={NextLink} href={item.url}>
-                                                {item.title}
-                                            </LinkOverlay>
-                                        </Heading>
-                                        <Flex alignItems="center">
-                                            <FiExternalLink />
-                                        </Flex>
+        <>
+            <Heading>{title}</Heading>
+            <Text fontSize="2xl">{subtitle}</Text>
+            <Stack {...props}>
+                {items ? (
+                    items.map((item) => (
+                        <Suspense fallback={<Skeleton />} key={item.id}>
+                            <LinkBox>
+                                <Card direction={{ base: "column", sm: "row" }} overflow="hidden" boxShadow="lg">
+                                    <Image
+                                        width={0}
+                                        height={0}
+                                        sizes="100vw"
+                                        style={{ width: "30%", height: "auto", objectFit: "cover" }}
+                                        src={item.image_src}
+                                        alt={item.image_alt}
+                                    />
+                                    <Stack width="100%">
+                                        <CardBody>
+                                            <Stack direction="row">
+                                                <Suspense fallback={<Skeleton />}>
+                                                    <Heading size="md">
+                                                        <LinkOverlay as={NextLink} href={item.url}>
+                                                            {item.title}
+                                                        </LinkOverlay>
+                                                    </Heading>
+                                                </Suspense>
+                                                <Flex alignItems="center">
+                                                    <FiExternalLink />
+                                                </Flex>
+                                            </Stack>
+                                            <Text>{item.description}</Text>
+                                        </CardBody>
+                                        <CardFooter width="100%" justifyContent="flex-end" alignItems="flex-end">
+                                            <Text flex={1} fontSize="sm">
+                                                {item.date}
+                                            </Text>
+                                            <Tags tags={item.tags} />
+                                        </CardFooter>
                                     </Stack>
-                                    <Text>{item.description}</Text>
-                                </CardBody>
-                                <CardFooter width="100%" justifyContent="flex-end" alignItems="flex-end">
-                                    <Text flex={1} fontSize="sm">
-                                        {item.date}
-                                    </Text>
-                                    <Tags tags={item.tags} />
-                                </CardFooter>
-                            </Stack>
-                        </Card>
-                    </LinkBox>
-                ))
-            ) : (
-                <Text>No content.</Text>
-            )}
-        </Stack>
+                                </Card>
+                            </LinkBox>
+                        </Suspense>
+                    ))
+                ) : (
+                    <Text>No content.</Text>
+                )}
+            </Stack>
+        </>
     );
 }
