@@ -1,5 +1,6 @@
 import { Tag } from "components";
 import { BlogPathName } from "config";
+import { environment } from "environment";
 import { notFound } from "next/navigation";
 
 // pocketbase
@@ -34,6 +35,9 @@ export interface PostDetails {
 }
 
 export interface PostBody {
+    /** Whether or not to show a disclaimer. */
+    showWarning: boolean;
+
     /** The post body. */
     body: string;
 }
@@ -101,18 +105,23 @@ export async function getProjects(): Promise<PostDetails[] | null> {
     return null;
 }
 
+/** Returns the url to the resume file.  */
+export function getResumeURL(): string {
+    return `${environment.NEXT_PUBLIC_POCKETBASE_URL}/api/files/files/${environment.NEXT_PUBLIC_POCKETBASE_RESUME_FILE_ID}/${environment.NEXT_PUBLIC_POCKETBASE_RESUME_FILE_NAME}`;
+}
+
 /** Handle errors. */
 function handleError(error: any) {
     if (error instanceof ClientResponseError && error.status === 404) notFound();
 }
 
 /** Converts a PB Post to a `Post`. */
-function convertPBPostToPost(post: ExpandCollection<"posts", { expand: ["categories"] }>) {
-    return { ...convertPBPostToPostDetails(post), ...{ body: post.body } };
+function convertPBPostToPost(post: ExpandCollection<"posts", { expand: ["categories"] }>): Post {
+    return { ...convertPBPostToPostDetails(post), ...{ body: post.body, showWarning: post.legacy } };
 }
 
 /** Converts a PB Post to a `PostDetails`. */
-function convertPBPostToPostDetails(post: ExpandCollection<"posts", { expand: ["categories"] }>) {
+function convertPBPostToPostDetails(post: ExpandCollection<"posts", { expand: ["categories"] }>): PostDetails {
     const image_src = getUrl(post, post.image);
     return {
         id: image_src,

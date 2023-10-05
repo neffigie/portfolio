@@ -22,20 +22,25 @@ interface CodeBlockProps extends CodeBlockBaseProps {
 const CodeBlock = ({ className, children, colorMode, ...props }: CodeBlockProps) => {
     const language = /lang(uage)?-(\w+)/.exec(className ?? "");
     return (
-        <Box margin="8">
-            <Card width="100%" boxShadow="xl" padding="8">
+        <Box p={2} mt={2}>
+            <Card width="100%" boxShadow="xl">
                 <CardBody>
-                    <Box>
-                        <SyntaxHighlighter
-                            language={language ? language[2] : ""}
-                            style={colorMode === "dark" ? gruvboxDark : vs}
-                            PreTag="div"
-                            {...props}
-                            wrapLongLines
-                        >
-                            {String(children).replace(/\n$/, "")}
-                        </SyntaxHighlighter>
-                    </Box>
+                    <SyntaxHighlighter
+                        language={language ? language[2] : ""}
+                        style={colorMode === "light" ? vs : gruvboxDark}
+                        PreTag="div"
+                        padding={0}
+                        wrapLongLines
+                        customStyle={{ fontSize: "0.75em" }}
+                        codeTagProps={{
+                            style: {
+                                fontSize: "inherit",
+                            },
+                        }}
+                        {...props}
+                    >
+                        {String(children).replace(/\n$/, "")}
+                    </SyntaxHighlighter>
                 </CardBody>
             </Card>
         </Box>

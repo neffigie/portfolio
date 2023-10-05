@@ -68,7 +68,7 @@ export function Feed({ title, subtitle, items, ...props }: FeedProps) {
                     items.map((item) => (
                         <Suspense fallback={<Skeleton />} key={item.id}>
                             <LinkBox>
-                                <Card direction={{ base: "column", sm: "row" }} overflow="hidden" boxShadow="lg">
+                                <Card direction="row" overflow="hidden" boxShadow="xl">
                                     <Image
                                         width={0}
                                         height={0}
@@ -94,7 +94,7 @@ export function Feed({ title, subtitle, items, ...props }: FeedProps) {
                                             <Text>{item.description}</Text>
                                         </CardBody>
                                         <CardFooter width="100%" justifyContent="flex-end" alignItems="flex-end">
-                                            <Text flex={1} fontSize="sm">
+                                            <Text flex={1} fontSize="sm" as="b" color="gray.600">
                                                 {item.date}
                                             </Text>
                                             <Tags tags={item.tags} />

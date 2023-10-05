@@ -1,9 +1,7 @@
 "use client";
 
-import { Link } from "router";
-
-import { usePathname } from "next/navigation";
-import { Link as ChakraLink, Flex, LinkProps, Stack, Text } from "@chakra-ui/react";
+import { Link as NextLink } from "router";
+import { Link as ChakraLink, LinkProps } from "@chakra-ui/react";
 import { FiExternalLink } from "react-icons/fi";
 
 export interface NavLinkProps extends LinkProps {
@@ -12,14 +10,15 @@ export interface NavLinkProps extends LinkProps {
 }
 
 /** A link intended to be used in-line with text. */
-export function NavLink({ href, children, isExternal }: React.PropsWithChildren<NavLinkProps>) {
-    const pathname = usePathname();
+export function NavLink({ href, children, isExternal, ...props }: React.PropsWithChildren<NavLinkProps>) {
     return (
-        <ChakraLink as={Link} href={href} style={{ fontWeight: pathname === href ? "bold" : undefined }} isExternal={isExternal}>
-            <Stack direction="row">
-                <Text>{children}</Text>
-                <Flex alignItems="center">{isExternal && <FiExternalLink />}</Flex>
-            </Stack>
+        <ChakraLink as={NextLink} href={href} variant={isExternal ? "external" : undefined} {...props}>
+            {children}{" "}
+            {isExternal && (
+                <FiExternalLink
+                    style={{ display: "inline-block", alignSelf: "center", marginLeft: "2px", marginRight: "4px" }}
+                />
+            )}
         </ChakraLink>
     );
 }

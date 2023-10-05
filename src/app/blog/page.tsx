@@ -1,6 +1,8 @@
 import { Feed } from "components";
 import { getPosts } from "config";
 
+export const fetchCache = "force-no-store";
+
 export default async function PostNavigationPage() {
     const posts = (await getPosts()) ?? undefined;
     return (

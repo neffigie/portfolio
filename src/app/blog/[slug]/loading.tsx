@@ -1,11 +1,15 @@
 "use client";
+
 import { Spinner, Stack, Text } from "@chakra-ui/react";
+import { Center } from "components";
 
 export default function Loading() {
     return (
-        <Stack direction="row">
-            <Text>Loading the post.... Please wait</Text>
-            <Spinner />
-        </Stack>
+        <Center>
+            <Stack direction="row">
+                <Text>Loading... Please wait</Text>
+                <Spinner colorScheme="teal" />
+            </Stack>
+        </Center>
     );
 }

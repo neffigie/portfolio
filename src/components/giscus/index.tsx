@@ -1,6 +1,6 @@
 "use client";
 
-import { ColorMode, Divider } from "@chakra-ui/react";
+import { Box, ColorMode } from "@chakra-ui/react";
 import GiscusBase from "@giscus/react";
 import { environment } from "environment";
 
@@ -12,8 +12,7 @@ const Giscus = ({
     colorMode: ColorMode;
 }) => {
     return (
-        <>
-            <Divider mt={16} mb={4} p={4} />
+        <Box mt={16} mb={4} p={4}>
             <GiscusBase
                 repo={environment.NEXT_PUBLIC_GISCUS_REPOSITORY}
                 repoId={environment.NEXT_PUBLIC_GISCUS_REPOSITORY_ID}
@@ -28,7 +27,7 @@ const Giscus = ({
                 loading="lazy"
                 lang="en"
             />
-        </>
+        </Box>
     );
 };
 

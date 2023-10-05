@@ -5,12 +5,12 @@ import { Container, ContainerProps } from "@chakra-ui/react";
 export default function MainContainer({ children, ...props }: ContainerProps) {
     return (
         <Container
-            maxWidth="4xl"
+            maxWidth="2xl"
             as="main"
-            padding="2"
-            mt={14}
+            mt={24}
             alignContent="center"
             flex={1}
+            p={0}
             height="100%"
             display="table"
             {...props}

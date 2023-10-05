@@ -15,9 +15,9 @@ export const ProjectsPathName = "/projects";
 
 /** Maps each pathname `href` to a {@link MenuItem}. */
 export const menuItems = new Map([
-    [BlogPathName, { displayName: "blog" }],
-    [HomePathName, { displayName: "home" }],
-    [ProjectsPathName, { displayName: "projects" }],
+    [HomePathName, { displayName: "Home" }],
+    [ProjectsPathName, { displayName: "Projects" }],
+    [BlogPathName, { displayName: "Blog" }],
 ] as const satisfies ReadonlyArray<readonly [string, MenuItem]>);
 
 /** Returns `true` if the current `href` should show some type of loading UI, `false` otherwise. */

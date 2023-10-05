@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { Button, Center, Flex, Stack, Text } from "@chakra-ui/react";
-import { IconButtonLink } from "components/link";
+import { Center, Divider, Stack, Text } from "@chakra-ui/react";
+import { IconButtonLink, ResumeButton } from "components/link";
 import { environment } from "environment";
-import { GrDocumentText, GrLinkedin, GrGithub } from "react-icons/gr";
+import { GrLinkedin, GrGithub } from "react-icons/gr";
 import { HiOutlineMail } from "react-icons/hi";
 import { FaItchIo } from "react-icons/fa6";
 
@@ -13,8 +12,9 @@ export function Footer() {
     return (
         <Center as="footer" mt={50} pb={46}>
             <Stack direction="column" spacing={4}>
+                <Divider />
                 <Text>Made by Anna Noelle</Text>
-                <Stack direction="row" justify="center" align="center" spacing={3}>
+                <Stack direction="row" justify="center" align="center" spacing={6}>
                     <IconButtonLink
                         href={`mailto:${environment.NEXT_PUBLIC_EMAIL}`}
                         icon={<HiOutlineMail />}
@@ -40,17 +40,7 @@ export function Footer() {
                         {...iconProps}
                     />
                 </Stack>
-                <Link
-                    href={`${environment.NEXT_PUBLIC_POCKETBASE_URL}/api/files/files/${environment.NEXT_PUBLIC_POCKETBASE_RESUME_FILE_ID}/${environment.NEXT_PUBLIC_POCKETBASE_RESUME_FILE_NAME}`}
-                    passHref
-                    target="_blank"
-                >
-                    <Flex justify="center" align="center">
-                        <Button variant="outline" leftIcon={<GrDocumentText />}>
-                            Open Resume
-                        </Button>
-                    </Flex>
-                </Link>
+                <ResumeButton />
             </Stack>
         </Center>
     );
