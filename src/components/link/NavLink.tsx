@@ -10,11 +10,11 @@ export interface NavLinkProps extends LinkProps {
 }
 
 /** A link intended to be used in-line with text. */
-export function NavLink({ href, children, isExternal, ...props }: React.PropsWithChildren<NavLinkProps>) {
+export function NavLink({ href, children, ...props }: React.PropsWithChildren<NavLinkProps>) {
     return (
-        <ChakraLink as={NextLink} href={href} variant={isExternal ? "external" : undefined} {...props}>
+        <ChakraLink as={NextLink} href={href} {...props}>
             {children}{" "}
-            {isExternal && (
+            {props.variant === "external" && (
                 <FiExternalLink
                     style={{ display: "inline-block", alignSelf: "center", marginLeft: "2px", marginRight: "4px" }}
                 />

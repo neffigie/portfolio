@@ -8,7 +8,7 @@ export default function Loading() {
         <Center>
             <Stack direction="row">
                 <Text>Loading... Please wait</Text>
-                <Spinner colorScheme="teal" />
+                <Spinner color="teal" />
             </Stack>
         </Center>
     );

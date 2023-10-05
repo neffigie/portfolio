@@ -6,7 +6,6 @@ import { useRouter } from "router";
 import { FaHashtag } from "react-icons/fa";
 import { Stack, Flex, IconButton, Box, Heading } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { IconContext } from "react-icons/lib";
 
 export interface HeadingLinkProps {
     /** The element that is converted into a header slug. See {@link generateSlug} */
@@ -22,7 +21,7 @@ export interface HeadingLinkProps {
 /** The amount of `HeadingLink` instances. */
 let instancesCount = 0;
 
-/** A heading that can link to itself. */
+/** A heading that can link to itself using anchors. */
 export function HeadingLink({ slugSource, text, ...props }: HeadingLinkProps) {
     const [hover, setHover] = useState(false);
     const [firstRender, setFirstRender] = useState(false);
@@ -53,13 +52,7 @@ export function HeadingLink({ slugSource, text, ...props }: HeadingLinkProps) {
                         onMouseEnter={() => setHover(true)}
                         onMouseLeave={() => setHover(false)}
                         onClick={onClick}
-                        icon={
-                            <IconContext.Provider value={{ color: hover ? "black" : "grey" }}>
-                                <>
-                                    <FaHashtag />
-                                </>
-                            </IconContext.Provider>
-                        }
+                        icon={<FaHashtag color={hover ? "black" : "gray"} />}
                         aria-label={`Link for ${text}`}
                         display="contents"
                         size="xl"

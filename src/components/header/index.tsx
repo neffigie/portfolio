@@ -1,7 +1,7 @@
 "use client";
 
 import { Flex, Spacer, Text } from "@chakra-ui/react";
-import { Sticky, NavLink } from "components";
+import { NavLink, MainContainer } from "components";
 import { menuItems } from "config/menu-items";
 import { environment } from "environment";
 import { usePathname } from "next/navigation";
@@ -16,12 +16,10 @@ function HeaderLink({ href, pathname, children }: React.PropsWithChildren<{ href
             key={href}
             size="xl"
             paddingLeft={4}
-            textDecoration="underline"
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
-            textDecorationColor={active ? "black" : "gray.600"}
-            color={active || hover ? "black" : "gray.600"}
-            style={{ fontWeight: active ? "bold" : undefined, display: "inline-flex" }}
+            variant={active ? "active" : "inactive"}
+            color={hover ? "black" : undefined}
         >
             {children}
         </NavLink>
@@ -31,28 +29,30 @@ function HeaderLink({ href, pathname, children }: React.PropsWithChildren<{ href
 export function Header() {
     const pathname = usePathname();
     return (
-        <Sticky
+        <Flex
             backgroundColor="whiteAlpha.800"
+            backdropFilter="saturate(180%) blur(16px)"
             py={4}
-            px={2}
             position="fixed"
-            left={0}
-            right={0}
-            margin="auto"
             width="100%"
-            maxWidth="2xl"
+            as="header"
+            display="flex"
+            justifyContent="center"
+            zIndex={999}
         >
-            <Flex direction="row" justifyContent="center" alignItems="flex-end" width="100%">
-                <Text fontSize="xl" color="gray.600">
-                    {environment.NEXT_PUBLIC_METADATA_AUTHOR.replace(/['"]+/g, "")}
-                </Text>
-                <Spacer />
-                {Array.from(menuItems, ([key, value]) => (
-                    <HeaderLink key={key} href={key} pathname={pathname}>
-                        {value.displayName}
-                    </HeaderLink>
-                ))}
-            </Flex>
-        </Sticky>
+            <MainContainer justifyContent="center" left={0} right={0} margin="auto">
+                <Flex direction="row" justifyContent="center" alignItems="flex-end" width="100%">
+                    <Text fontSize="xl" color="gray.600">
+                        {environment.NEXT_PUBLIC_METADATA_AUTHOR.replace(/['"]+/g, "")}
+                    </Text>
+                    <Spacer />
+                    {Array.from(menuItems, ([key, value]) => (
+                        <HeaderLink key={key} href={key} pathname={pathname}>
+                            {value.displayName}
+                        </HeaderLink>
+                    ))}
+                </Flex>
+            </MainContainer>
+        </Flex>
     );
 }

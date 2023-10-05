@@ -24,8 +24,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <StyleJsxGlobal />
                 <Providers>
                     <Header />
-                    <MainContainer>{children}</MainContainer>
-                    <Footer />
+                    <MainContainer as="main" flex={1} marginTop={24}>
+                        {children}
+                    </MainContainer>
+                    <MainContainer>
+                        <Footer />
+                    </MainContainer>
                 </Providers>
             </body>
         </html>

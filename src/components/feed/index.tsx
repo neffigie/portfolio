@@ -91,7 +91,7 @@ export function Feed({ title, subtitle, items, ...props }: FeedProps) {
                                                     <FiExternalLink />
                                                 </Flex>
                                             </Stack>
-                                            <Text>{item.description}</Text>
+                                            <Text mt={2}>{item.description}</Text>
                                         </CardBody>
                                         <CardFooter width="100%" justifyContent="flex-end" alignItems="flex-end">
                                             <Text flex={1} fontSize="sm" as="b" color="gray.600">

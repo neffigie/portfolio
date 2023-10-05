@@ -22,6 +22,6 @@ export default extendTheme(
     theme,
     withDefaultColorScheme({
         colorScheme: "teal",
-        components: ["Tag", "Badge"],
+        components: ["Tag", "Badge", "Spinner"],
     }),
 );
