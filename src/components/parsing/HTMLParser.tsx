@@ -61,7 +61,7 @@ const HTMLParser = ({ body, colorMode }: MarkdownProps) => {
                     );
                 case "a":
                     return (
-                        <NavLink {...props} isExternal={true}>
+                        <NavLink {...props} variant="external">
                             {domToReact(node.children)}
                         </NavLink>
                     );
