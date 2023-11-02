@@ -35,7 +35,7 @@ export function generatePageMetadata({
             description: resolvedDescription,
             publisher: environment.NEXT_PUBLIC_METADATA_AUTHOR,
             creator: environment.NEXT_PUBLIC_METADATA_AUTHOR,
-            colorScheme: "light",
+            // colorScheme: "light",
             openGraph: {
                 url: "./",
                 title: resolved,

@@ -12,6 +12,8 @@ import {
     Stack,
     StackProps,
     Text,
+    Wrap,
+    WrapItem,
 } from "@chakra-ui/react";
 import { Tag, Tags } from "components/tags";
 import Image from "next/image";
@@ -66,43 +68,51 @@ export function Feed({ title, subtitle, items, ...props }: FeedProps) {
             <Stack {...props}>
                 {items ? (
                     items.map((item) => (
-                        <Suspense fallback={<Skeleton />} key={item.id}>
-                            <LinkBox>
-                                <Card direction="row" overflow="hidden" boxShadow="xl">
-                                    <Image
-                                        width={0}
-                                        height={0}
-                                        sizes="100vw"
-                                        style={{ width: "30%", height: "auto", objectFit: "cover" }}
-                                        src={item.image_src}
-                                        alt={item.image_alt}
-                                    />
-                                    <Stack width="100%">
-                                        <CardBody>
-                                            <Stack direction="row">
-                                                <Suspense fallback={<Skeleton />}>
-                                                    <Heading size="md">
-                                                        <LinkOverlay as={NextLink} href={item.url}>
-                                                            {item.title}
-                                                        </LinkOverlay>
-                                                    </Heading>
-                                                </Suspense>
-                                                <Flex alignItems="center">
-                                                    <FiExternalLink />
-                                                </Flex>
-                                            </Stack>
-                                            <Text mt={2}>{item.description}</Text>
-                                        </CardBody>
-                                        <CardFooter width="100%" justifyContent="flex-end" alignItems="flex-end">
-                                            <Text flex={1} fontSize="sm" as="b" color="gray.600">
-                                                {item.date}
-                                            </Text>
-                                            <Tags tags={item.tags} />
-                                        </CardFooter>
-                                    </Stack>
-                                </Card>
-                            </LinkBox>
-                        </Suspense>
+                        <LinkBox key={item.id} paddingBottom={2}>
+                            <Card direction="column" overflow="hidden" boxShadow="xl">
+                                <Image
+                                    width={0}
+                                    height={0}
+                                    sizes="100vw"
+                                    style={{
+                                        width: "100%",
+                                        maxHeight: "300px",
+                                        objectFit: "cover",
+                                    }}
+                                    src={item.image_src}
+                                    alt={item.image_alt}
+                                />
+                                <Stack width="100%">
+                                    <CardBody>
+                                        <Stack direction="row">
+                                            <Suspense fallback={<Skeleton />}>
+                                                <Heading size="md">
+                                                    <LinkOverlay as={NextLink} href={item.url}>
+                                                        {item.title}
+                                                    </LinkOverlay>
+                                                </Heading>
+                                            </Suspense>
+                                            <Flex alignItems="center">
+                                                <FiExternalLink />
+                                            </Flex>
+                                        </Stack>
+                                        <Text mt={2}>{item.description}</Text>
+                                    </CardBody>
+                                    <CardFooter>
+                                        <Wrap width="100%" justifyContent="flex-end">
+                                            <WrapItem flexGrow={1} minWidth="300px">
+                                                <Text fontSize="sm" as="b" color="gray.600" alignSelf="flex-end">
+                                                    {item.date}
+                                                </Text>
+                                            </WrapItem>
+                                            <WrapItem>
+                                                <Tags tags={item.tags} />
+                                            </WrapItem>
+                                        </Wrap>
+                                    </CardFooter>
+                                </Stack>
+                            </Card>
+                        </LinkBox>
                     ))
                 ) : (
                     <Text>No content.</Text>

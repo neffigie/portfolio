@@ -7,7 +7,9 @@ import { TagsProps } from "./types";
 export default function Tags({ tags, ...props }: TagsProps) {
     const getItem = (name: string, key?: string) => (
         <WrapItem key={key}>
-            <Tag padding={2}>{name}</Tag>
+            <Tag bgGradient="linear(to-l, teal.100, cyan.100)" padding={2}>
+                {name}
+            </Tag>
         </WrapItem>
     );
     return (

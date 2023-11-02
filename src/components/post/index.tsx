@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, AlertIcon, Center, Divider, Flex, Spacer, useColorMode } from "@chakra-ui/react";
+import { Alert, AlertIcon, Divider, Spacer, Wrap, WrapItem, useColorMode } from "@chakra-ui/react";
 import { Giscus, Image, Text, Tags, HTMLParser } from "components";
 import { Post } from "config";
 
@@ -14,22 +14,23 @@ export function Post({ post }: PostProps) {
     return (
         <>
             <Image src={post.image_src} alt={post.image_alt} priority />
-            <Text fontSize="6xl">{post.title}</Text>
-            <Flex>
-                <Center>
-                    <Text fontSize="2xl">{post.description}</Text>
-                </Center>
-                <Spacer />
-                <Center>
-                    <Text fontSize="1xl">{post.date}</Text>
-                </Center>
-            </Flex>
+            <Text fontSize="3xl">{post.title}</Text>
+            <Wrap>
+                <WrapItem flexGrow={1}>
+                    <Text fontSize="xl">{post.description}</Text>
+                </WrapItem>
+                <WrapItem>
+                    <Text fontSize="xl" as="i">
+                        {post.date}
+                    </Text>
+                </WrapItem>
+            </Wrap>
             <Tags tags={post.tags} mt={2} />
             {post.showWarning && (
                 <Alert status="warning" variant="top-accent" mt={2}>
                     <AlertIcon />
-                    This post is legacy and reflects a point where my skill set was developing, but still contains
-                    useful information. Enjoy reading nonethless!
+                    This post is legacy; it may reflect a point where my skill-set was developing or contains outdated
+                    information. Enjoy reading nonethless!
                 </Alert>
             )}
             <Divider mt={4} />

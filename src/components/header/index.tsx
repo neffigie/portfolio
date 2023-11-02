@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, Spacer, Text } from "@chakra-ui/react";
+import { Flex, Show, Spacer, Text } from "@chakra-ui/react";
 import { NavLink, MainContainer } from "components";
 import { menuItems } from "config/menu-items";
 import { environment } from "environment";
@@ -15,7 +15,7 @@ function HeaderLink({ href, pathname, children }: React.PropsWithChildren<{ href
             href={href}
             key={href}
             size="xl"
-            paddingLeft={4}
+            marginLeft={4}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             variant={active ? "active" : "inactive"}
@@ -42,10 +42,12 @@ export function Header() {
         >
             <MainContainer justifyContent="center" left={0} right={0} margin="auto">
                 <Flex direction="row" justifyContent="center" alignItems="flex-end" width="100%">
-                    <Text fontSize="xl" color="gray.600">
-                        {environment.NEXT_PUBLIC_METADATA_AUTHOR.replace(/['"]+/g, "")}
-                    </Text>
-                    <Spacer />
+                    <Show above="md">
+                        <Text fontSize="xl" color="gray.600">
+                            {environment.NEXT_PUBLIC_METADATA_AUTHOR.replace(/['"]+/g, "")}
+                        </Text>
+                        <Spacer />
+                    </Show>
                     {Array.from(menuItems, ([key, value]) => (
                         <HeaderLink key={key} href={key} pathname={pathname}>
                             {value.displayName}

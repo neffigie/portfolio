@@ -5,7 +5,7 @@ import { NavLink, Text, HeadingLink } from "components";
 import { generateSlug } from "shared/parsing";
 
 import parse, { DOMNode, Element, attributesToProps, domToReact } from "html-react-parser";
-import { ColorMode } from "@chakra-ui/react";
+import { ColorMode, Divider, Stack } from "@chakra-ui/react";
 
 interface MarkdownProps {
     /** The HTML. */
@@ -66,6 +66,12 @@ const HTMLParser = ({ body, colorMode }: MarkdownProps) => {
                         </NavLink>
                     );
                 case "blockquote":
+                    return (
+                        <Stack direction="row" padding={4} alignItems="center">
+                            <Divider orientation="vertical" height="250px" paddingLeft={2} />
+                            <Text as="i">{domToReact(node.children)}</Text>
+                        </Stack>
+                    );
                 default:
                     return node;
             }

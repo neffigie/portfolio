@@ -1,10 +1,18 @@
 "use client";
 
-import { Container, ContainerProps } from "@chakra-ui/react";
+import { Box, Container, ContainerProps } from "@chakra-ui/react";
 
 export default function MainContainer({ children, ...props }: ContainerProps) {
     return (
-        <Container width="80vw" alignContent="center" p={0} height="100%" display="table" {...props}>
+        <Container
+            maxWidth={["xs", "md", "xl", "3xl", "5xl"]}
+            alignContent="center"
+            height="100%"
+            display="table"
+            style={{ tableLayout: "fixed" }}
+            padding={0}
+            {...props}
+        >
             {children}
         </Container>
     );

@@ -13,7 +13,7 @@ export function Footer() {
         <Center as="footer" mt={50} pb={46}>
             <Stack direction="column" spacing={4}>
                 <Divider />
-                <Text>Made by Anna Noelle</Text>
+                <Text textAlign="center">Made by Anna Noelle</Text>
                 <Stack direction="row" justify="center" align="center" spacing={6}>
                     <IconButtonLink
                         href={`mailto:${environment.NEXT_PUBLIC_EMAIL}`}

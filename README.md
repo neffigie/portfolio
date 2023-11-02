@@ -1,6 +1,6 @@
 # neffigie.com
 
-Anna Noelle's portfolio at [https://muhakushi.com]() built with [Next.js](https://nextjs.org/) and hosted by [AWS Amplify](https://aws.amazon.com/amplify/).
+Anna Noelle's portfolio at [https://www.muhakushi.com]() built with [Next.js](https://nextjs.org/) and hosted by [AWS Amplify](https://aws.amazon.com/amplify/).
 
 ## 🐈 Installation using Yarn
 
@@ -35,6 +35,7 @@ NEXT_PUBLIC_POCKETBASE_RESUME_FILE_ID="id"
 NEXT_PUBLIC_POCKETBASE_RESUME_FILE_NAME="name.extension"
 
 # GISCUS COMPONENT (https://github.com/giscus/giscus-component)
+# As of 2.3.0, set strict to 1 if using the pathname mapping.
 NEXT_PUBLIC_GISCUS_REPOSITORY="Username/repository"
 NEXT_PUBLIC_GISCUS_REPOSITORY_ID="id"
 NEXT_PUBLIC_GISCUS_CATEGORY="category"
@@ -57,6 +58,62 @@ NEXT_PUBLIC_METADATA_DESCRIPTION="description"
 ```
 
 The validation for `NEXT_PUBLIC_...` variables are located in [environment.ts](src/environment/environment.ts). The validation schema is powered by [Zod](https://github.com/colinhacks/zod).
+
+## 🌎 PocketBase Schema
+
+This project uses [PocketBase](https://pocketbase.io/) as the database. Please ensure you have the following the schema.
+
+### The Base System Record
+
+Every record in PocketBase, including the ones below, automatically has the following fields. Ensure your database includes the fields or create them.
+
+| Base System Record |          |
+| ------------------ | -------- |
+| id                 | ID       |
+| created            | ISO Date |
+| updated            | ISO Date |
+
+### Project-Specfic Records
+
+| categories        |             |                   |
+| ----------------- | ----------- | ----------------- |
+| name              | Plain Text  | The category name |
+| short_description | Plain Text  | unused            |
+| long_description  | Rich Editor | unused            |
+
+| files |            |               |
+| ----- | ---------- | ------------- |
+| name  | Plain Text | The file name |
+| field | File       | The file      |
+
+| posts       |                          |                                                              |
+| ----------- | ------------------------ | ------------------------------------------------------------ |
+| slug        | [^\s-]                   | The slug this post should display on (i.e. .../posts/[slug]) |
+| title       | Plain Text               |                                                              |
+| description | Plain Text               |                                                              |
+| image       | Single Image             | The image that shows on the preview card and post page       |
+| image_alt   | Plain Text               | Image alt text                                               |
+| date        | ISO Date                 | The date of publication                                      |
+| body        | Rich Editor              | The post body                                                |
+| categories  | categories Relationships | The categories of this post                                  |
+| legacy      | Boolean                  | Whether or not this post is outdated. Shows a warning        |
+
+| projects    |                          |                                |
+| ----------- | ------------------------ | ------------------------------ |
+| date        | ISO Date                 | The date                       |
+| title       | Plain Text               |                                |
+| description | Plain Text               |                                |
+| banner      | Single Image             | The image that shows on card   |
+| url         | URL                      | The external project page      |
+| categories  | categories Relationships | The categories of this project |
+
+_Plain Text is and Rich Editor are both strings, with Rich Editor specifically being HTML._
+
+### Changing or Editing the Database
+
+You can delete the `src/pocketbase-lib` folder when using another database than PocketBase, since it's only used for bringing extra type-features to the existing PocketBase SDK.
+
+Regardless, you can change and edit the database by modifying the [database.ts](src/config/database.ts) file.
 
 ## 🚀 Deploy on AWS Amplify
 
