@@ -129,7 +129,7 @@ There are currently limitations of hosting a Next.js app on Amplify:
 >
 > https://docs.aws.amazon.com/amplify/latest/userguide/ssr-Amplify-support.html.
 
-In you Build Settings, make sure you are using node version ^18.17. You can do this by going to Build Settings > Edit Build image settings > Live Package updates
+_Please use Next.js 13.0 - 13.5. Right now Next.js 14 and higher is not supported by AWS. It requires Node ^18.17. In you Build Settings, make sure you are using node version ^18.17. You can do this by going to Build Settings > Edit Build image settings > Live Package updates. However, GLIBC_2.27 is required and not currently available for AWS, and this is, most likely, one of many issues._
 
 ## ❓ Miscellaneous
 
