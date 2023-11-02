@@ -8,6 +8,7 @@ export function generateSlug(from: string): string;
 export function generateSlug(from: ChildNode | ParentNode | Node): string | undefined;
 export function generateSlug(from: string | ChildNode | ParentNode | Node): string | undefined;
 export function generateSlug(from: string | ChildNode | ParentNode | Node): string | undefined {
+    if (!from) return undefined;
     let string: string | undefined = undefined;
     if (typeof from === "string") string = from;
     else if ("nodeType" in from && isText(from)) string = `${from.data}`;
@@ -17,8 +18,10 @@ export function generateSlug(from: string | ChildNode | ParentNode | Node): stri
     string = string.toLowerCase();
 
     // remove accents, swap ñ for n, etc
-    let source = "ÁÄÂÀÃÅČÇĆĎÉĚËÈÊẼĔȆĞÍÌÎÏİŇÑÓÖÒÔÕØŘŔŠŞŤÚŮÜÙÛÝŸŽáäâàãåčçćďéěëèêẽĕȇğíìîïıňñóöòôõøðřŕšşťúůüùûýÿžþÞĐđßÆa·/_,:;";
-    let target = "AAAAAACCCDEEEEEEEEGIIIIINNOOOOOORRSSTUUUUUYYZaaaaaacccdeeeeeeeegiiiiinnooooooorrsstuuuuuyyzbBDdBAa------";
+    let source =
+        "ÁÄÂÀÃÅČÇĆĎÉĚËÈÊẼĔȆĞÍÌÎÏİŇÑÓÖÒÔÕØŘŔŠŞŤÚŮÜÙÛÝŸŽáäâàãåčçćďéěëèêẽĕȇğíìîïıňñóöòôõøðřŕšşťúůüùûýÿžþÞĐđßÆa·/_,:;";
+    let target =
+        "AAAAAACCCDEEEEEEEEGIIIIINNOOOOOORRSSTUUUUUYYZaaaaaacccdeeeeeeeegiiiiinnooooooorrsstuuuuuyyzbBDdBAa------";
     for (let i = 0, l = source.length; i < l; i++) {
         string = string.replace(new RegExp(source.charAt(i), "g"), target.charAt(i));
     }

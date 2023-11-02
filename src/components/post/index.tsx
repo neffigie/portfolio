@@ -1,7 +1,7 @@
 "use client";
 
 import { Alert, AlertIcon, Divider, Spacer, Wrap, WrapItem, useColorMode } from "@chakra-ui/react";
-import { Giscus, Image, Text, Tags, HTMLParser } from "components";
+import { Giscus, Image, ClientText, Tags, HTMLParser } from "components";
 import { Post } from "config";
 
 export interface PostProps {
@@ -14,15 +14,15 @@ export function Post({ post }: PostProps) {
     return (
         <>
             <Image src={post.image_src} alt={post.image_alt} priority />
-            <Text fontSize="3xl">{post.title}</Text>
+            <ClientText fontSize="3xl">{post.title}</ClientText>
             <Wrap>
                 <WrapItem flexGrow={1}>
-                    <Text fontSize="xl">{post.description}</Text>
+                    <ClientText fontSize="xl">{post.description}</ClientText>
                 </WrapItem>
                 <WrapItem>
-                    <Text fontSize="xl" as="i">
+                    <ClientText fontSize="xl" as="i">
                         {post.date}
-                    </Text>
+                    </ClientText>
                 </WrapItem>
             </Wrap>
             <Tags tags={post.tags} mt={2} />

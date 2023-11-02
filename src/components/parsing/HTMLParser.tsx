@@ -1,11 +1,12 @@
 import PreBlock from "./PreBlock";
 import InlineCodeBlock from "./InlineCodeBlock";
 import { CodeBlockBaseProps } from "./types";
-import { NavLink, Text, HeadingLink } from "components";
+import { NavLink, ClientText, HeadingLink } from "components";
 import { generateSlug } from "shared/parsing";
 
 import parse, { DOMNode, Element, attributesToProps, domToReact } from "html-react-parser";
-import { ColorMode, Divider, Stack } from "@chakra-ui/react";
+import { ColorMode } from "@chakra-ui/react";
+import { Prose } from "./Prose";
 
 interface MarkdownProps {
     /** The HTML. */
@@ -49,15 +50,15 @@ const HTMLParser = ({ body, colorMode }: MarkdownProps) => {
                     );
                 case "p":
                     return (
-                        <Text as="div" fontSize="md" lineHeight={6} {...props}>
+                        <ClientText as="div" fontSize="md" lineHeight={6} {...props}>
                             {domToReact(node.children, { replace: replace })}
-                        </Text>
+                        </ClientText>
                     );
                 case "sub":
                     return (
-                        <Text as="sub" {...props}>
+                        <ClientText as="sub" {...props}>
                             {domToReact(node.children)}
-                        </Text>
+                        </ClientText>
                     );
                 case "a":
                     return (
@@ -67,11 +68,15 @@ const HTMLParser = ({ body, colorMode }: MarkdownProps) => {
                     );
                 case "blockquote":
                     return (
-                        <Stack direction="row" padding={4} alignItems="center">
-                            <Divider orientation="vertical" height="250px" paddingLeft={2} />
-                            <Text as="i">{domToReact(node.children)}</Text>
-                        </Stack>
+                        <Prose {...props}>
+                            <blockquote>{domToReact(node.children)}</blockquote>
+                        </Prose>
                     );
+                case "figure":
+                case "ol":
+                case "ul":
+                case "table":
+                    return <Prose {...props}>{domToReact(node.children)}</Prose>;
                 default:
                     return node;
             }

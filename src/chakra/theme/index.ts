@@ -1,4 +1,5 @@
 import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
+import { withProse } from "@nikolovlazar/chakra-ui-prose";
 import link from "chakra/theme/components/link";
 import fonts from "chakra/theme/foundations/fonts";
 import styles from "chakra/theme/foundations/fonts";
@@ -24,4 +25,5 @@ export default extendTheme(
         colorScheme: "teal",
         components: ["Tag", "Badge", "Spinner"],
     }),
+    withProse(),
 );

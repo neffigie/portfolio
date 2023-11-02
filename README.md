@@ -107,7 +107,7 @@ Every record in PocketBase, including the ones below, automatically has the foll
 | url         | URL                      | The external project page      |
 | categories  | categories Relationships | The categories of this project |
 
-_Plain Text is and Rich Editor are both strings, with Rich Editor specifically being HTML._
+_Plain Text is and Rich Editor are both strings, with Rich Editor specifically being HTML. If using PocketBase, pay extra attention when pasting text directly into the Rich Editor, since it will preserve formatting in this application, too._
 
 ### Changing or Editing the Database
 

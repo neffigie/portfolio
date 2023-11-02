@@ -84,18 +84,17 @@ export function Feed({ title, subtitle, items, ...props }: FeedProps) {
                                 />
                                 <Stack width="100%">
                                     <CardBody>
-                                        <Stack direction="row">
-                                            <Suspense fallback={<Skeleton />}>
-                                                <Heading size="md">
-                                                    <LinkOverlay as={NextLink} href={item.url}>
-                                                        {item.title}
-                                                    </LinkOverlay>
-                                                </Heading>
-                                            </Suspense>
-                                            <Flex alignItems="center">
-                                                <FiExternalLink />
-                                            </Flex>
-                                        </Stack>
+                                        <Heading size="md">
+                                            <LinkOverlay as={NextLink} href={item.url} verticalAlign="center">
+                                                {item.title}
+                                            </LinkOverlay>
+                                            <FiExternalLink
+                                                style={{
+                                                    display: "inline",
+                                                    marginLeft: "4px",
+                                                }}
+                                            />
+                                        </Heading>
                                         <Text mt={2}>{item.description}</Text>
                                     </CardBody>
                                     <CardFooter>
