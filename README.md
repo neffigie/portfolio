@@ -129,6 +129,8 @@ There are currently limitations of hosting a Next.js app on Amplify:
 >
 > https://docs.aws.amazon.com/amplify/latest/userguide/ssr-Amplify-support.html.
 
+In you Build Settings, make sure you are using node version ^18.17. You can do this by going to Build Settings > Edit Build image settings > Live Package updates
+
 ## ❓ Miscellaneous
 
 ### Linting on Visual Studio Code
