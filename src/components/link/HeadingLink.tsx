@@ -4,7 +4,7 @@ import { generateSlug } from "shared/parsing";
 import { useRouter } from "router";
 
 import { FaHashtag } from "react-icons/fa";
-import { Stack, Flex, IconButton, Box, Heading } from "@chakra-ui/react";
+import { Stack, Flex, IconButton, Box, Heading, Wrap, WrapItem } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 export interface HeadingLinkProps {
@@ -46,20 +46,24 @@ export function HeadingLink({ slugSource, text, ...props }: HeadingLinkProps) {
             id={id}
             {...props}
         >
-            <Stack direction="row">
-                <Flex alignItems="center">
-                    <IconButton
-                        onMouseEnter={() => setHover(true)}
-                        onMouseLeave={() => setHover(false)}
-                        onClick={onClick}
-                        icon={<FaHashtag color={hover ? "black" : "gray"} />}
-                        aria-label={`Link for ${text}`}
-                        display="contents"
-                        size="xl"
-                    />
-                </Flex>
-                <Heading size="lg">{text}</Heading>
-            </Stack>
+            <Wrap direction="row">
+                <WrapItem>
+                    <Flex alignItems="center">
+                        <IconButton
+                            onMouseEnter={() => setHover(true)}
+                            onMouseLeave={() => setHover(false)}
+                            onClick={onClick}
+                            icon={<FaHashtag color={hover ? "black" : "gray"} />}
+                            aria-label={`Link for ${text}`}
+                            display="contents"
+                            size="xl"
+                        />
+                    </Flex>
+                </WrapItem>
+                <WrapItem>
+                    <Heading size="lg">{text}</Heading>
+                </WrapItem>
+            </Wrap>
         </Box>
     );
 }
