@@ -1,4 +1,6 @@
-import PreBlock from "./PreBlock";
+import dynamic from "next/dynamic";
+const PreBlock = dynamic(() => import("./PreBlock"), { ssr: false }); // occasionally getting incorrect (?) ssr errors
+
 import InlineCodeBlock from "./InlineCodeBlock";
 import { CodeBlockBaseProps } from "./types";
 import { NavLink, ClientText, HeadingLink } from "components";

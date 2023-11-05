@@ -4,7 +4,7 @@ import { generateSlug } from "shared/parsing";
 import { useRouter } from "router";
 
 import { FaHashtag } from "react-icons/fa";
-import { Stack, Flex, IconButton, Box, Heading, Wrap, WrapItem } from "@chakra-ui/react";
+import { IconButton, Heading, Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 export interface HeadingLinkProps {
@@ -44,26 +44,27 @@ export function HeadingLink({ slugSource, text, ...props }: HeadingLinkProps) {
             marginTop={anchorOffset}
             marginBottom={4}
             id={id}
+            display="flex"
+            alignItems="center"
             {...props}
         >
-            <Wrap direction="row">
-                <WrapItem>
-                    <Flex alignItems="center">
-                        <IconButton
-                            onMouseEnter={() => setHover(true)}
-                            onMouseLeave={() => setHover(false)}
-                            onClick={onClick}
-                            icon={<FaHashtag color={hover ? "black" : "gray"} />}
-                            aria-label={`Link for ${text}`}
-                            display="contents"
-                            size="xl"
-                        />
-                    </Flex>
-                </WrapItem>
-                <WrapItem>
-                    <Heading size="lg">{text}</Heading>
-                </WrapItem>
-            </Wrap>
+            <Heading size="lg" display="inline">
+                <IconButton
+                    onMouseEnter={() => setHover(true)}
+                    onMouseLeave={() => setHover(false)}
+                    onClick={onClick}
+                    icon={<FaHashtag color={hover ? "black" : "gray"} size="1.25em" />}
+                    aria-label={`Link for ${text}`}
+                    display="inline flex"
+                    justifyContent="left"
+                    minWidth="auto"
+                    marginRight={2}
+                    backgroundColor="transparent"
+                    _hover={{ backgroundColor: "transparent" }}
+                    size="lg"
+                />{" "}
+                {text}
+            </Heading>
         </Box>
     );
 }

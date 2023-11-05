@@ -30,11 +30,11 @@ const CodeBlock = ({ className, children, colorMode, ...props }: CodeBlockProps)
                         style={colorMode === "light" ? vs : gruvboxDark}
                         PreTag="div"
                         padding={0}
-                        wrapLongLines
                         customStyle={{ fontSize: "0.75em" }}
                         codeTagProps={{
                             style: {
                                 fontSize: "inherit",
+                                overflowX: "scroll",
                             },
                         }}
                         {...props}

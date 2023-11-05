@@ -1,7 +1,8 @@
 "use client";
 
-import { Box, ColorMode } from "@chakra-ui/react";
+import { ColorMode } from "@chakra-ui/react";
 import GiscusBase from "@giscus/react";
+import { GradientBackgroundBox } from "components/gradient-background-box";
 import { environment } from "environment";
 
 /** Renders `giscus` using its respective `enviornment` variables. */
@@ -12,7 +13,7 @@ const Giscus = ({
     colorMode: ColorMode;
 }) => {
     return (
-        <Box mt={16} mb={4} p={4}>
+        <GradientBackgroundBox mt={16} mb={4} p={4}>
             <GiscusBase
                 repo={environment.NEXT_PUBLIC_GISCUS_REPOSITORY}
                 repoId={environment.NEXT_PUBLIC_GISCUS_REPOSITORY_ID}
@@ -27,7 +28,7 @@ const Giscus = ({
                 loading="lazy"
                 lang="en"
             />
-        </Box>
+        </GradientBackgroundBox>
     );
 };
 

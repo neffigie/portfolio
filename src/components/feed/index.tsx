@@ -15,6 +15,7 @@ import {
     Wrap,
     WrapItem,
 } from "@chakra-ui/react";
+import { GradientBackgroundBox } from "components/gradient-background-box";
 import { Tag, Tags } from "components/tags";
 import Image from "next/image";
 import NextLink from "next/link";
@@ -63,7 +64,9 @@ export interface FeedItem {
 export function Feed({ title, subtitle, items, ...props }: FeedProps) {
     return (
         <>
-            <Heading>{title}</Heading>
+            <GradientBackgroundBox>
+                <Heading>{title}</Heading>
+            </GradientBackgroundBox>
             <Text fontSize="2xl">{subtitle}</Text>
             <Stack {...props}>
                 {items ? (
