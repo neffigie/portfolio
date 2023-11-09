@@ -1,2 +1,2 @@
 "use client";
-export { Prose } from "@nikolovlazar/chakra-ui-prose";
+export { Prose as ProseClient } from "@nikolovlazar/chakra-ui-prose";

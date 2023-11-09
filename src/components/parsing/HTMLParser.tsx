@@ -8,7 +8,8 @@ import { generateSlug } from "shared/parsing";
 
 import parse, { DOMNode, Element, attributesToProps, domToReact } from "html-react-parser";
 import { ColorMode } from "@chakra-ui/react";
-import { Prose } from "./Prose";
+import { ProseClient } from "./Prose";
+import Table from "./html-table";
 
 interface MarkdownProps {
     /** The HTML. */
@@ -20,7 +21,7 @@ interface MarkdownProps {
 
 /** Renders HTML. */
 const HTMLParser = ({ body, colorMode }: MarkdownProps) => {
-    if (!body) return "";
+    if (!body) return <></>;
 
     /** replaces a {@link DOMNode} with the appropriate element or `undefined` if the `node` is an instance of the domhandler's `Element`. */
     const replace = (node: DOMNode) => {
@@ -70,15 +71,20 @@ const HTMLParser = ({ body, colorMode }: MarkdownProps) => {
                     );
                 case "blockquote":
                     return (
-                        <Prose {...props}>
+                        <ProseClient {...props}>
                             <blockquote>{domToReact(node.children)}</blockquote>
-                        </Prose>
+                        </ProseClient>
+                    );
+                case "table":
+                    return (
+                        <Table {...props} mb={6}>
+                            {domToReact(node.children)}
+                        </Table>
                     );
                 case "figure":
                 case "ol":
                 case "ul":
-                case "table":
-                    return <Prose {...props}>{domToReact(node.children)}</Prose>;
+                    return <ProseClient {...props}>{domToReact(node.children)}</ProseClient>;
                 default:
                     return node;
             }

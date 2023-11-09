@@ -4,11 +4,9 @@ import {
     Card,
     CardBody,
     CardFooter,
-    Flex,
     Heading,
     LinkBox,
     LinkOverlay,
-    Skeleton,
     Stack,
     StackProps,
     Text,
@@ -19,7 +17,6 @@ import { GradientBackgroundBox } from "components/gradient-background-box";
 import { Tag, Tags } from "components/tags";
 import Image from "next/image";
 import NextLink from "next/link";
-import { Suspense } from "react";
 import { FiExternalLink } from "react-icons/fi";
 
 export interface FeedProps extends StackProps {
