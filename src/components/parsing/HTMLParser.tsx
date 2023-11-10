@@ -9,7 +9,7 @@ import { generateSlug } from "shared/parsing";
 import parse, { DOMNode, Element, attributesToProps, domToReact } from "html-react-parser";
 import { ColorMode } from "@chakra-ui/react";
 import { ProseClient } from "./Prose";
-import Table from "./html-table";
+import Table from "./HTMLTable";
 
 interface MarkdownProps {
     /** The HTML. */
@@ -76,11 +76,7 @@ const HTMLParser = ({ body, colorMode }: MarkdownProps) => {
                         </ProseClient>
                     );
                 case "table":
-                    return (
-                        <Table {...props} mb={6}>
-                            {domToReact(node.children)}
-                        </Table>
-                    );
+                    return <Table mb={6}>{domToReact(node.children) as JSX.Element[]}</Table>;
                 case "figure":
                 case "ol":
                 case "ul":

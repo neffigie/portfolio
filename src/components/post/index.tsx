@@ -1,7 +1,7 @@
 "use client";
 
-import { Alert, AlertIcon, Divider, Spacer, Wrap, WrapItem, useColorMode } from "@chakra-ui/react";
-import { Giscus, Image, ClientText, Tags, HTMLParser } from "components";
+import { Alert, AlertIcon, Box, Divider, Spacer, Wrap, WrapItem, useColorMode } from "@chakra-ui/react";
+import { Giscus, Image, ClientText, Tags, HTMLParser, ClientHeading } from "components";
 import { Post } from "config";
 
 export interface PostProps {
@@ -12,15 +12,17 @@ export interface PostProps {
 export function Post({ post }: PostProps) {
     const { colorMode } = useColorMode();
     return (
-        <>
+        <Box backgroundColor="whiteAlpha.50">
+            <ClientHeading fontSize="3xl" color="brand.800">
+                {post.title}
+            </ClientHeading>
             <Image src={post.image_src} alt={post.image_alt} priority />
-            <ClientText fontSize="3xl">{post.title}</ClientText>
-            <Wrap>
+            <Wrap align="end">
                 <WrapItem flexGrow={1}>
                     <ClientText fontSize="xl">{post.description}</ClientText>
                 </WrapItem>
                 <WrapItem>
-                    <ClientText fontSize="xl" as="i">
+                    <ClientText fontSize="md" as="i">
                         {post.date}
                     </ClientText>
                 </WrapItem>
@@ -36,6 +38,6 @@ export function Post({ post }: PostProps) {
             <Divider mt={4} />
             <HTMLParser body={post.body} colorMode={colorMode} />
             <Giscus colorMode={colorMode} />
-        </>
+        </Box>
     );
 }

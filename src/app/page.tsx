@@ -17,7 +17,7 @@ export default function HomePage() {
         <>
             <ClientHeading>Hi, 👋! I'm </ClientHeading>
             <ClientHeading
-                bgGradient="linear(to-l, teal.500, cyan.500)"
+                bgGradient="linear(to-l, brand.700, brand.500)"
                 bgClip="text"
                 fontSize="6xl"
                 fontWeight="extrabold"

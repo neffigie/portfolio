@@ -62,7 +62,7 @@ export function Feed({ title, subtitle, items, ...props }: FeedProps) {
     return (
         <>
             <GradientBackgroundBox>
-                <Heading>{title}</Heading>
+                <Heading color="brand.800">{title}</Heading>
             </GradientBackgroundBox>
             <Text fontSize="2xl">{subtitle}</Text>
             <Stack {...props}>
@@ -84,7 +84,7 @@ export function Feed({ title, subtitle, items, ...props }: FeedProps) {
                                 />
                                 <Stack width="100%">
                                     <CardBody>
-                                        <Heading size="md">
+                                        <Heading size="md" color="brand.700">
                                             <LinkOverlay as={NextLink} href={item.url} verticalAlign="center">
                                                 {item.title}
                                             </LinkOverlay>

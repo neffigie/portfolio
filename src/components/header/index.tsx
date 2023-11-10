@@ -30,7 +30,7 @@ export function Header() {
     const pathname = usePathname();
     return (
         <Flex
-            backgroundColor="whiteAlpha.800"
+            backgroundColor="whiteAlpha.600"
             backdropFilter="saturate(180%) blur(16px)"
             py={4}
             position="fixed"
@@ -38,7 +38,7 @@ export function Header() {
             as="header"
             display="flex"
             justifyContent="center"
-            zIndex={999}
+            zIndex={1000}
         >
             <MainContainer justifyContent="center" left={0} right={0} margin="auto">
                 <Flex direction="row" justifyContent="center" alignItems="flex-end" width="100%">

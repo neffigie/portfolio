@@ -1,16 +1,16 @@
 const link = {
     variants: {
         external: {
-            color: "blue.600",
+            color: "brand.500",
         },
         active: {
-            color: "black",
+            color: "brand.800",
             fontWeight: "bold",
             display: "inline-flex",
             _hover: { textDecoration: "none" },
         },
         inactive: {
-            color: "gray.600",
+            color: "brand.900",
             display: "inline-flex",
             _hover: { textDecoration: "none" },
         },

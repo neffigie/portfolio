@@ -1,4 +1,4 @@
-import { StyleJsxGlobal, Providers, ColorModeScript } from "chakra";
+import { StyleJsxGlobal, Providers } from "chakra";
 import { Header, MainContainer, Footer } from "components";
 import { HandleOnComplete } from "router";
 
@@ -19,7 +19,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     minHeight: "100%",
                 }}
             >
-                <ColorModeScript />
                 <HandleOnComplete />
                 <StyleJsxGlobal />
                 <Providers>

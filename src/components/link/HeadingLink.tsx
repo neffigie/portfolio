@@ -48,12 +48,17 @@ export function HeadingLink({ slugSource, text, ...props }: HeadingLinkProps) {
             alignItems="center"
             {...props}
         >
-            <Heading size="lg" display="inline">
+            <Heading size="lg" display="inline" color="brand.700">
                 <IconButton
                     onMouseEnter={() => setHover(true)}
                     onMouseLeave={() => setHover(false)}
                     onClick={onClick}
-                    icon={<FaHashtag color={hover ? "black" : "gray"} size="1.25em" />}
+                    icon={
+                        <FaHashtag
+                            color={hover ? "var(--chakra-colors-brand-600)" : "var(--chakra-colors-brand-700)"}
+                            size="1.25em"
+                        />
+                    }
                     aria-label={`Link for ${text}`}
                     display="inline flex"
                     justifyContent="left"
