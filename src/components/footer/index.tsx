@@ -10,9 +10,9 @@ import { FaItchIo } from "react-icons/fa6";
 export function Footer() {
     const iconProps = { size: "lg", fontSize: "18px", display: "contents" };
     return (
-        <Center as="footer" mt={50} pb={46}>
+        <Center as="footer" mt={50} pb={46} flexDirection="column">
             <Stack direction="column" spacing={4}>
-                <Divider />
+                <Divider mb={2} borderColor="brand.100" />
                 <Text textAlign="center">Made by Anna Noelle</Text>
                 <Stack direction="row" justify="center" align="center" spacing={6}>
                     <IconButtonLink

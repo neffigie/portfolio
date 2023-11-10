@@ -3,8 +3,8 @@
 import { generateSlug } from "shared/parsing";
 import { useRouter } from "router";
 
-import { FaHashtag } from "react-icons/fa";
-import { IconButton, Heading, Box } from "@chakra-ui/react";
+import { FaHashtag } from "react-icons/fa6";
+import { IconButton, Heading, Box, Divider } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 export interface HeadingLinkProps {
@@ -39,37 +39,42 @@ export function HeadingLink({ slugSource, text, ...props }: HeadingLinkProps) {
     const anchorOffset = -100;
 
     return (
-        <Box
-            paddingTop={firstRender ? 8 - anchorOffset : 32 - anchorOffset}
-            marginTop={anchorOffset}
-            marginBottom={4}
-            id={id}
-            display="flex"
-            alignItems="center"
-            {...props}
-        >
-            <Heading size="lg" display="inline" color="brand.700">
-                <IconButton
-                    onMouseEnter={() => setHover(true)}
-                    onMouseLeave={() => setHover(false)}
-                    onClick={onClick}
-                    icon={
-                        <FaHashtag
-                            color={hover ? "var(--chakra-colors-brand-600)" : "var(--chakra-colors-brand-700)"}
-                            size="1.25em"
-                        />
-                    }
-                    aria-label={`Link for ${text}`}
-                    display="inline flex"
-                    justifyContent="left"
-                    minWidth="auto"
-                    marginRight={2}
-                    backgroundColor="transparent"
-                    _hover={{ backgroundColor: "transparent" }}
-                    size="lg"
-                />{" "}
-                {text}
-            </Heading>
-        </Box>
+        <>
+            <Box
+                paddingTop={firstRender ? 8 - anchorOffset : 32 - anchorOffset}
+                marginTop={anchorOffset}
+                id={id}
+                display="flex"
+                alignItems="center"
+                marginBottom={2}
+                {...props}
+            >
+                <Heading size="md" display="inline">
+                    {text}{" "}
+                    <IconButton
+                        onMouseEnter={() => setHover(true)}
+                        onMouseLeave={() => setHover(false)}
+                        onClick={onClick}
+                        icon={
+                            <FaHashtag
+                                color={hover ? "var(--chakra-colors-brand-300)" : "var(--chakra-colors-brand-200)"}
+                                size="1.25em"
+                                strokeWidth={2}
+                            />
+                        }
+                        aria-label={`Link for ${text}`}
+                        display="inline flex"
+                        justifyContent="left"
+                        minWidth="auto"
+                        marginLeft={2}
+                        backgroundColor="transparent"
+                        _hover={{ backgroundColor: "transparent" }}
+                        size="xs"
+                        verticalAlign="top"
+                    />
+                </Heading>
+            </Box>
+            <Divider marginBottom={4} borderColor="brand.50" />
+        </>
     );
 }

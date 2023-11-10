@@ -12,7 +12,7 @@ const styles = {
         body: {
             fontFamily: "body",
             color: mode("black", "whiteAlpha.900")(props),
-            bgGradient: mode("linear(to-tl, brand.50, 10%, white)", "gray.800")(props),
+            bgGradient: mode("linear(to-tl, brand.100, 10%, white)", "gray.800")(props),
             backgroundAttachment: "fixed",
             lineHeight: "base",
         },

@@ -19,7 +19,7 @@ function HeaderLink({ href, pathname, children }: React.PropsWithChildren<{ href
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             variant={active ? "active" : "inactive"}
-            color={hover ? "black" : undefined}
+            color={hover ? "brand.900" : undefined}
         >
             {children}
         </NavLink>

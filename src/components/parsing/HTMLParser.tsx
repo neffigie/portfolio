@@ -7,20 +7,16 @@ import { NavLink, ClientText, HeadingLink } from "components";
 import { generateSlug } from "shared/parsing";
 
 import parse, { DOMNode, Element, attributesToProps, domToReact } from "html-react-parser";
-import { ColorMode } from "@chakra-ui/react";
 import { ProseClient } from "./Prose";
 import Table from "./HTMLTable";
 
 interface MarkdownProps {
     /** The HTML. */
     body: string;
-
-    /** The current color mode. */
-    colorMode: ColorMode;
 }
 
 /** Renders HTML. */
-const HTMLParser = ({ body, colorMode }: MarkdownProps) => {
+const HTMLParser = ({ body }: MarkdownProps) => {
     if (!body) return <></>;
 
     /** replaces a {@link DOMNode} with the appropriate element or `undefined` if the `node` is an instance of the domhandler's `Element`. */
@@ -30,20 +26,12 @@ const HTMLParser = ({ body, colorMode }: MarkdownProps) => {
             switch (node.name as keyof HTMLElementTagNameMap) {
                 case "pre":
                     return (
-                        <PreBlock
-                            colorMode={colorMode}
-                            className={node.attribs.class as CodeBlockBaseProps["className"]}
-                            {...props}
-                        >
+                        <PreBlock className={node.attribs.class as CodeBlockBaseProps["className"]} {...props}>
                             {domToReact(node.children) as React.ReactElement}
                         </PreBlock>
                     );
                 case "code":
-                    return (
-                        <InlineCodeBlock colorMode={colorMode} {...props}>
-                            {domToReact(node.children)}
-                        </InlineCodeBlock>
-                    );
+                    return <InlineCodeBlock {...props}>{domToReact(node.children)}</InlineCodeBlock>;
                 case "h2":
                     const children = domToReact(node.children);
                     if (children === "\xa0" /** &nbsp */) return <></>;

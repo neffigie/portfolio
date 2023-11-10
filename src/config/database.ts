@@ -35,8 +35,8 @@ export interface PostDetails {
 }
 
 export interface PostBody {
-    /** Whether or not to show a disclaimer. */
-    showWarning: boolean;
+    /** Any note on the post, such as a disclaimer. */
+    note: string;
 
     /** The post body. */
     body: string;
@@ -117,7 +117,7 @@ function handleError(error: any) {
 
 /** Converts a PB Post to a `Post`. */
 function convertPBPostToPost(post: ExpandCollection<"posts", { expand: ["categories"] }>): Post {
-    return { ...convertPBPostToPostDetails(post), ...{ body: post.body, showWarning: post.legacy } };
+    return { ...convertPBPostToPostDetails(post), ...{ body: post.body, note: post.note } };
 }
 
 /** Converts a PB Post to a `PostDetails`. */

@@ -127,7 +127,7 @@ export type PostsRecord = {
     date: IsoDateString;
     body: HTMLString;
     categories: RecordIdString[];
-    legacy: boolean;
+    note: string;
 } & BaseSystemRecord;
 
 export type ProjectsRecord = {

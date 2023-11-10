@@ -2,7 +2,6 @@ import "css/nprogress/nprogress.css";
 
 import { ClientHeading, ClientText } from "components";
 import { generatePageMetadata } from "config";
-import { GradientBackgroundBox } from "components/gradient-background-box";
 
 export function generateMetadata() {
     return generatePageMetadata({
@@ -24,12 +23,10 @@ export default function HomePage() {
             >
                 Anna Noelle.
             </ClientHeading>
-            <GradientBackgroundBox>
-                <ClientText mt={4}>
-                    I'm a UVA Computer Science student and aspiring game developer. I'm passionate about creating
-                    exciting, accessible systems. When I'm not coding, I enjoy drawing and making music.
-                </ClientText>
-            </GradientBackgroundBox>
+            <ClientText mt={4}>
+                I'm a UVA Computer Science student and aspiring game developer. I'm passionate about creating exciting,
+                accessible systems. When I'm not coding, I enjoy drawing and making music.
+            </ClientText>
         </>
     );
 }

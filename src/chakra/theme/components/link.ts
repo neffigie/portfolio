@@ -4,14 +4,14 @@ const link = {
             color: "brand.500",
         },
         active: {
-            color: "brand.800",
+            color: "brand.700",
             fontWeight: "bold",
             display: "inline-flex",
             _hover: { textDecoration: "none" },
         },
         inactive: {
-            color: "brand.900",
             display: "inline-flex",
+            fontWeight: "bold",
             _hover: { textDecoration: "none" },
         },
     },

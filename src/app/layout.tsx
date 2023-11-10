@@ -1,6 +1,7 @@
 import { StyleJsxGlobal, Providers } from "chakra";
 import { Header, MainContainer, Footer } from "components";
 import { HandleOnComplete } from "router";
+import "css/giscus/giscus.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -26,9 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <MainContainer as="main" flex={1} marginTop={24}>
                         {children}
                     </MainContainer>
-                    <MainContainer>
-                        <Footer />
-                    </MainContainer>
+                    <Footer />
                 </Providers>
             </body>
         </html>
