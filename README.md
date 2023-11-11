@@ -1,6 +1,6 @@
 # neffigie.com
 
-Anna Noelle's portfolio at [https://www.muhakushi.com]() built with [Next.js](https://nextjs.org/) and hosted by [AWS Amplify](https://aws.amazon.com/amplify/).
+Anna Noelle's portfolio at [https://www.muhakushi.com](https://www.muhakushi.com) built with [Next.js](https://nextjs.org/) and hosted by [AWS Amplify](https://aws.amazon.com/amplify/).
 
 ## 🐈 Installation using Yarn
 
