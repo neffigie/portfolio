@@ -20,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     minHeight: "100%",
                 }}
             >
+                <link rel="icon" href="/favicon.ico" sizes="any" />
                 <HandleOnComplete />
                 <StyleJsxGlobal />
                 <Providers>
