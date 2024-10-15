@@ -4,7 +4,7 @@ import { type Exactly, type RemoveIndexSignatures } from "shared/types";
 import { type ListQueryParams, type Record, type RecordQueryParams, type RecordListQueryParams } from "pocketbase";
 
 /** A type containing all expandable fields of every Record */
-export type ExpandableRecords<T extends RecordNames> = "expand" extends keyof Collections[T]
+export type ExpandableRecords<T extends CollectionNames> = "expand" extends keyof Collections[T]
     ? Collections[T]["expand"]
     : undefined;
 
@@ -14,7 +14,7 @@ export type ExpandableRecords<T extends RecordNames> = "expand" extends keyof Co
  * @remarks Contrary to PocketBase's {@link RecordListQueryParams},
  * this app's {@link CustomRecordListQueryParams} uses an array to represent it's `expand` in order to enforce maximal type safety.
  */
-export interface CustomRecordListQueryParams<T extends RecordNames>
+export interface CustomRecordListQueryParams<T extends CollectionNames>
     extends ListQueryParams,
         Omit<RecordQueryParams, "expand"> {
     /** The record to expand. */
@@ -54,7 +54,7 @@ export type Expand<
 /**
  * Narrows the `expand` property of `Collection[T]` to only include properties that are included in `E["expand"]`.
  *
- * @template T The name of the record.
+ * @template T The name of the collection.
  *
  * @template E The expanded fields of `T`.
  *
@@ -62,7 +62,7 @@ export type Expand<
  * Similarly, if `E` is undefined, `Collection[T]["expand"]` will be too.
  */
 export type ExpandCollection<
-    T extends RecordNames,
+    T extends CollectionNames,
     E extends { expand?: (keyof ExpandableRecords<T>)[] } | undefined,
 > = Omit<Collections[T], "expand"> & {
     expand: Collections[T]["expand"] extends undefined
@@ -76,11 +76,11 @@ export type ExpandCollection<
         : undefined;
 };
 
-/** The available record names. */
-export type RecordNames = keyof Collections;
+/** The available collections names. */
+export type CollectionNames = keyof Collections;
 
-/** The available records. */
-export type Records = Collections[RecordNames];
+/** The fields available in each record per collection. */
+export type RecordFields = Collections[CollectionNames];
 
 // Alias types for improved usability
 export type IsoDateString = string;
@@ -89,7 +89,7 @@ export type HTMLString = string;
 
 /***************************** Record Types for each collection *****************************/
 
-/** Maps record names to their {@link Records} with all their relationships expanded. */
+/** Maps collections names to their {@link RecordFields} with all their relationships expanded. */
 export type Collections = {
     files: Expand<FilesRecord>;
     categories: Expand<CategoriesRecord>;

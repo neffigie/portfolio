@@ -6,9 +6,6 @@ const environment = {
     /** The pocketbase database endpoint. */
     NEXT_PUBLIC_POCKETBASE_URL: urlWithoutTrailingSlash().parse(process.env.NEXT_PUBLIC_POCKETBASE_URL),
 
-    /** The name of the resume file as in PocketBase. */
-    NEXT_PUBLIC_POCKETBASE_RESUME_FILE_NAME: z.string().parse(process.env.NEXT_PUBLIC_POCKETBASE_RESUME_FILE_NAME),
-
     /** The id of the resume PDF file, named `NEXT_PUBLIC_POCKETBASE_RESUME_FILE_NAME`, in the files collection. */
     NEXT_PUBLIC_POCKETBASE_RESUME_FILE_ID: z.string().parse(process.env.NEXT_PUBLIC_POCKETBASE_RESUME_FILE_ID),
 

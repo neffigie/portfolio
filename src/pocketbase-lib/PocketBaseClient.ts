@@ -3,7 +3,7 @@ import {
     type ExpandCollection,
     type Collections,
     type CustomRecordListQueryParams,
-    type RecordNames,
+    type CollectionNames as CollectionNames,
 } from "pocketbase-lib";
 import { omit } from "shared/object-util";
 
@@ -36,7 +36,7 @@ function convertParamsToPBParams(queryParams: CustomRecordListQueryParams<any> |
  *
  * @param queryParams The query parameters.
  */
-export async function getList<T extends RecordNames, Q extends CustomRecordListQueryParams<T> | undefined>(
+export async function getList<T extends CollectionNames, Q extends CustomRecordListQueryParams<T> | undefined>(
     collection: T,
     page?: number,
     perPage?: number,
@@ -51,13 +51,13 @@ export async function getList<T extends RecordNames, Q extends CustomRecordListQ
  * Returns a promise with all list items batch fetched at once
  * (by default 200 items per request; to change it, set the `queryParams.batch` to the wanted value).
  *
- * @template T The name of the record on which to perfom the request.
+ * @template T The name of the collection on which to perfom the request.
  *
  * @param collection The collection from which to fetch records.
  *
  * @param queryParams The query parameters.
  */
-export async function getFullList<T extends RecordNames, Q extends CustomRecordListQueryParams<T> | undefined>(
+export async function getFullList<T extends CollectionNames, Q extends CustomRecordListQueryParams<T> | undefined>(
     collection: T,
     queryParams?: Q,
 ) {
@@ -69,13 +69,13 @@ export async function getFullList<T extends RecordNames, Q extends CustomRecordL
 /**
  * Returns single item by its id.
  *
- * @template T The name of the record on which to perfom the request.
+ * @template T The name of the collection on which to perfom the request.
  *
  * @param id The id of the record to get.
  *
  * @param queryParams The query parameters.
  */
-export async function getOne<T extends RecordNames, Q extends CustomRecordListQueryParams<T> | undefined>(
+export async function getOne<T extends CollectionNames, Q extends CustomRecordListQueryParams<T> | undefined>(
     collection: T,
     id: string,
     queryParams?: Q,
@@ -86,7 +86,7 @@ export async function getOne<T extends RecordNames, Q extends CustomRecordListQu
 /**
  * Builds and returns an absolute record file url for the provided filename.
  *
- * @template T The name of the record on which to perfom the request.
+ * @template T The name of the collection on which to perfom the request.
  *
  * @param record The record containing the file.
  *
@@ -94,7 +94,7 @@ export async function getOne<T extends RecordNames, Q extends CustomRecordListQu
  *
  * @param queryParams The file query parameters.
  */
-export function getUrl<T extends RecordNames>(
+export function getUrl<T extends CollectionNames>(
     record: Pick<Collections[T], "id" | "collectionId" | "collectionName">,
     filename: string,
     queryParams?: FileQueryParams,
@@ -105,7 +105,7 @@ export function getUrl<T extends RecordNames>(
 /**
  * Returns the first found item by the specified filter.
  *
- * @template T The name of the record on which to perfom the request.
+ * @template T The name of the collection on which to perfom the request.
  *
  * @template Q The query parameters.
  *
@@ -119,7 +119,7 @@ export function getUrl<T extends RecordNames>(
  * first found item. For consistency with `getOne`, this method will throw a `404`
  * `ClientResponseError` if no item was found.
  */
-export async function getFirstListItem<T extends RecordNames, Q extends CustomRecordListQueryParams<T> | undefined>(
+export async function getFirstListItem<T extends CollectionNames, Q extends CustomRecordListQueryParams<T> | undefined>(
     collection: T,
     filter: string,
     queryParams?: Q,

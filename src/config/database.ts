@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 
 // pocketbase
 import { ClientResponseError } from "pocketbase";
-import { ExpandCollection, convertPBDateToDate, getFirstListItem, getFullList, getUrl } from "pocketbase-lib";
+import { ExpandCollection, convertPBDateToDate, getFirstListItem, getFullList, getOne, getUrl } from "pocketbase-lib";
 
 /** A blog post. */
 export interface PostDetails {
@@ -106,8 +106,10 @@ export async function getProjects(): Promise<PostDetails[] | null> {
 }
 
 /** Returns the url to the resume file.  */
-export function getResumeURL(): string {
-    return `${environment.NEXT_PUBLIC_POCKETBASE_URL}/api/files/files/${environment.NEXT_PUBLIC_POCKETBASE_RESUME_FILE_ID}/${environment.NEXT_PUBLIC_POCKETBASE_RESUME_FILE_NAME}`;
+export async function getResumeURL(): Promise<string> {
+    const resumeRecord = await getOne("files", environment.NEXT_PUBLIC_POCKETBASE_RESUME_FILE_ID);
+    const resumeFileName = Array.isArray(resumeRecord.field) ? resumeRecord.field[0] : resumeRecord.field;
+    return getUrl(resumeRecord, resumeFileName);
 }
 
 /** Handle errors. */

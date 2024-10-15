@@ -3,12 +3,15 @@
 import Link from "next/link";
 import { Flex, Button } from "@chakra-ui/react";
 import { HiDocument } from "react-icons/hi2";
-import { getResumeURL } from "config";
+
+export interface ResumeButtonProps {
+    resumeUrl: string;
+}
 
 /** Button to open resume. */
-export function ResumeButton() {
+export function ResumeButton({ resumeUrl }: ResumeButtonProps) {
     return (
-        <Link href={getResumeURL()} passHref target="_blank">
+        <Link href={resumeUrl} passHref target="_blank">
             <Flex justify="center" align="center">
                 <Button
                     variant="outline"
