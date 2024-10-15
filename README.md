@@ -32,7 +32,6 @@ You need to create a `.env.local` file in the root directory with the following 
 # POCKETBASE (https://pocketbase.io/)
 NEXT_PUBLIC_POCKETBASE_URL="url"
 NEXT_PUBLIC_POCKETBASE_RESUME_FILE_ID="id"
-NEXT_PUBLIC_POCKETBASE_RESUME_FILE_NAME="name.extension"
 
 # GISCUS COMPONENT (https://github.com/giscus/giscus-component)
 # As of 2.3.0, set strict to 1 if using the pathname mapping.
