@@ -3,11 +3,24 @@
 import { Tag, Wrap, WrapItem } from "@chakra-ui/react";
 import { TagsProps } from "./types";
 
-/** Displays a group of tag(s). */
+/** Displays a group of sea-glass tag chip(s). */
 export default function Tags({ tags, ...props }: TagsProps) {
     const getItem = (name: string, key?: string) => (
         <WrapItem key={key}>
-            <Tag bgGradient="linear(to-l, brand.50, 10%, brand.100)" padding={2}>
+            <Tag
+                fontSize="9px"
+                letterSpacing="0.1em"
+                textTransform="uppercase"
+                bg="rgba(209, 231, 224, 0.6)"
+                backdropFilter="blur(8px)"
+                color="brand.500"
+                border="1px solid"
+                borderColor="brand.100"
+                borderRadius="full"
+                px={3}
+                py={1}
+                fontFamily="body"
+            >
                 {name}
             </Tag>
         </WrapItem>

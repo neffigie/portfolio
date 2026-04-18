@@ -1,7 +1,7 @@
 import "css/nprogress/nprogress.css";
 
-import { ClientHeading, ClientText } from "components";
-import { generatePageMetadata } from "config";
+import { generatePageMetadata, getProjects } from "config";
+import { HomeContent } from "./HomeContent";
 
 export function generateMetadata() {
     return generatePageMetadata({
@@ -11,22 +11,8 @@ export function generateMetadata() {
     });
 }
 
-export default function HomePage() {
-    return (
-        <>
-            <ClientHeading>Hi, 👋! I'm </ClientHeading>
-            <ClientHeading
-                bgGradient="linear(to-l, brand.700, brand.500)"
-                bgClip="text"
-                fontSize="6xl"
-                fontWeight="extrabold"
-            >
-                Anna Noelle.
-            </ClientHeading>
-            <ClientText mt={4}>
-                I'm a UVA Computer Science student and aspiring game developer. I'm passionate about creating exciting,
-                accessible systems. When I'm not coding, I enjoy drawing and making music.
-            </ClientText>
-        </>
-    );
+export default async function HomePage() {
+    const allProjects = (await getProjects()) ?? [];
+    const featured = allProjects.slice(0, 3);
+    return <HomeContent featured={featured} />;
 }

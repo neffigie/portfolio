@@ -1,27 +1,16 @@
 "use client";
 
-import { Flex, Show, Spacer, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { NavLink, MainContainer } from "components";
 import { menuItems } from "config/menu-items";
-import { environment } from "environment";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { environment } from "../../environment";
 
-function HeaderLink({ href, pathname, children }: React.PropsWithChildren<{ href: string; pathname: string }>) {
-    const [hover, setHover] = useState(false);
+function NavItem({ href, pathname, children }: React.PropsWithChildren<{ href: string; pathname: string }>) {
     const active = href === pathname || (href !== "/" && pathname.includes(href));
     return (
-        <NavLink
-            href={href}
-            key={href}
-            size="xl"
-            marginLeft={4}
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}
-            variant={active ? "active" : "inactive"}
-            color={hover ? "brand.900" : undefined}
-        >
-            {children}
+        <NavLink href={href} variant={active ? "active" : "inactive"} fontSize="xs" letterSpacing="0.1em">
+            {(children as string)?.toUpperCase()}
         </NavLink>
     );
 }
@@ -29,32 +18,40 @@ function HeaderLink({ href, pathname, children }: React.PropsWithChildren<{ href
 export function Header() {
     const pathname = usePathname();
     return (
-        <Flex
-            backgroundColor="whiteAlpha.600"
-            backdropFilter="saturate(180%) blur(16px)"
-            py={4}
+        <Box
+            as="header"
             position="fixed"
             width="100%"
-            as="header"
-            display="flex"
-            justifyContent="center"
             zIndex={1000}
+            backgroundColor="rgba(249, 249, 248, 0.82)"
+            backdropFilter="saturate(180%) blur(4px)"
+            borderColor="surface.containerHighest"
+            py={4}
         >
-            <MainContainer justifyContent="center" left={0} right={0} margin="auto">
-                <Flex direction="row" justifyContent="center" alignItems="flex-end" width="100%">
-                    <Show above="md">
-                        <Text fontSize="xl" color="gray.600">
-                            {environment.NEXT_PUBLIC_METADATA_AUTHOR.replace(/['"]+/g, "")}
-                        </Text>
-                        <Spacer />
-                    </Show>
-                    {Array.from(menuItems, ([key, value]) => (
-                        <HeaderLink key={key} href={key} pathname={pathname}>
-                            {value.displayName}
-                        </HeaderLink>
-                    ))}
+            <MainContainer>
+                <Flex direction="row" alignItems="center" width="100%">
+                    {/* Wordmark */}
+                    <Text
+                        fontFamily="heading"
+                        fontStyle="italic"
+                        fontSize="xl"
+                        color="ink.primary"
+                        letterSpacing="-0.01em"
+                        flexShrink={0}
+                    >
+                        {environment.NEXT_PUBLIC_METADATA_AUTHOR.replace(/['"]+/g, "")}
+                    </Text>
+
+                    {/* Nav links */}
+                    <Flex direction="row" gap={8} ml="auto" alignItems="center">
+                        {Array.from(menuItems, ([key, value]) => (
+                            <NavItem key={key} href={key} pathname={pathname}>
+                                {value.displayName}
+                            </NavItem>
+                        ))}
+                    </Flex>
                 </Flex>
             </MainContainer>
-        </Flex>
+        </Box>
     );
 }

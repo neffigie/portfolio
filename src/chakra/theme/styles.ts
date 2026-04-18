@@ -1,29 +1,22 @@
 "use client";
 
-import { StyleFunctionProps } from "@chakra-ui/react";
-import { mode } from "@chakra-ui/theme-tools";
-
 /**
  * The global styles.
  * @remarks See: https://chakra-ui.com/docs/styled-system/customize-theme#customizing-global-styles
+ * Dark mode is deferred — the Editorial Ether system is light-only for now.
  */
 const styles = {
-    global: (props: StyleFunctionProps) => ({
+    global: {
         body: {
             fontFamily: "body",
-            color: mode("black", "whiteAlpha.900")(props),
-            bgGradient: mode("linear(to-tl, brand.100, 10%, white)", "gray.800")(props),
-            backgroundAttachment: "fixed",
+            color: "ink.primary",
+            bg: "surface.bright",
             lineHeight: "base",
         },
-    }),
+    },
 
-    /**
-     * System set initial value, and the app subscribes to system color mode changes.
-     * See: https://chakra-ui.com/docs/styled-system/color-mode#common-configurations
-     */
-    initialColorMode: "system",
-    useSystemColorMode: true,
+    initialColorMode: "light",
+    useSystemColorMode: false,
 };
 
 export default styles;

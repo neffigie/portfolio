@@ -1,26 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import { Flex, Button } from "@chakra-ui/react";
-import { HiDocument } from "react-icons/hi2";
+import { Box, Flex } from "@chakra-ui/react";
+import { MdOutlineDescription } from "react-icons/md";
 
 export interface ResumeButtonProps {
     resumeUrl: string;
 }
 
-/** Button to open resume. */
+/** Outlined CTA resume link with file icon. */
 export function ResumeButton({ resumeUrl }: ResumeButtonProps) {
     return (
-        <Link href={resumeUrl} passHref target="_blank">
-            <Flex justify="center" align="center">
-                <Button
-                    variant="outline"
-                    colorScheme="brand"
-                    leftIcon={<HiDocument color="var(--chakra-colors-brand-500)" />}
-                >
-                    Open Resume
-                </Button>
+        <Box
+            as={Link}
+            href={resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            display="inline-block"
+            fontSize="10px"
+            letterSpacing="0.12em"
+            textTransform="uppercase"
+            fontFamily="body"
+            color="ink.primary"
+            border="1px solid"
+            borderColor="ink.primary"
+            px={4}
+            py="8px"
+            borderRadius="lg"
+            transition="all 0.15s ease"
+            _hover={{ bg: "ink.primary", color: "surface.bright" }}
+        >
+            <Flex as="span" align="center" gap={2}>
+                <MdOutlineDescription size={14} />
+                Open Resume
             </Flex>
-        </Link>
+        </Box>
     );
 }

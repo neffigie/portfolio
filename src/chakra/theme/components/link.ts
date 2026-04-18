@@ -4,21 +4,25 @@ const link = {
             color: "brand.500",
         },
         active: {
-            color: "brand.700",
-            fontWeight: "bold",
+            color: "ink.primary",
+            fontWeight: "medium",
             display: "inline-flex",
-            _hover: { textDecoration: "none" },
+            borderBottom: "1.5px solid",
+            borderColor: "brand.500",
+            paddingBottom: "2px",
+            _hover: { textDecoration: "none", color: "brand.500" },
         },
         inactive: {
+            color: "ink.muted",
             display: "inline-flex",
-            fontWeight: "bold",
-            _hover: { textDecoration: "none" },
+            fontWeight: "medium",
+            _hover: { textDecoration: "none", color: "ink.primary" },
         },
     },
     sizes: {
-        xl: {
-            fontSize: "xl",
-        },
+        sm: { fontSize: "sm" },
+        md: { fontSize: "md" },
+        xl: { fontSize: "xl" },
     },
 };
 
