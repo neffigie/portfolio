@@ -2,19 +2,12 @@
 
 import Link from "next/link";
 import { IconButton, IconButtonProps } from "@chakra-ui/react";
-import { Url } from "next/dist/shared/lib/router/router";
 
 export interface IconButtonLinkProps extends IconButtonProps {
-    /**
-     * The path or URL to navigate to. It can also be an object.
-     * @privateremarks from the Next.js docs
-     */
-    href: Url;
+    href: string;
 }
 
 /** An `IconButton` that can link to other pages using the `href` prop. */
 export const IconButtonLink = ({ href, ...props }: IconButtonLinkProps) => (
-    <Link href={href} passHref target="_blank" legacyBehavior>
-        <IconButton {...props} as="a" />
-    </Link>
+    <IconButton as={Link} href={href} target="_blank" {...props} />
 );

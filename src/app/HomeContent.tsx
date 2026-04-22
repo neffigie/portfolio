@@ -9,7 +9,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { environment } from "../environment";
 import { ResumeButton } from "components";
-import { getResumeURL } from "../config";
 
 function Eyebrow({ children }: { children: string }) {
     return (
@@ -19,8 +18,7 @@ function Eyebrow({ children }: { children: string }) {
     );
 }
 
-export async function HomeContent({ featured }: { featured: FeedItem[] }) {
-    const resumeUrl = (await getResumeURL()) ?? "";
+export function HomeContent({ featured, resumeUrl }: { featured: FeedItem[]; resumeUrl: string }) {
     return (
         <>
             {/* ── Hero ─────────────────────────────────────────────── */}

@@ -1,5 +1,7 @@
+"use client";
+
 import dynamic from "next/dynamic";
-const PreBlock = dynamic(() => import("./PreBlock"), { ssr: false }); // occasionally getting incorrect (?) ssr errors
+const PreBlock = dynamic(() => import("./PreBlock"), { ssr: false });
 
 import InlineCodeBlock from "./InlineCodeBlock";
 import { CodeBlockBaseProps } from "./types";
