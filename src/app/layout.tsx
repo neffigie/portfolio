@@ -5,7 +5,7 @@ import { environment } from "environment";
 import { getResumeURL } from "config";
 import "css/giscus/giscus.css";
 
-export const fetchCache = "force-no-store"; // allows the resume to be continuously updated
+export const dynamic = "force-dynamic"; // layout fetches resume URL from PocketBase on every request
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
     const resumeUrl = (await getResumeURL()) ?? "";

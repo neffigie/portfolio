@@ -29,13 +29,13 @@ const HTMLParser = ({ body }: MarkdownProps) => {
                 case "pre":
                     return (
                         <PreBlock className={node.attribs.class as CodeBlockBaseProps["className"]} {...props}>
-                            {domToReact(node.children) as React.ReactElement}
+                            {domToReact(node.children as DOMNode[]) as React.ReactElement}
                         </PreBlock>
                     );
                 case "code":
-                    return <InlineCodeBlock {...props}>{domToReact(node.children)}</InlineCodeBlock>;
+                    return <InlineCodeBlock {...props}>{domToReact(node.children as DOMNode[])}</InlineCodeBlock>;
                 case "h2":
-                    const children = domToReact(node.children);
+                    const children = domToReact(node.children as DOMNode[]);
                     if (children === "\xa0" /** &nbsp */) return <></>;
                     return (
                         // @ts-ignore TODO - Argument of type ChildNode is not assignable to parameter of type ChildNode | Node | ParentNode
@@ -44,33 +44,33 @@ const HTMLParser = ({ body }: MarkdownProps) => {
                 case "p":
                     return (
                         <ClientText as="div" fontSize="md" lineHeight={6} {...props}>
-                            {domToReact(node.children, { replace: replace })}
+                            {domToReact(node.children as DOMNode[], { replace: replace })}
                         </ClientText>
                     );
                 case "sub":
                     return (
                         <ClientText as="sub" {...props}>
-                            {domToReact(node.children)}
+                            {domToReact(node.children as DOMNode[])}
                         </ClientText>
                     );
                 case "a":
                     return (
                         <NavLink {...props} variant="external">
-                            {domToReact(node.children)}
+                            {domToReact(node.children as DOMNode[])}
                         </NavLink>
                     );
                 case "blockquote":
                     return (
                         <ProseClient {...props}>
-                            <blockquote>{domToReact(node.children)}</blockquote>
+                            <blockquote>{domToReact(node.children as DOMNode[])}</blockquote>
                         </ProseClient>
                     );
                 case "table":
-                    return <Table mb={6}>{domToReact(node.children) as JSX.Element[]}</Table>;
+                    return <Table mb={6}>{domToReact(node.children as DOMNode[]) as JSX.Element[]}</Table>;
                 case "figure":
                 case "ol":
                 case "ul":
-                    return <ProseClient {...props}>{domToReact(node.children)}</ProseClient>;
+                    return <ProseClient {...props}>{domToReact(node.children as DOMNode[])}</ProseClient>;
                 default:
                     return node;
             }
