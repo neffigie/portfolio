@@ -4,7 +4,7 @@ import { Fragment, useEffect, useRef } from "react";
 
 interface FluidTextProps {
     children: string;
-    /** Apply ink.primary → brand.500 left-to-right gradient across all characters. */
+    /** Apply a left-to-right gradient across all characters. */
     gradient?: boolean;
     maxPush?: number;
     radius?: number;
@@ -42,7 +42,7 @@ export function FluidText({ children, gradient = false, maxPush = 10, radius = 1
         // Avoids background-clip entirely — italic glyphs extend beyond their
         // content box, so background-clip always clips the descenders/ascenders.
         // Direct color interpolation has no clipping issues whatsoever.
-        // ink.primary = #111c1b, brand.500 = #2a6c5c
+        // Gradient: warm rose #b07888 → soft sky #78a0b8
         if (gradient) {
             const applyGradient = () => {
                 const container = containerRef.current;
@@ -52,8 +52,8 @@ export function FluidText({ children, gradient = false, maxPush = 10, radius = 1
                     requestAnimationFrame(applyGradient);
                     return;
                 }
-                const [sR, sG, sB] = [17, 28, 27];   // #111c1b
-                const [eR, eG, eB] = [42, 108, 92];  // #2a6c5c
+                const [sR, sG, sB] = [176, 120, 136]; // #b07888
+                const [eR, eG, eB] = [120, 160, 184]; // #78a0b8
                 for (let i = 0; i < charCount; i++) {
                     const el = charsRef.current[i];
                     if (!el) continue;

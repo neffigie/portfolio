@@ -1,3 +1,6 @@
+export * from "components/providers";
+export * from "components/glass";
+export * from "components/scene";
 export * from "components/parsing";
 export * from "components/giscus";
 export * from "components/image";

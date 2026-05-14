@@ -47,7 +47,7 @@ export function BlogContent({ posts }: { posts: FeedItem[] | undefined }) {
     return (
         <>
             {/* ── Page Hero ──────────────────────────────────────── */}
-            <Box as="section" bg="surface.containerLow" pt={{ base: 16, md: 24 }} pb={{ base: 12, md: 16 }}>
+            <Box as="section" bg="surface.muted" pt={{ base: 16, md: 24 }} pb={{ base: 12, md: 16 }}>
                 <MainContainer>
                     <Text
                         fontSize="10px"
@@ -83,7 +83,7 @@ export function BlogContent({ posts }: { posts: FeedItem[] | undefined }) {
             </Box>
 
             {/* ── Feed ───────────────────────────────────────────── */}
-            <Box as="section" bg="surface.bright" py={{ base: 12, md: 20 }}>
+            <Box as="section" bg="surface.elevated" py={{ base: 12, md: 20 }}>
                 <MainContainer>
                     <SearchFilter
                         tags={allTags}

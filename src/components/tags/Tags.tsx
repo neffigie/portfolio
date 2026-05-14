@@ -11,11 +11,11 @@ export default function Tags({ tags, ...props }: TagsProps) {
                 fontSize="9px"
                 letterSpacing="0.1em"
                 textTransform="uppercase"
-                bg="rgba(209, 231, 224, 0.6)"
+                bg="rgba(232,196,200,0.35)"
                 backdropFilter="blur(8px)"
-                color="brand.500"
+                color="ink.muted"
                 border="1px solid"
-                borderColor="brand.100"
+                borderColor="rgba(235,184,194,0.5)"
                 borderRadius="full"
                 px={3}
                 py={1}

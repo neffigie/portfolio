@@ -17,7 +17,7 @@ interface ImageProps extends React.ComponentProps<typeof NextImage> {
 
 /** The Next `Image` component wrapped in a tooltip with extra configuration. */
 const Image = ({ src, alt, style, ...props }: ImageProps) => (
-    <Tooltip label={alt} background="brand.100" color="gray.800" backdropFilter="saturate(180%) blur(2px)">
+    <Tooltip label={alt} background="decorative.a" color="ink.primary" backdropFilter="saturate(180%) blur(2px)">
         <NextImage
             src={src}
             alt={alt}

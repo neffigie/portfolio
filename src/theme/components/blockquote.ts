@@ -1,5 +1,5 @@
 const blockquote = {
-    borderInlineStartColor: "brand.200",
+    borderInlineStartColor: "decorative.a",
 };
 
 export default blockquote;

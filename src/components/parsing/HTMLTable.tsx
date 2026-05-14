@@ -13,11 +13,11 @@ export default function HTMLTable<T extends TableProps>({ children, ...props }: 
     const table = children[1].props.children;
     return (
         <TableContainer {...props}>
-            <Table size="sm" colorScheme="brand">
+            <Table size="sm" colorScheme="accent">
                 <Thead>
                     <Tr>
                         {table[0].props.children.map((x, i) => (
-                            <Th key={i} color="brand.800">{`${x.props.children}`}</Th>
+                            <Th key={i} color="ink.primary">{`${x.props.children}`}</Th>
                         ))}
                     </Tr>
                 </Thead>
@@ -25,7 +25,7 @@ export default function HTMLTable<T extends TableProps>({ children, ...props }: 
                     {[...table].slice(1).map((x, i) => (
                         <Tr key={i}>
                             {x.props.children.map((x, i) => (
-                                <Td key={i} color="brand.600">{`${x.props.children}`}</Td>
+                                <Td key={i} color="ink.muted">{`${x.props.children}`}</Td>
                             ))}
                         </Tr>
                     ))}

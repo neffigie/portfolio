@@ -15,9 +15,18 @@ const CARD_TINTS = [
     "linear-gradient(135deg, #e8d4c0, #d8c0a8)",
 ];
 
+const CARD_DECOR_STYLE = {
+    position: "absolute",
+    inset: 0,
+    width: "100%",
+    height: "100%",
+    opacity: 0.45,
+    display: "block",
+} as const;
+
 function CardDecor({ index }: { index: number }) {
     if (index === 0) return (
-        <svg viewBox="0 0 800 600" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.45 }} preserveAspectRatio="xMidYMid slice">
+        <svg viewBox="0 0 800 600" style={CARD_DECOR_STYLE} preserveAspectRatio="xMidYMid slice">
             <g stroke="rgba(255,255,255,0.6)" strokeWidth="0.8" fill="none">
                 <path d="M0,260 Q200,200 400,260 T800,260"/>
                 <path d="M0,310 Q200,250 400,310 T800,310"/>
@@ -29,7 +38,7 @@ function CardDecor({ index }: { index: number }) {
         </svg>
     );
     if (index === 1) return (
-        <svg viewBox="0 0 600 400" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.45 }} preserveAspectRatio="xMidYMid slice">
+        <svg viewBox="0 0 600 400" style={CARD_DECOR_STYLE} preserveAspectRatio="xMidYMid slice">
             <g fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="0.8">
                 <circle cx="300" cy="200" r="35"/><circle cx="300" cy="200" r="65"/>
                 <circle cx="300" cy="200" r="95"/><circle cx="300" cy="200" r="125"/>
@@ -38,7 +47,7 @@ function CardDecor({ index }: { index: number }) {
         </svg>
     );
     return (
-        <svg viewBox="0 0 600 400" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.45 }} preserveAspectRatio="xMidYMid slice">
+        <svg viewBox="0 0 600 400" style={CARD_DECOR_STYLE} preserveAspectRatio="xMidYMid slice">
             <g stroke="rgba(255,255,255,0.45)" strokeWidth="0.8" fill="none">
                 <path d="M0,80 L600,80"/><path d="M0,140 L600,140"/>
                 <path d="M0,200 L600,200"/><path d="M0,260 L600,260"/>
@@ -122,7 +131,7 @@ function ProjectCard({ item, index, big }: { item: FeedItem; index: number; big?
                         fontFamily="heading"
                         fontStyle="italic"
                         fontWeight="400"
-                        fontSize={big ? "15px" : "14px"}
+                        fontSize={big ? "clamp(12px, 1.55dvh, 15px)" : "clamp(11px, 1.45dvh, 14px)"}
                         color="ink.primary"
                         lineHeight="1.25"
                     >
@@ -140,8 +149,8 @@ export function HomeContent({ featured, resumeUrl }: { featured: FeedItem[]; res
     return (
         <Flex
             direction="column"
-            height="calc(100dvh - 104px)"
-            overflow="hidden"
+            flex="1 1 auto"
+            minH={0}
             position="relative"
             zIndex={1}
         >
@@ -149,10 +158,11 @@ export function HomeContent({ featured, resumeUrl }: { featured: FeedItem[]; res
             <Flex
                 as="section"
                 flexShrink={0}
-                px={{ base: 6, md: 10 }}
-                py="14px"
-                align="center"
-                gap={8}
+                px={{ base: 4, md: 10 }}
+                py={{ base: 2, md: "14px" }}
+                align={{ base: "flex-start", md: "center" }}
+                gap={{ base: 3, md: 8 }}
+                wrap="wrap"
             >
                 {/* Left: eyebrow + headline */}
                 <Box flexShrink={0}>
@@ -174,7 +184,7 @@ export function HomeContent({ featured, resumeUrl }: { featured: FeedItem[]; res
                         fontFamily="heading"
                         fontStyle="italic"
                         fontWeight="300"
-                        fontSize="clamp(36px, 4.5vw, 64px)"
+                        fontSize="clamp(30px, min(4.5vw, 7.5dvh), 64px)"
                         lineHeight="0.9"
                         letterSpacing="-0.03em"
                         display="inline-block"
@@ -185,15 +195,14 @@ export function HomeContent({ featured, resumeUrl }: { featured: FeedItem[]; res
                 </Box>
 
                 {/* Right: lede + resume pill — plain CSS, no LiquidGlass */}
-                <Flex direction="column" align="flex-start" gap={2}>
+                <Flex direction="column" align="flex-start" gap={{ base: 1, md: 2 }}>
                     <Text
                         fontFamily="heading"
                         fontStyle="italic"
                         fontWeight="300"
-                        fontSize="14px"
-                        lineHeight="1.5"
+                        fontSize="clamp(12px, 1.6dvh, 14px)"
+                        lineHeight="1.35"
                         color="ink.primary"
-                        whiteSpace="nowrap"
                     >
                         Full-stack engineer, game developer, creative builder.
                     </Text>
@@ -205,8 +214,8 @@ export function HomeContent({ featured, resumeUrl }: { featured: FeedItem[]; res
                         display="inline-flex"
                         alignItems="center"
                         gap={2}
-                        px="20px"
-                        py="10px"
+                        px={{ base: 3, md: "20px" }}
+                        py={{ base: 2, md: "10px" }}
                         borderRadius="999px"
                         fontFamily="mono"
                         fontSize="10px"
@@ -237,15 +246,15 @@ export function HomeContent({ featured, resumeUrl }: { featured: FeedItem[]; res
                     direction="column"
                     flex={1}
                     minH={0}
-                    px={{ base: 6, md: 10 }}
-                    pb="12px"
+                    px={{ base: 4, md: 10 }}
+                    pb={{ base: 2, md: "12px" }}
                 >
-                    <Flex justifyContent="space-between" alignItems="baseline" mb={2} flexShrink={0}>
+                    <Flex justifyContent="space-between" alignItems="baseline" mb={{ base: 1, md: 2 }} flexShrink={0}>
                         <Text
                             fontFamily="heading"
                             fontStyle="italic"
                             fontWeight="400"
-                            fontSize="17px"
+                            fontSize="clamp(14px, 2dvh, 17px)"
                             color="ink.primary"
                         >
                             Selected Work

@@ -1,13 +1,16 @@
 import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
 import { withProse } from "@nikolovlazar/chakra-ui-prose";
-import link from "chakra/theme/components/link";
-import blockquote from "chakra/theme/components/blockquote";
-import fonts from "chakra/theme/foundations/fonts";
-import styles from "chakra/theme/styles";
-import colors from "chakra/theme/colors";
+import link from "theme/components/link";
+import blockquote from "theme/components/blockquote";
+import fonts from "theme/fonts";
+import styles from "theme/styles";
+import colors from "theme/colors";
 
-/** The app theme. */
 const theme = {
+    config: {
+        initialColorMode: "light",
+        useSystemColorMode: false,
+    },
     styles,
     fonts,
     colors,
@@ -19,7 +22,7 @@ const theme = {
 export default extendTheme(
     theme,
     withDefaultColorScheme({
-        colorScheme: "brand",
+        colorScheme: "accent",
         components: ["Tag", "Badge", "Spinner", "Code"],
     }),
     withProse({

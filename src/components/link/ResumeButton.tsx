@@ -28,7 +28,7 @@ export function ResumeButton({ resumeUrl }: ResumeButtonProps) {
             py="8px"
             borderRadius="lg"
             transition="all 0.15s ease"
-            _hover={{ bg: "ink.primary", color: "surface.bright" }}
+            _hover={{ bg: "ink.primary", color: "surface.elevated" }}
         >
             <Flex as="span" align="center" gap={2}>
                 <MdOutlineDescription size={14} />

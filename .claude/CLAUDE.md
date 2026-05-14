@@ -2,7 +2,7 @@
 
 Personal portfolio for a multidisciplinary creator: software engineer, game developer, artistically driven builder.
 
-**Active initiative:** Visual 2.0 overhaul — implementing the Editorial Ether design system.
+**Active initiative:** Visual 2.0 overhaul — new design language replacing Editorial Ether. See design-system.md.
 
 ## Core Goal
 
@@ -13,8 +13,10 @@ Do not rewrite working functionality. Do not add features. Do not change routes 
 ## Stack
 
 - Next.js 13.5, App Router (`src/app/`)
-- Chakra UI v2 + Emotion — theme lives in `src/chakra/theme/`
-- Framer Motion
+- Chakra UI v2 + Emotion — theme lives in `src/theme/`
+- Framer Motion v10
+- React Three Fiber (`@react-three/fiber`, `@react-three/drei`) — hero scene
+- `html2canvas` — page capture for glassmorphic displacement (GlassPanel bar profile)
 - PocketBase (CMS backend)
 - TypeScript, **npm**
 

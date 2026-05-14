@@ -16,10 +16,10 @@ export function Post({ post }: PostProps) {
             <MainContainer>
             <Box
                 mx="auto"
-                sx={{ background: "linear-gradient(135deg, rgba(255,255,255,0.78), rgba(241,244,243,0.52))" }}
+                sx={{ background: "linear-gradient(135deg, rgba(255,252,248,0.78), rgba(245,237,227,0.52))" }}
                 backdropFilter="blur(16px)"
                 border="1px solid"
-                borderColor="surface.containerHighest"
+                borderColor="surface.border"
                 borderRadius="xl"
                 p={{ base: 6, md: 10 }}
             >
@@ -72,7 +72,7 @@ export function Post({ post }: PostProps) {
             </Box>
 
             {/* Comments */}
-            <Box mt={16} pt={12} borderTop="1px solid" borderColor="surface.containerHighest">
+            <Box mt={16} pt={12} borderTop="1px solid" borderColor="surface.border">
                 <Text
                     fontSize="10px"
                     letterSpacing="0.14em"

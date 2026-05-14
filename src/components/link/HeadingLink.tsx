@@ -57,7 +57,8 @@ export function HeadingLink({ slugSource, text, ...props }: HeadingLinkProps) {
                         onClick={onClick}
                         icon={
                             <FaHashtag
-                                color={hover ? "var(--chakra-colors-brand-300)" : "var(--chakra-colors-brand-200)"}
+                                color={hover ? "var(--chakra-colors-accent-primaryHover)" : "var(--chakra-colors-decorative-a)"}
+
                                 size="1.25em"
                                 strokeWidth={2}
                             />
@@ -74,7 +75,7 @@ export function HeadingLink({ slugSource, text, ...props }: HeadingLinkProps) {
                     />
                 </Heading>
             </Box>
-            <Divider marginBottom={4} borderColor="brand.50" />
+            <Divider marginBottom={4} borderColor="decorative.a" />
         </>
     );
 }

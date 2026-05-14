@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function NotFound() {
     return (
-        <Box as="section" bg="surface.bright" py={{ base: 32, md: 48 }}>
+        <Box as="section" bg="surface.elevated" minH="calc(100dvh - 104px)" display="flex" alignItems="center">
             <MainContainer>
                 <Text
                     fontSize="10px"

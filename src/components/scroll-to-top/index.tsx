@@ -1,9 +1,10 @@
 "use client";
 
-import { IconButton } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { HiArrowUp } from "react-icons/hi2";
+import { Box } from "@chakra-ui/react";
+import { GlassPanel } from "components/glass";
 
 /** Appears after scrolling 400px. Smooth-scrolls back to top on click. */
 export function ScrollToTop() {
@@ -25,32 +26,43 @@ export function ScrollToTop() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
                     transition={{ duration: 0.2, ease: "easeOut" }}
-                    style={{
-                        position: "fixed",
-                        bottom: "2rem",
-                        right: "2rem",
-                        zIndex: 999,
-                    }}
+                    style={{ position: "fixed", bottom: "1.5rem", right: "1.5rem", zIndex: 999 }}
                 >
-                    <IconButton
-                        aria-label="Scroll to top"
-                        icon={<HiArrowUp />}
-                        onClick={scrollToTop}
-                        size="md"
-                        borderRadius="full"
-                        // Glass treatment
-                        backgroundColor="rgba(249, 249, 248, 0.82)"
-                        backdropFilter="saturate(180%) blur(16px)"
-                        border="1px solid"
-                        borderColor="surface.containerHighest"
-                        color="ink.primary"
-                        boxShadow="0 4px 20px rgba(44, 52, 51, 0.08)"
-                        _hover={{
-                            backgroundColor: "rgba(249, 249, 248, 0.95)",
-                            color: "brand.500",
+                    <GlassPanel
+                        cornerRadius={15}
+                        displacementScale={52}
+                        blurAmount={0.8}
+                        padding="0"
+                        style={{
+                            display: "block",
+                            height: "44px",
+                            transition: "transform 0.2s ease-out, box-shadow 0.2s ease-out",
+                            width: "44px",
                         }}
-                        _active={{ transform: "scale(0.95)" }}
-                    />
+                    >
+                        <Box
+                            as="button"
+                            onClick={scrollToTop}
+                            aria-label="Scroll to top"
+                            cursor="pointer"
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                            w="44px"
+                            h="44px"
+                            border={0}
+                            borderRadius="15px"
+                            background="transparent"
+                            color="ink.primary"
+                            transition="all 0.2s ease-out"
+                            _hover={{
+                                transform: "translateY(-1px)",
+                            }}
+                            _active={{ transform: "scale(0.95)" }}
+                        >
+                            <HiArrowUp size={16} />
+                        </Box>
+                    </GlassPanel>
                 </motion.div>
             )}
         </AnimatePresence>

@@ -1,5 +1,8 @@
-import { StyleJsxGlobal, Providers } from "chakra";
+import StyleGlobal from "components/style-global";
+import { Providers } from "components/providers";
 import { Header, Footer, ScrollToTop } from "components";
+import { HeroScene } from "components/scene/HeroScene";
+import { FieldLines } from "components/scene/FieldLines";
 import { HandleOnComplete } from "router";
 import { environment } from "environment";
 import { getResumeURL } from "config";
@@ -19,16 +22,28 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 style={{
                     display: "flex",
                     flexDirection: "column",
-                    minHeight: "100%",
+                    minHeight: "100dvh",
                 }}
             >
                 <link rel="icon" href="/favicon.ico" sizes="any" />
                 <HandleOnComplete />
-                <StyleJsxGlobal />
+                <StyleGlobal />
                 <Providers>
+                    <HeroScene />
+                    <FieldLines />
                     <Header />
-                    {/* pt accounts for fixed header height (~64px) */}
-                    <main style={{ flex: 1, paddingTop: "64px" }}>
+                    <main
+                        style={{
+                            boxSizing: "border-box",
+                            display: "flex",
+                            flex: "1 1 auto",
+                            flexDirection: "column",
+                            minHeight: 0,
+                            paddingTop: "56px",
+                            position: "relative",
+                            zIndex: 1,
+                        }}
+                    >
                         {children}
                     </main>
                     <Footer

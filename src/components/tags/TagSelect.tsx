@@ -38,14 +38,14 @@ export default function TagSelect({ tags, value, onChange }: TagSelectProps) {
                         py="6px"
                         borderRadius="full"
                         border="1px solid"
-                        bg={active ? "brand.500" : "rgba(249,249,248,0.7)"}
-                        color={active ? "white" : "ink.muted"}
-                        borderColor={active ? "brand.500" : "surface.containerHighest"}
+                        bg={active ? "accent.primary" : "rgba(255,252,248,0.7)"}
+                        color={active ? "ink.primary" : "ink.muted"}
+                        borderColor={active ? "accent.primary" : "surface.border"}
                         backdropFilter={active ? "none" : "blur(8px)"}
                         transition="all 0.15s ease"
                         _hover={{
-                            bg: active ? "brand.600" : "rgba(209, 231, 224, 0.5)",
-                            color: active ? "white" : "ink.primary",
+                            bg: active ? "accent.primaryHover" : "rgba(232,196,200,0.3)",
+                            color: "ink.primary",
                         }}
                         cursor="pointer"
                     >
