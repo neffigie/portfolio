@@ -1,286 +1,294 @@
 "use client";
 
-import { Box, Button, Flex, Grid, GridItem, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, Text } from "@chakra-ui/react";
 import { FeedItem } from "components/feed";
 import { FluidText } from "components/fluid-text";
-import { MainContainer } from "components/main-container";
+import { MagneticText } from "components/magnetic";
 import { TiltCard } from "components/tilt-card";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 import { environment } from "../environment";
-import { ResumeButton } from "components";
 
-function Eyebrow({ children }: { children: string }) {
+const CARD_TINTS = [
+    "linear-gradient(135deg, #d8c4e0, #c4b8d8)",
+    "linear-gradient(135deg, #c4dcc8, #a8c8b4)",
+    "linear-gradient(135deg, #e8d4c0, #d8c0a8)",
+];
+
+function CardDecor({ index }: { index: number }) {
+    if (index === 0) return (
+        <svg viewBox="0 0 800 600" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.45 }} preserveAspectRatio="xMidYMid slice">
+            <g stroke="rgba(255,255,255,0.6)" strokeWidth="0.8" fill="none">
+                <path d="M0,260 Q200,200 400,260 T800,260"/>
+                <path d="M0,310 Q200,250 400,310 T800,310"/>
+                <path d="M0,360 Q200,300 400,360 T800,360"/>
+                <path d="M0,410 Q200,350 400,410 T800,410"/>
+            </g>
+            <circle cx="600" cy="180" r="90" fill="rgba(255,255,255,0.20)"/>
+            <circle cx="600" cy="180" r="55" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1"/>
+        </svg>
+    );
+    if (index === 1) return (
+        <svg viewBox="0 0 600 400" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.45 }} preserveAspectRatio="xMidYMid slice">
+            <g fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="0.8">
+                <circle cx="300" cy="200" r="35"/><circle cx="300" cy="200" r="65"/>
+                <circle cx="300" cy="200" r="95"/><circle cx="300" cy="200" r="125"/>
+            </g>
+            <rect x="284" y="184" width="32" height="32" fill="rgba(255,255,255,0.25)" transform="rotate(45 300 200)"/>
+        </svg>
+    );
     return (
-        <Text fontSize="10px" letterSpacing="0.14em" textTransform="uppercase" color="ink.muted" fontFamily="heading" mb={4}>
-            <FluidText>{children}</FluidText>
-        </Text>
+        <svg viewBox="0 0 600 400" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.45 }} preserveAspectRatio="xMidYMid slice">
+            <g stroke="rgba(255,255,255,0.45)" strokeWidth="0.8" fill="none">
+                <path d="M0,80 L600,80"/><path d="M0,140 L600,140"/>
+                <path d="M0,200 L600,200"/><path d="M0,260 L600,260"/>
+                <path d="M0,320 L600,320"/>
+            </g>
+            <circle cx="180" cy="200" r="45" fill="rgba(255,255,255,0.22)"/>
+            <circle cx="420" cy="200" r="45" fill="none" stroke="rgba(255,255,255,0.50)" strokeWidth="1"/>
+        </svg>
+    );
+}
+
+function ProjectCard({ item, index, big }: { item: FeedItem; index: number; big?: boolean }) {
+    return (
+        <TiltCard style={{ height: "100%", display: "block" }}>
+            <Box
+                as={Link}
+                href={item.url}
+                display="flex"
+                flexDirection="column"
+                height="100%"
+                overflow="hidden"
+                borderRadius="14px"
+                background="rgba(255,252,248,0.55)"
+                backdropFilter="blur(14px) saturate(130%)"
+                sx={{ WebkitBackdropFilter: "blur(14px) saturate(130%)" }}
+                border="2px solid rgba(255,255,255,0.80)"
+                boxShadow="0 4px 20px rgba(180,160,170,0.18)"
+                transition="transform 0.35s, box-shadow 0.35s"
+                _hover={{ transform: "translateY(-2px)", boxShadow: "0 8px 32px rgba(180,160,190,0.25)" }}
+                cursor="pointer"
+            >
+                <Box
+                    position="relative"
+                    flex={1}
+                    minH={0}
+                    background={CARD_TINTS[index % 3]}
+                    overflow="hidden"
+                >
+                    {item.image_src && (
+                        <Image
+                            src={item.image_src}
+                            alt={item.image_alt}
+                            fill
+                            sizes={big ? "(max-width: 768px) 100vw, 62vw" : "(max-width: 768px) 100vw, 38vw"}
+                            loading="eager"
+                            style={{ objectFit: "cover", opacity: 0.18, mixBlendMode: "overlay" }}
+                        />
+                    )}
+                    <CardDecor index={index} />
+                    <Text
+                        position="absolute"
+                        top={3}
+                        left={3}
+                        fontFamily="mono"
+                        fontSize="9px"
+                        letterSpacing="0.18em"
+                        color="rgba(255,255,255,0.85)"
+                    >
+                        / 0{index + 1}
+                    </Text>
+                </Box>
+
+                <Box
+                    px={3}
+                    py="10px"
+                    flexShrink={0}
+                    background="rgba(255,255,255,0.60)"
+                    borderTop="1px solid rgba(255,255,255,0.50)"
+                >
+                    <Text
+                        fontFamily="mono"
+                        fontSize="8px"
+                        letterSpacing="0.18em"
+                        textTransform="uppercase"
+                        color="ink.faint"
+                        mb="2px"
+                    >
+                        {item.tags[0]?.name}
+                    </Text>
+                    <Text
+                        fontFamily="heading"
+                        fontStyle="italic"
+                        fontWeight="400"
+                        fontSize={big ? "15px" : "14px"}
+                        color="ink.primary"
+                        lineHeight="1.25"
+                    >
+                        {item.title}
+                    </Text>
+                </Box>
+            </Box>
+        </TiltCard>
     );
 }
 
 export function HomeContent({ featured, resumeUrl }: { featured: FeedItem[]; resumeUrl: string }) {
+    const author = environment.NEXT_PUBLIC_METADATA_AUTHOR.replace(/['"]+/g, "");
+
     return (
-        <>
-            {/* ── Hero ─────────────────────────────────────────────── */}
-            <Box as="section" bg="surface.containerLow" py={{ base: 24, md: 36 }} overflow="hidden">
-                <MainContainer>
-                    <Eyebrow>The portfolio of</Eyebrow>
+        <Flex
+            direction="column"
+            height="calc(100dvh - 104px)"
+            overflow="hidden"
+            position="relative"
+            zIndex={1}
+        >
+            {/* ── Hero ───────────────────────────────────────────── */}
+            <Flex
+                as="section"
+                flexShrink={0}
+                px={{ base: 6, md: 10 }}
+                py="14px"
+                align="center"
+                gap={8}
+            >
+                {/* Left: eyebrow + headline */}
+                <Box flexShrink={0}>
+                    <Flex align="center" gap="10px" mb="6px">
+                        <Box w="24px" h="1px" bg="ink.faint" flexShrink={0} />
+                        <Text
+                            fontFamily="mono"
+                            fontSize="9px"
+                            letterSpacing="0.22em"
+                            textTransform="uppercase"
+                            color="ink.faint"
+                            whiteSpace="nowrap"
+                        >
+                            <MagneticText>The portfolio of Anna Noelle</MagneticText>
+                        </Text>
+                    </Flex>
                     <Text
                         as="h1"
                         fontFamily="heading"
                         fontStyle="italic"
-                        fontSize={{ base: "6xl", md: "8xl", lg: "9xl" }}
-                        lineHeight="0.92"
-                        letterSpacing="-0.02em"
-                        mb={8}
-                        maxW="14ch"
+                        fontWeight="300"
+                        fontSize="clamp(36px, 4.5vw, 64px)"
+                        lineHeight="0.9"
+                        letterSpacing="-0.03em"
+                        display="inline-block"
                     >
-                        <FluidText gradient>{environment.NEXT_PUBLIC_METADATA_AUTHOR.replace(/['"]+/g, "") + "."}</FluidText>
+                        <FluidText gradient>{author}</FluidText>
+                        <Box as="span" color="accent.primary">.</Box>
                     </Text>
-                    <Text
-                        fontFamily="body"
-                        fontSize={{ base: "sm", md: "md" }}
-                        color="ink.muted"
-                        maxW="44ch"
-                        lineHeight="1.7"
-                        mb={10}
-                    >
-                        <FluidText>{"A multidisciplinary creator: software engineer, game developer, and artistically driven builder. I craft systems that sit at the edge of code and lived experience."}</FluidText>
-                    </Text>
-                    <ResumeButton resumeUrl={resumeUrl}/>
-                </MainContainer>
-            </Box>
-
-            {/* ── Concept ──────────────────────────────────────────── */}
-            <Box as="section" bg="surface.bright" py={{ base: 20, md: 32 }}>
-                <MainContainer>
-                    <Grid templateColumns={{ base: "1fr", md: "1fr 1.6fr" }} gap={{ base: 10, md: 20 }}>
-                        <GridItem>
-                            <Text
-                                fontFamily="heading"
-                                fontStyle="italic"
-                                fontSize={{ base: "2xl", md: "3xl" }}
-                                color="ink.primary"
-                                lineHeight="1.2"
-                            >
-                                The Concept
-                            </Text>
-                        </GridItem>
-                        <GridItem>
-                            <Text
-                                fontFamily="heading"
-                                fontStyle="italic"
-                                fontSize={{ base: "lg", md: "xl" }}
-                                color="ink.primary"
-                                lineHeight="1.5"
-                                mb={6}
-                            >
-                                &ldquo;The archive is not merely a storage of data, but a vessel for atmosphere. Every
-                                project curated within these digital walls is an experiment in sensory
-                                digitalism.&rdquo;
-                            </Text>
-                            <Text fontFamily="body" fontSize="sm" color="ink.muted" lineHeight="1.8">
-                                In a world of noise, we prioritize the pause. The negative space is as vital as the
-                                content it holds.
-                            </Text>
-                        </GridItem>
-                    </Grid>
-                </MainContainer>
-            </Box>
-
-            {/* ── Selected Fragments ───────────────────────────────── */}
-            {featured.length > 0 && (
-                <Box as="section" bg="surface.containerLow" py={{ base: 20, md: 32 }}>
-                    <MainContainer>
-                        <Flex justifyContent="space-between" alignItems="flex-end" mb={12}>
-                            <Box>
-                                <Eyebrow>Collection 00</Eyebrow>
-                                <Text
-                                    fontFamily="body"
-                                    fontWeight="medium"
-                                    fontSize={{ base: "2xl", md: "3xl" }}
-                                    color="ink.primary"
-                                    letterSpacing="-0.01em"
-                                >
-                                    Selected Fragments
-                                </Text>
-                            </Box>
-                            <Text
-                                as={Link}
-                                href="/projects"
-                                fontSize="10px"
-                                letterSpacing="0.12em"
-                                textTransform="uppercase"
-                                color="ink.muted"
-                                _hover={{ color: "ink.primary" }}
-                                display={{ base: "none", md: "block" }}
-                            >
-                                View all work
-                            </Text>
-                        </Flex>
-
-                        <Grid
-                            templateColumns={{ base: "1fr", md: "5fr 3fr" }}
-                            templateRows={{ base: "auto", md: "auto auto" }}
-                            gap={4}
-                        >
-                            {/* First item — large left */}
-                            {featured[0] && (
-                                <GridItem rowSpan={{ md: 2 }}>
-                                    <TiltCard>
-                                    <Box
-                                        as={Link}
-                                        href={featured[0].url}
-                                        display="block"
-                                        overflow="hidden"
-                                        position="relative"
-                                        height={{ base: "240px", md: "100%" }}
-                                        minH={{ md: "420px" }}
-                                    >
-                                        <Image
-                                            src={featured[0].image_src}
-                                            alt={featured[0].image_alt}
-                                            fill
-                                            style={{ objectFit: "cover" }}
-                                        />
-                                        <Box
-                                            position="absolute"
-                                            bottom={4}
-                                            left={4}
-                                            right={4}
-                                            bg="rgba(249,249,248,0.88)"
-                                            backdropFilter="blur(12px)"
-                                            p={3}
-                                        >
-                                            <Text
-                                                fontSize="9px"
-                                                letterSpacing="0.12em"
-                                                textTransform="uppercase"
-                                                color="ink.muted"
-                                                mb={1}
-                                            >
-                                                {featured[0].tags[0]?.name}
-                                            </Text>
-                                            <Text
-                                                fontFamily="heading"
-                                                fontStyle="italic"
-                                                fontSize="lg"
-                                                color="ink.primary"
-                                                lineHeight="1.2"
-                                            >
-                                                {featured[0].title}
-                                            </Text>
-                                        </Box>
-                                    </Box>
-                                    </TiltCard>
-                                </GridItem>
-                            )}
-
-                            {/* Second item — top right */}
-                            {featured[1] && (
-                                <GridItem>
-                                    <TiltCard>
-                                    <Box
-                                        as={Link}
-                                        href={featured[1].url}
-                                        display="block"
-                                        overflow="hidden"
-                                        position="relative"
-                                        height={{ base: "200px", md: "200px" }}
-                                    >
-                                        <Image
-                                            src={featured[1].image_src}
-                                            alt={featured[1].image_alt}
-                                            fill
-                                            style={{ objectFit: "cover" }}
-                                        />
-                                    </Box>
-                                    <Box mt={2}>
-                                        <Text
-                                            fontSize="9px"
-                                            letterSpacing="0.12em"
-                                            textTransform="uppercase"
-                                            color="ink.muted"
-                                            mb={1}
-                                        >
-                                            {featured[1].tags[0]?.name}
-                                        </Text>
-                                        <Text fontFamily="heading" fontStyle="italic" fontSize="md" color="ink.primary">
-                                            {featured[1].title}
-                                        </Text>
-                                    </Box>
-                                    </TiltCard>
-                                </GridItem>
-                            )}
-
-                            {/* Third item — bottom right */}
-                            {featured[2] && (
-                                <GridItem>
-                                    <TiltCard>
-                                    <Box
-                                        as={Link}
-                                        href={featured[2].url}
-                                        display="block"
-                                        overflow="hidden"
-                                        position="relative"
-                                        height={{ base: "200px", md: "200px" }}
-                                    >
-                                        <Image
-                                            src={featured[2].image_src}
-                                            alt={featured[2].image_alt}
-                                            fill
-                                            style={{ objectFit: "cover" }}
-                                        />
-                                    </Box>
-                                    <Box mt={2}>
-                                        <Text
-                                            fontSize="9px"
-                                            letterSpacing="0.12em"
-                                            textTransform="uppercase"
-                                            color="ink.muted"
-                                            mb={1}
-                                        >
-                                            {featured[2].tags[0]?.name}
-                                        </Text>
-                                        <Text fontFamily="heading" fontStyle="italic" fontSize="md" color="ink.primary">
-                                            {featured[2].title}
-                                        </Text>
-                                    </Box>
-                                    </TiltCard>
-                                </GridItem>
-                            )}
-                        </Grid>
-                    </MainContainer>
                 </Box>
-            )}
 
-            {/* ── CTA ──────────────────────────────────────────────── */}
-            <Box as="section" bg="surface.bright" py={{ base: 24, md: 40 }} textAlign="center">
-                <MainContainer>
+                {/* Right: lede + resume pill — plain CSS, no LiquidGlass */}
+                <Flex direction="column" align="flex-start" gap={2}>
                     <Text
                         fontFamily="heading"
                         fontStyle="italic"
-                        fontSize={{ base: "4xl", md: "6xl", lg: "7xl" }}
-                        lineHeight="1.1"
-                        letterSpacing="-0.02em"
+                        fontWeight="300"
+                        fontSize="14px"
+                        lineHeight="1.5"
                         color="ink.primary"
-                        mb={8}
+                        whiteSpace="nowrap"
                     >
-                        The journey begins within.
+                        Full-stack engineer, game developer, creative builder.
                     </Text>
-                    <Text
+                    <Box
                         as={Link}
-                        href="/blog"
+                        href={resumeUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        display="inline-flex"
+                        alignItems="center"
+                        gap={2}
+                        px="20px"
+                        py="10px"
+                        borderRadius="999px"
+                        fontFamily="mono"
                         fontSize="10px"
-                        letterSpacing="0.14em"
+                        letterSpacing="0.12em"
                         textTransform="uppercase"
-                        color="ink.muted"
-                        _hover={{ color: "ink.primary" }}
+                        color="ink.primary"
+                        background="linear-gradient(135deg, rgba(222,168,176,0.35), rgba(184,212,232,0.35))"
+                        backdropFilter="blur(12px)"
+                        sx={{ WebkitBackdropFilter: "blur(12px)" }}
+                        border="1px solid rgba(222,168,176,0.50)"
+                        boxShadow="0 2px 12px rgba(180,160,170,0.18)"
+                        transition="all 0.3s"
+                        _hover={{
+                            background: "rgba(255,255,255,0.75)",
+                            transform: "translateY(-1px)",
+                            boxShadow: "0 6px 20px rgba(180,160,170,0.18)",
+                        }}
                     >
-                        Explore the repository →
-                    </Text>
-                </MainContainer>
-            </Box>
-        </>
+                        View Résumé →
+                    </Box>
+                </Flex>
+            </Flex>
+
+            {/* ── Work ───────────────────────────────────────────── */}
+            {featured.length > 0 && (
+                <Flex
+                    as="section"
+                    direction="column"
+                    flex={1}
+                    minH={0}
+                    px={{ base: 6, md: 10 }}
+                    pb="12px"
+                >
+                    <Flex justifyContent="space-between" alignItems="baseline" mb={2} flexShrink={0}>
+                        <Text
+                            fontFamily="heading"
+                            fontStyle="italic"
+                            fontWeight="400"
+                            fontSize="17px"
+                            color="ink.primary"
+                        >
+                            Selected Work
+                        </Text>
+                        <Text
+                            as={Link}
+                            href="/projects"
+                            fontFamily="mono"
+                            fontSize="9px"
+                            letterSpacing="0.14em"
+                            textTransform="uppercase"
+                            color="ink.faint"
+                            _hover={{ color: "ink.primary" }}
+                        >
+                            View all work →
+                        </Text>
+                    </Flex>
+
+                    <Grid
+                        templateColumns="5fr 3fr"
+                        templateRows="1fr 1fr"
+                        gap="10px"
+                        flex={1}
+                        minH={0}
+                    >
+                        {featured[0] && (
+                            <GridItem rowSpan={2} minH={0}>
+                                <ProjectCard item={featured[0]} index={0} big />
+                            </GridItem>
+                        )}
+                        {featured[1] && (
+                            <GridItem minH={0}>
+                                <ProjectCard item={featured[1]} index={1} />
+                            </GridItem>
+                        )}
+                        {featured[2] && (
+                            <GridItem minH={0}>
+                                <ProjectCard item={featured[2]} index={2} />
+                            </GridItem>
+                        )}
+                    </Grid>
+                </Flex>
+            )}
+        </Flex>
     );
 }

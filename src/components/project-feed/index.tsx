@@ -20,12 +20,12 @@ function ProjectEntry({ item, index }: { item: FeedItem; index: number }) {
             as="article"
             p={{ base: 6, md: 10 }}
             sx={{
-                background: "linear-gradient(135deg, rgba(255,255,255,0.78), rgba(241,244,243,0.52))",
-                "&:hover": { background: "linear-gradient(135deg, rgba(255,255,255,0.92), rgba(241,244,243,0.72))" },
+                background: "linear-gradient(135deg, rgba(255,252,248,0.78), rgba(245,237,227,0.52))",
+                "&:hover": { background: "linear-gradient(135deg, rgba(255,252,248,0.92), rgba(245,237,227,0.72))" },
             }}
             backdropFilter="blur(12px)"
             border="1px solid"
-            borderColor="surface.containerHighest"
+            borderColor="surface.border"
             borderRadius="xl"
             transition="all 0.15s ease"
         >
@@ -45,6 +45,7 @@ function ProjectEntry({ item, index }: { item: FeedItem; index: number }) {
                             src={item.image_src}
                             alt={item.image_alt}
                             fill
+                            sizes="(max-width: 768px) calc(100vw - 48px), 50vw"
                             style={{ objectFit: "cover" }}
                         />
                     </Box>
@@ -68,7 +69,7 @@ function ProjectEntry({ item, index }: { item: FeedItem; index: number }) {
                         fontSize={{ base: "3xl", md: "4xl" }}
                         lineHeight="1.1"
                         letterSpacing="-0.02em"
-                        bgGradient="linear(to-br, ink.primary, brand.500)"
+                        bgGradient="linear(to-br, ink.primary, accent.primary)"
                         bgClip="text"
                         mb={4}
                     >
@@ -107,12 +108,12 @@ function ProjectEntry({ item, index }: { item: FeedItem; index: number }) {
                         fontSize="10px"
                         letterSpacing="0.1em"
                         textTransform="uppercase"
-                        bg="brand.500"
-                        color="white"
+                        bg="accent.primary"
+                        color="ink.primary"
                         borderRadius="lg"
                         px={6}
                         py={5}
-                        _hover={{ bg: "brand.600" }}
+                        _hover={{ bg: "accent.primaryHover" }}
                     >
                         View project
                     </Button>

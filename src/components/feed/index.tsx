@@ -52,15 +52,15 @@ function FeedEntry({ item }: { item: FeedItem }) {
             py={{ base: 6, md: 8 }}
             px={{ base: 5, md: 8 }}
             sx={{
-                background: "linear-gradient(135deg, rgba(255,255,255,0.78), rgba(241,244,243,0.52))",
+                background: "linear-gradient(135deg, rgba(255,252,248,0.78), rgba(245,237,227,0.52))",
                 "&:hover": {
-                    background: "linear-gradient(135deg, rgba(255,255,255,0.92), rgba(241,244,243,0.72))",
-                    "& .feed-title": { color: "var(--chakra-colors-brand-500)" },
+                    background: "linear-gradient(135deg, rgba(255,252,248,0.92), rgba(245,237,227,0.72))",
+                    "& .feed-title": { color: "var(--chakra-colors-accent-primary)" },
                 },
             }}
             backdropFilter="blur(12px)"
             border="1px solid"
-            borderColor="surface.containerHighest"
+            borderColor="surface.border"
             borderRadius="xl"
             transition="all 0.15s ease"
         >
@@ -77,6 +77,7 @@ function FeedEntry({ item }: { item: FeedItem }) {
                             src={item.image_src}
                             alt={item.image_alt}
                             fill
+                            sizes="(max-width: 768px) calc(100vw - 40px), 200px"
                             style={{ objectFit: "cover" }}
                         />
                     </Box>
@@ -103,7 +104,7 @@ function FeedEntry({ item }: { item: FeedItem }) {
                         fontSize={{ base: "xl", md: "2xl" }}
                         lineHeight="1.2"
                         letterSpacing="-0.01em"
-                        bgGradient="linear(to-br, ink.primary, brand.500)"
+                        bgGradient="linear(to-br, ink.primary, accent.primary)"
                         bgClip="text"
                         mb={3}
                         transition="color 0.15s ease"

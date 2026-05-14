@@ -4,7 +4,6 @@ const pocketbaseUrl = new URL(process.env.NEXT_PUBLIC_POCKETBASE_URL);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
-    swcMinify: true,
     images: {
         remotePatterns: [
             {
