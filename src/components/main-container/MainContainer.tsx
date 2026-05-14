@@ -1,15 +1,17 @@
 "use client";
 
-import { Container, ContainerProps } from "@chakra-ui/react";
+import { Box, type BoxProps } from "@chakra-ui/react";
 
-export default function MainContainer({ children, ...props }: ContainerProps) {
+export default function MainContainer({ children, ...props }: BoxProps) {
     return (
-        <Container
-            maxWidth={["100%", "100%", "container.xl"]}
+        <Box
+            w="100%"
+            maxW="1280px"
+            mx="auto"
             px={{ base: 6, md: 10, lg: 16 }}
             {...props}
         >
             {children}
-        </Container>
+        </Box>
     );
 }
