@@ -35,10 +35,10 @@ export default function StyleGlobal() {
                 body {
                     background:
                         ${paperTexture},
-                        radial-gradient(ellipse 130% 80% at 15% 20%, rgba(232,196,200,0.45), transparent 55%),
-                        radial-gradient(ellipse 100% 100% at 85% 75%, rgba(184,212,232,0.40), transparent 55%),
-                        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(188,216,204,0.25), transparent 50%),
-                        #faf5ee;
+                        radial-gradient(ellipse 130% 80% at 15% 20%, rgba(232,212,218,0.58), transparent 55%),
+                        radial-gradient(ellipse 90% 90% at 85% 76%, rgba(216,190,198,0.38), transparent 58%),
+                        radial-gradient(ellipse 72% 58% at 54% 38%, rgba(215,222,211,0.18), transparent 52%),
+                        #FBF5F1;
                     background-attachment: fixed;
                 }
             `}

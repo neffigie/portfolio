@@ -16,7 +16,7 @@ export function Post({ post }: PostProps) {
             <MainContainer>
             <Box
                 mx="auto"
-                sx={{ background: "linear-gradient(135deg, rgba(255,252,248,0.78), rgba(245,237,227,0.52))" }}
+                sx={{ background: "linear-gradient(135deg, rgba(255,249,246,0.88), rgba(243,228,232,0.52))" }}
                 backdropFilter="blur(16px)"
                 border="1px solid"
                 borderColor="surface.border"

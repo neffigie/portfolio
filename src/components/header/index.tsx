@@ -44,6 +44,7 @@ export function Header() {
                     borderLeft: 0,
                     borderRight: 0,
                     borderTop: 0,
+                    background: "rgba(255,249,246,0.34)",
                     boxShadow:
                         "inset 0 1.5px 0 rgba(255,255,255,0.95), 0 2px 32px rgba(60,40,50,0.06)",
                 }}

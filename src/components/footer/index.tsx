@@ -45,7 +45,7 @@ export function Footer({ email, linkedInUrl, githubUrl, itchUrl, resumeUrl }: Fo
                         variant="ghost"
                         size="md"
                         color="ink.faint"
-                        _hover={{ color: "ink.primary", bg: "rgba(0,0,0,0.04)" }}
+                        _hover={{ color: "ink.primary", bg: "rgba(232,212,218,0.38)" }}
                         borderRadius="md"
                     />
                     <IconButtonLink
@@ -55,7 +55,7 @@ export function Footer({ email, linkedInUrl, githubUrl, itchUrl, resumeUrl }: Fo
                         variant="ghost"
                         size="md"
                         color="ink.faint"
-                        _hover={{ color: "ink.primary", bg: "rgba(0,0,0,0.04)" }}
+                        _hover={{ color: "ink.primary", bg: "rgba(232,212,218,0.38)" }}
                         borderRadius="md"
                     />
                     <IconButtonLink
@@ -65,7 +65,7 @@ export function Footer({ email, linkedInUrl, githubUrl, itchUrl, resumeUrl }: Fo
                         variant="ghost"
                         size="md"
                         color="ink.faint"
-                        _hover={{ color: "ink.primary", bg: "rgba(0,0,0,0.04)" }}
+                        _hover={{ color: "ink.primary", bg: "rgba(232,212,218,0.38)" }}
                         borderRadius="md"
                     />
                     <IconButtonLink
@@ -75,7 +75,7 @@ export function Footer({ email, linkedInUrl, githubUrl, itchUrl, resumeUrl }: Fo
                         variant="ghost"
                         size="md"
                         color="ink.faint"
-                        _hover={{ color: "ink.primary", bg: "rgba(0,0,0,0.04)" }}
+                        _hover={{ color: "ink.primary", bg: "rgba(232,212,218,0.38)" }}
                         borderRadius="md"
                     />
                 </Flex>

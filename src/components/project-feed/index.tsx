@@ -20,8 +20,8 @@ function ProjectEntry({ item, index }: { item: FeedItem; index: number }) {
             as="article"
             p={{ base: 6, md: 10 }}
             sx={{
-                background: "linear-gradient(135deg, rgba(255,252,248,0.78), rgba(245,237,227,0.52))",
-                "&:hover": { background: "linear-gradient(135deg, rgba(255,252,248,0.92), rgba(245,237,227,0.72))" },
+                background: "linear-gradient(135deg, rgba(255,249,246,0.86), rgba(243,228,232,0.48))",
+                "&:hover": { background: "linear-gradient(135deg, rgba(255,249,246,0.94), rgba(232,212,218,0.64))" },
             }}
             backdropFilter="blur(12px)"
             border="1px solid"
@@ -109,7 +109,7 @@ function ProjectEntry({ item, index }: { item: FeedItem; index: number }) {
                         letterSpacing="0.1em"
                         textTransform="uppercase"
                         bg="accent.primary"
-                        color="ink.primary"
+                        color="surface.elevated"
                         borderRadius="lg"
                         px={6}
                         py={5}

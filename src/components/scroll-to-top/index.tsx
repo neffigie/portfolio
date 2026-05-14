@@ -29,11 +29,13 @@ export function ScrollToTop() {
                     style={{ position: "fixed", bottom: "1.5rem", right: "1.5rem", zIndex: 999 }}
                 >
                     <GlassPanel
+                        variant="accent"
                         cornerRadius={15}
                         displacementScale={52}
                         blurAmount={0.8}
                         padding="0"
                         style={{
+                            background: "rgba(232,212,218,0.20)",
                             display: "block",
                             height: "44px",
                             transition: "transform 0.2s ease-out, box-shadow 0.2s ease-out",

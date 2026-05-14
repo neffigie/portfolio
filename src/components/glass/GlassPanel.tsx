@@ -201,6 +201,8 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
     const captureRafRef = useRef<number>(0);
     const pathname = usePathname();
     const edgeExpansion = profile === "bar" ? Math.ceil(displacementScale / 2) : 0;
+    const horizontalBleed =
+        profile === "bar" ? Math.ceil(displacementScale + blurAmount * 4 + 12) : 0;
 
     useLayoutEffect(() => {
         const element = localRef.current;
@@ -211,7 +213,7 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
             setMap(
                 profile === "bar"
                     ? createBarEdgeMask(
-                          rect.width,
+                          rect.width + horizontalBleed * 2,
                           rect.height + 2 * edgeExpansion,
                           edgeExpansion,
                           edgeThickness,
@@ -225,7 +227,7 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
         const observer = new ResizeObserver(updateMap);
         observer.observe(element);
         return () => observer.disconnect();
-    }, [cornerRadius, edgeExpansion, edgeThickness, profile]);
+    }, [cornerRadius, edgeExpansion, edgeThickness, horizontalBleed, profile]);
 
     useEffect(() => {
         const element = localRef.current;
@@ -241,7 +243,9 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
 
             const rect = element.getBoundingClientRect();
             const scrollY = window.scrollY;
-            // Bar: full-width strip anchored at scroll position; edgeExpansion adds OOB margin.
+            // Bar: full-width strip anchored at scroll position.
+            // edgeExpansion adds vertical OOB margin; horizontalBleed lets chromatic split
+            // resolve outside the visible viewport edge.
             // Rounded: element can be anywhere on screen — use rect.left + absolute document Y.
             const cssSrcX = profile === "bar" ? 0 : rect.left;
             const cssSrcY = profile === "bar"
@@ -249,16 +253,37 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
                 : rect.top + scrollY; // rect.top is viewport-relative; add scrollY for document-absolute
             const cssSrcW = rect.width;
             const cssSrcH = rect.height + edgeExpansion * 2;
+            const displayWidth = profile === "bar" ? cssSrcW + horizontalBleed * 2 : cssSrcW;
 
-            display.width = Math.round(cssSrcW);
+            display.width = Math.round(displayWidth);
             display.height = Math.round(cssSrcH);
 
             const ctx = display.getContext("2d");
             if (!ctx) return;
             ctx.clearRect(0, 0, display.width, display.height);
 
-            // html2canvas captured at scale=1 so canvas pixels = CSS pixels — no conversion needed.
-            ctx.drawImage(full, cssSrcX, cssSrcY, cssSrcW, cssSrcH, 0, 0, display.width, display.height);
+            // html2canvas captured at scale=1 so canvas pixels = CSS pixels: no conversion needed.
+            // Bar canvases include neutral horizontal bleed so chromatic displacement
+            // resolves offscreen instead of pulling blue source pixels into the viewport edge.
+            if (profile === "bar") {
+                const visibleDisplayWidth = display.width - horizontalBleed * 2;
+                ctx.fillStyle = "#FBF5F1";
+                ctx.fillRect(0, 0, horizontalBleed, display.height);
+                ctx.drawImage(
+                    full,
+                    cssSrcX,
+                    cssSrcY,
+                    cssSrcW,
+                    cssSrcH,
+                    horizontalBleed,
+                    0,
+                    visibleDisplayWidth,
+                    display.height,
+                );
+                ctx.fillRect(horizontalBleed + visibleDisplayWidth, 0, horizontalBleed, display.height);
+            } else {
+                ctx.drawImage(full, cssSrcX, cssSrcY, cssSrcW, cssSrcH, 0, 0, display.width, display.height);
+            }
         };
 
         const captureFullPage = async () => {
@@ -296,26 +321,37 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
             };
 
             let captured: HTMLCanvasElement | null = null;
+            const hiddenDuringCapture = Array.from(
+                document.querySelectorAll<HTMLElement>("[data-glass-ignore]"),
+            ).map((el) => ({ el, visibility: el.style.visibility }));
             try {
+                hiddenDuringCapture.forEach(({ el }) => {
+                    el.style.visibility = "hidden";
+                });
                 // document.body gives full scroll height; documentElement may return viewport height only.
                 // scale=1 keeps canvas pixels = CSS pixels so updateSlice needs no coordinate conversion.
                 // scrollX/scrollY=0 ensures we always capture from document top regardless of scroll.
                 captured = await html2canvas(document.body, {
-                    backgroundColor: "#f9f9f8",
+                    backgroundColor: "#FBF5F1",
                     scale: 1,
                     logging: false,
                     useCORS: true,
                     allowTaint: true,
                     scrollX: 0,
                     scrollY: 0,
-                    // Skip glass panels to avoid capturing our own overlay effect
+                    // Skip glass panels and decorative backdrops so captured refraction stays UI-colored.
                     ignoreElements: (el) =>
                         el.matches("[data-liquid-glass-panel]") ||
-                        Boolean(el.closest("[data-liquid-glass-panel]")),
+                        Boolean(el.closest("[data-liquid-glass-panel]")) ||
+                        el.matches("[data-glass-ignore]") ||
+                        Boolean(el.closest("[data-glass-ignore]")),
                 });
             } catch (err) {
                 console.warn("[GlassPanel] html2canvas capture failed:", err);
             } finally {
+                hiddenDuringCapture.forEach(({ el, visibility }) => {
+                    el.style.visibility = visibility;
+                });
                 (window as typeof window & { getComputedStyle: typeof window.getComputedStyle }).getComputedStyle =
                     origGetComputedStyle;
             }
@@ -348,7 +384,7 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
             window.removeEventListener("scroll", onScroll);
             window.removeEventListener("resize", onResize);
         };
-    }, [profile, edgeExpansion, pathname]);
+    }, [profile, edgeExpansion, horizontalBleed, pathname]);
 
     const cssVars = {
         "--liquid-glass-radius": `${cornerRadius}px`,
@@ -356,8 +392,8 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
 
     const accentBackground =
         variant === "accent"
-            ? "linear-gradient(135deg, rgba(222,168,176,0.28), rgba(184,212,232,0.28))"
-            : "rgba(255,255,255,0.06)";
+            ? "linear-gradient(135deg, rgba(216,190,198,0.34), rgba(255,249,246,0.38))"
+            : "rgba(255,249,246,0.10)";
 
     const displacementFilter = map ? `url(#${filterId})` : "none";
 
@@ -380,8 +416,9 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
                     {profile === "bar" ? (
                         <>
                             {/*
-                              * Step 1: Generate organic turbulence noise (0–1 per channel, ~0.5 = neutral).
-                              * The slow SMIL animation drifts the noise topology over 8 seconds.
+                              * Step 1: Generate subtle organic turbulence noise.
+                              * The tiny, slow frequency drift gives the rim a barely-there wave
+                              * without sweeping a solid background color through the header.
                               */}
                             <feTurbulence
                                 type="fractalNoise"
@@ -390,11 +427,10 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
                                 seed={9}
                                 result="NOISE"
                             >
-                                {/* Lower frequency = larger, smoother waves; reduces choppy ripples on uniform shapes */}
                                 <animate
                                     attributeName="baseFrequency"
-                                    values="0.002 0.02;0.004 0.03;0.002 0.02"
-                                    dur="8s"
+                                    values="0.003 0.025;0.00325 0.026;0.003 0.025"
+                                    dur="18s"
                                     repeatCount="indefinite"
                                     calcMode="spline"
                                     keySplines="0.45 0 0.55 1;0.45 0 0.55 1"
@@ -416,19 +452,18 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
                             {/*
                               * Step 3: Weight the noise by the edge mask.
                               * feComposite arithmetic: result = k1*i1*i2 + k2*i1 + k3*i2 + k4
-                              * With k1=1, k2=0, k3=-0.5, k4=0.5 this computes:
-                              *   result = NOISE*EDGE_MASK - 0.5*EDGE_MASK + 0.5
-                              *          = 0.5 + EDGE_MASK*(NOISE - 0.5)
+                              * With k1=0.42, k2=0, k3=-0.21, k4=0.5 this computes:
+                              *   result = 0.5 + 0.42*EDGE_MASK*(NOISE - 0.5)
                               * At mask=0 (center): result = 0.5 → neutral, no displacement.
-                              * At mask=1 (rim):    result = NOISE → full organic displacement.
+                              * At mask=1 (rim):    result = reduced organic displacement.
                               */}
                             <feComposite
                                 in="NOISE"
                                 in2="EDGE_MASK"
                                 operator="arithmetic"
-                                k1="1"
+                                k1="0.42"
                                 k2="0"
-                                k3="-0.5"
+                                k3="-0.21"
                                 k4="0.5"
                                 result="LIQUID_DISPLACEMENT_MAP"
                             />
@@ -540,7 +575,8 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
               * (after displacement) for physically correct order: refract first, then scatter.
               *
               * Bar: slices from X=0 at scrollY (full-width strip). edgeExpansion extends the
-              * canvas above/below the header to prevent OOB sampling at the active rim.
+              * canvas above/below the header, while horizontalBleed extends left/right with
+              * warm neutral pixels so chromatic edges resolve outside the viewport.
               * Rounded: slices from rect.left at rect.top+scrollY (element-relative position).
               * The SDF displacement map concentrates refraction on all four rounded edges.
               */}
@@ -551,7 +587,7 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
                     WebkitFilter: displacementFilter,
                     filter: displacementFilter,
                     position: "absolute",
-                    inset: edgeExpansion > 0 ? `-${edgeExpansion}px 0` : 0,
+                    inset: edgeExpansion > 0 ? `-${edgeExpansion}px -${horizontalBleed}px` : 0,
                     pointerEvents: "none",
                     zIndex: 0,
                 }}
@@ -570,11 +606,11 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
                 aria-hidden="true"
                 style={{
                     background:
-                        "linear-gradient(145deg, rgba(255,255,255,0.70), rgba(255,255,255,0.08) 42%, rgba(120,95,105,0.16) 100%)",
+                        "linear-gradient(145deg, rgba(255,249,246,0.42), rgba(232,212,218,0.06) 42%, rgba(74,58,56,0.09) 100%)",
                     borderRadius: "inherit",
                     inset: 0,
                     mixBlendMode: "screen",
-                    opacity: 0.48,
+                    opacity: 0.34,
                     pointerEvents: "none",
                     position: "absolute",
                     zIndex: 2,

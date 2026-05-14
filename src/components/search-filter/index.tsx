@@ -27,7 +27,7 @@ export function SearchFilter({
             {/* Search input — gradient from pure white to page background, no border */}
             <Box
                 sx={{
-                    background: "linear-gradient(to right, #ffffff, #f9f9f8)",
+                    background: "linear-gradient(to right, #FFF9F6, #F7EFEA)",
                 }}
                 backdropFilter="blur(8px)"
                 borderRadius="xl"

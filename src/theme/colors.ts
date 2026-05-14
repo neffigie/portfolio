@@ -1,41 +1,49 @@
 const colors = {
     surface: {
-        default: "#faf5ee",
-        elevated: "#fefbf7",
-        muted: "#f5ede3",
-        border: "#d8ccc8",
+        default: "#FBF5F1",
+        elevated: "#FFF9F6",
+        muted: "#F7EFEA",
+        soft: "#F4ECE8",
+        border: "#E8DCDD",
     },
     ink: {
-        primary: "#3e3238",
-        muted: "#6e5a62",
-        faint: "#9e8a92",
+        primary: "#4A3A38",
+        muted: "#7D6B68",
+        faint: "#A99491",
     },
     accent: {
         // Full scale required by Chakra's withDefaultColorScheme
-        50:  "#fdf0f3",
-        100: "#fad9e0",
-        200: "#f5bac4",
-        300: "#ebb8c2",
-        400: "#e0a8b4",
-        500: "#d4889a",  // primary action (pink)
-        600: "#c06878",
-        700: "#a04858",
-        800: "#803040",
-        900: "#601828",
-        primary:      "#ebb8c2",
-        primaryHover: "#e0a8b4",
+        50:  "#FFF9F6",
+        100: "#F7EFEA",
+        200: "#E8DCDD",
+        300: "#E8D4DA",
+        400: "#D8BEC6",
+        500: "#CFA8B5",
+        600: "#C79EAC",
+        700: "#A97886",
+        800: "#7D5661",
+        900: "#4A3A38",
+        primary:      "#D8BEC6",
+        primaryHover: "#C79EAC",
     },
     glass: {
-        surface: "rgba(255,252,248,0.55)",
-        border:  "rgba(255,255,255,0.65)",
-        shadow:  "rgba(180,160,170,0.18)",
+        surface: "rgba(255,249,246,0.64)",
+        border:  "rgba(232,220,221,0.74)",
+        shadow:  "rgba(207,168,181,0.20)",
     },
     decorative: {
-        a: "#e8c4c8",  // blush
-        b: "#b8d4e8",  // sky
-        c: "#bcd8cc",  // mint
-        d: "#c4b0d8",  // lavender
-        e: "#e8cdb8",  // peach
+        a: "#E8D4DA",  // rosewater
+        b: "#D6DFEA",  // powder blue
+        c: "#D7DED3",  // dusty sage
+        d: "#EADFC2",  // buttercream
+        e: "#F3E4E8",  // pink wash
+        sage: "#D7DED3",
+        blue: "#D6DFEA",
+        yellow: "#EADFC2",
+        pinkWash: "#F3E4E8",
+        greenWash: "#E8EEE5",
+        blueWash: "#E8EDF4",
+        yellowWash: "#F3EEDB",
     },
 };
 

@@ -52,8 +52,8 @@ export function FluidText({ children, gradient = false, maxPush = 10, radius = 1
                     requestAnimationFrame(applyGradient);
                     return;
                 }
-                const [sR, sG, sB] = [176, 120, 136]; // #b07888
-                const [eR, eG, eB] = [120, 160, 184]; // #78a0b8
+                const [sR, sG, sB] = [74, 58, 56]; // #4A3A38
+                const [eR, eG, eB] = [207, 168, 181]; // #CFA8B5
                 for (let i = 0; i < charCount; i++) {
                     const el = charsRef.current[i];
                     if (!el) continue;

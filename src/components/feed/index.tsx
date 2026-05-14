@@ -52,9 +52,9 @@ function FeedEntry({ item }: { item: FeedItem }) {
             py={{ base: 6, md: 8 }}
             px={{ base: 5, md: 8 }}
             sx={{
-                background: "linear-gradient(135deg, rgba(255,252,248,0.78), rgba(245,237,227,0.52))",
+                background: "linear-gradient(135deg, rgba(255,249,246,0.86), rgba(243,228,232,0.48))",
                 "&:hover": {
-                    background: "linear-gradient(135deg, rgba(255,252,248,0.92), rgba(245,237,227,0.72))",
+                    background: "linear-gradient(135deg, rgba(255,249,246,0.94), rgba(232,212,218,0.64))",
                     "& .feed-title": { color: "var(--chakra-colors-accent-primary)" },
                 },
             }}

@@ -21,14 +21,15 @@ export function ResumeButton({ resumeUrl }: ResumeButtonProps) {
             letterSpacing="0.12em"
             textTransform="uppercase"
             fontFamily="body"
-            color="ink.primary"
+            color="surface.elevated"
             border="1px solid"
-            borderColor="ink.primary"
+            borderColor="accent.primary"
+            bg="accent.primary"
             px={4}
             py="8px"
             borderRadius="lg"
             transition="all 0.15s ease"
-            _hover={{ bg: "ink.primary", color: "surface.elevated" }}
+            _hover={{ bg: "accent.primaryHover", borderColor: "accent.primaryHover" }}
         >
             <Flex as="span" align="center" gap={2}>
                 <MdOutlineDescription size={14} />

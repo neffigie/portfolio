@@ -95,7 +95,7 @@ function Particles() {
             <bufferGeometry>
                 <bufferAttribute attach="attributes-position" args={[positions, 3]} />
             </bufferGeometry>
-            <pointsMaterial size={0.02} color="#d4b8c0" transparent opacity={0.5} sizeAttenuation />
+            <pointsMaterial size={0.02} color="#D8BEC6" transparent opacity={0.5} sizeAttenuation />
         </points>
     );
 }
@@ -106,9 +106,9 @@ function Scene() {
             <Suspense fallback={null}>
                 <Environment preset="studio" />
             </Suspense>
-            <ambientLight intensity={0.4} color="#fdf0f3" />
-            <pointLight position={[4, 3, 3]} intensity={1.5} color="#e8c4c8" />
-            <pointLight position={[-3, -2, 2]} intensity={1.0} color="#b8d4e8" />
+            <ambientLight intensity={0.4} color="#FFF9F6" />
+            <pointLight position={[4, 3, 3]} intensity={1.5} color="#E8D4DA" />
+            <pointLight position={[-3, -2, 2]} intensity={0.55} color="#D7DED3" />
 
             <RibbonSculpture position={[2.2, 0.8, -0.5]} />
             <OrbSculpture position={[-2.4, -1.0, -0.8]} radius={0.55} phase={0} />
@@ -123,9 +123,13 @@ export function HeroScene() {
     return (
         <div
             aria-hidden="true"
+            data-glass-ignore=""
             style={{
                 position: "fixed",
-                inset: 0,
+                top: "56px",
+                right: 0,
+                bottom: 0,
+                left: 0,
                 zIndex: 0,
                 pointerEvents: "none",
             }}

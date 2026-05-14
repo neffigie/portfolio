@@ -10,18 +10,21 @@ import Image from "next/image";
 import { environment } from "../environment";
 
 const CARD_TINTS = [
-    "linear-gradient(135deg, #d8c4e0, #c4b8d8)",
-    "linear-gradient(135deg, #c4dcc8, #a8c8b4)",
-    "linear-gradient(135deg, #e8d4c0, #d8c0a8)",
+    "linear-gradient(135deg, #F3E4E8, #D8BEC6)",
+    "linear-gradient(135deg, #F3E4E8, #D7DED3)",
+    "linear-gradient(135deg, #F3E4E8, #D6DFEA)",
 ];
 
 const CARD_DECOR_STYLE = {
     position: "absolute",
-    inset: 0,
-    width: "100%",
-    height: "100%",
-    opacity: 0.45,
+    top: "50%",
+    right: "-18%",
+    transform: "translateY(-50%)",
+    width: "145%",
+    height: "145%",
+    opacity: 0.58,
     display: "block",
+    pointerEvents: "none",
 } as const;
 
 function CardDecor({ index }: { index: number }) {
@@ -68,23 +71,29 @@ function ProjectCard({ item, index, big }: { item: FeedItem; index: number; big?
                 display="flex"
                 flexDirection="column"
                 height="100%"
+                position="relative"
                 overflow="hidden"
                 borderRadius="14px"
-                background="rgba(255,252,248,0.55)"
-                backdropFilter="blur(14px) saturate(130%)"
-                sx={{ WebkitBackdropFilter: "blur(14px) saturate(130%)" }}
-                border="2px solid rgba(255,255,255,0.80)"
-                boxShadow="0 4px 20px rgba(180,160,170,0.18)"
+                p="5px"
+                gap="5px"
+                background={CARD_TINTS[index % 3]}
+                border="2px solid rgba(232,220,221,0.78)"
+                boxShadow="0 4px 20px rgba(207,168,181,0.18)"
                 transition="transform 0.35s, box-shadow 0.35s"
-                _hover={{ transform: "translateY(-2px)", boxShadow: "0 8px 32px rgba(180,160,190,0.25)" }}
+                _hover={{ transform: "translateY(-2px)", boxShadow: "0 8px 32px rgba(207,168,181,0.26)" }}
                 cursor="pointer"
             >
+                <Box position="absolute" top={0} right={0} bottom={0} width={{ base: "52%", md: "48%" }} zIndex={0}>
+                    <CardDecor index={index} />
+                </Box>
                 <Box
                     position="relative"
                     flex={1}
                     minH={0}
-                    background={CARD_TINTS[index % 3]}
+                    background="transparent"
                     overflow="hidden"
+                    zIndex={1}
+                    borderRadius="9px"
                 >
                     {item.image_src && (
                         <Image
@@ -93,10 +102,9 @@ function ProjectCard({ item, index, big }: { item: FeedItem; index: number; big?
                             fill
                             sizes={big ? "(max-width: 768px) 100vw, 62vw" : "(max-width: 768px) 100vw, 38vw"}
                             loading="eager"
-                            style={{ objectFit: "cover", opacity: 0.18, mixBlendMode: "overlay" }}
+                            style={{ objectFit: "cover" }}
                         />
                     )}
-                    <CardDecor index={index} />
                     <Text
                         position="absolute"
                         top={3}
@@ -111,32 +119,37 @@ function ProjectCard({ item, index, big }: { item: FeedItem; index: number; big?
                 </Box>
 
                 <Box
+                    position="relative"
                     px={3}
                     py="10px"
                     flexShrink={0}
-                    background="rgba(255,255,255,0.60)"
-                    borderTop="1px solid rgba(255,255,255,0.50)"
+                    overflow="hidden"
+                    background="transparent"
+                    zIndex={1}
+                    borderRadius="9px"
                 >
-                    <Text
-                        fontFamily="mono"
-                        fontSize="8px"
-                        letterSpacing="0.18em"
-                        textTransform="uppercase"
-                        color="ink.faint"
-                        mb="2px"
-                    >
-                        {item.tags[0]?.name}
-                    </Text>
-                    <Text
-                        fontFamily="heading"
-                        fontStyle="italic"
-                        fontWeight="400"
-                        fontSize={big ? "clamp(12px, 1.55dvh, 15px)" : "clamp(11px, 1.45dvh, 14px)"}
-                        color="ink.primary"
-                        lineHeight="1.25"
-                    >
-                        {item.title}
-                    </Text>
+                    <Box position="relative" zIndex={1} maxW="72%">
+                        <Text
+                            fontFamily="mono"
+                            fontSize="8px"
+                            letterSpacing="0.18em"
+                            textTransform="uppercase"
+                            mb="2px"
+                            textShadow="0 1px 8px rgba(40,35,42,0.28)"
+                        >
+                            {item.tags[0]?.name}
+                        </Text>
+                        <Text
+                            fontFamily="heading"
+                            fontStyle="italic"
+                            fontWeight="400"
+                            fontSize={big ? "clamp(12px, 1.55dvh, 15px)" : "clamp(11px, 1.45dvh, 14px)"}
+                            lineHeight="1.25"
+                            textShadow="0 1px 10px rgba(40,35,42,0.35)"
+                        >
+                            {item.title}
+                        </Text>
+                    </Box>
                 </Box>
             </Box>
         </TiltCard>
@@ -176,7 +189,7 @@ export function HomeContent({ featured, resumeUrl }: { featured: FeedItem[]; res
                             color="ink.faint"
                             whiteSpace="nowrap"
                         >
-                            <MagneticText>The portfolio of Anna Noelle</MagneticText>
+                            <MagneticText>The portfolio of</MagneticText>
                         </Text>
                     </Flex>
                     <Text
@@ -222,16 +235,16 @@ export function HomeContent({ featured, resumeUrl }: { featured: FeedItem[]; res
                         letterSpacing="0.12em"
                         textTransform="uppercase"
                         color="ink.primary"
-                        background="linear-gradient(135deg, rgba(222,168,176,0.35), rgba(184,212,232,0.35))"
+                        background="linear-gradient(135deg, rgba(216,190,198,0.56), rgba(255,249,246,0.78))"
                         backdropFilter="blur(12px)"
                         sx={{ WebkitBackdropFilter: "blur(12px)" }}
-                        border="1px solid rgba(222,168,176,0.50)"
-                        boxShadow="0 2px 12px rgba(180,160,170,0.18)"
+                        border="1px solid rgba(207,168,181,0.58)"
+                        boxShadow="0 2px 12px rgba(207,168,181,0.18)"
                         transition="all 0.3s"
                         _hover={{
-                            background: "rgba(255,255,255,0.75)",
+                            background: "rgba(232,212,218,0.82)",
                             transform: "translateY(-1px)",
-                            boxShadow: "0 6px 20px rgba(180,160,170,0.18)",
+                            boxShadow: "0 6px 20px rgba(207,168,181,0.22)",
                         }}
                     >
                         View Résumé →
