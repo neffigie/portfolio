@@ -1,4 +1,5 @@
-import { CheckboxGroupProps, WrapProps } from "@chakra-ui/react";
+import { CheckboxGroupProps } from "@chakra-ui/react";
+import type { HTMLAttributes } from "react";
 
 /** A single tag. */
 export type Tag = {
@@ -9,7 +10,7 @@ export type Tag = {
     name: string;
 };
 
-export interface TagsProps extends WrapProps {
+export interface TagsProps extends Omit<HTMLAttributes<HTMLDivElement>, "color"> {
     /** The tag(s). */
     tags: Tag | Tag[];
 }
