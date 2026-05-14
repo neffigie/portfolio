@@ -41,6 +41,27 @@ export default function StyleGlobal() {
                         #FBF5F1;
                     background-attachment: fixed;
                 }
+                .content-skeleton {
+                    background:
+                        linear-gradient(90deg, rgba(232,212,218,0.34), rgba(255,249,246,0.78), rgba(232,212,218,0.34)),
+                        rgba(232,212,218,0.42);
+                    background-size: 220% 100%;
+                    box-shadow: inset 0 0 0 1px rgba(216,190,198,0.18);
+                    animation: content-skeleton-shimmer 1.9s ease-in-out infinite;
+                }
+                @keyframes content-skeleton-shimmer {
+                    0% {
+                        background-position: 120% 0;
+                    }
+                    100% {
+                        background-position: -120% 0;
+                    }
+                }
+                @media (prefers-reduced-motion: reduce) {
+                    .content-skeleton {
+                        animation: none;
+                    }
+                }
             `}
         </style>
     );

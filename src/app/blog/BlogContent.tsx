@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Skeleton, SkeletonText, Text } from "@chakra-ui/react";
 import { Feed } from "components";
 import { FeedItem } from "components/feed";
 import { FluidText } from "components/fluid-text";
@@ -9,7 +9,7 @@ import { SearchFilter } from "components/search-filter";
 import { Tag } from "components/tags";
 import { useMemo, useState } from "react";
 
-export function BlogContent({ posts }: { posts: FeedItem[] | undefined }) {
+export function BlogContent({ posts, isLoading }: { posts: FeedItem[] | undefined; isLoading?: boolean }) {
     const [search, setSearch] = useState("");
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -47,38 +47,37 @@ export function BlogContent({ posts }: { posts: FeedItem[] | undefined }) {
     return (
         <>
             {/* ── Page Hero ──────────────────────────────────────── */}
-            <Box as="section" bg="surface.muted" pt={{ base: 16, md: 24 }} pb={{ base: 12, md: 16 }}>
+            <Box as="section" bg="surface.muted" pt={{ base: 10, md: 14 }} pb={{ base: 6, md: 8 }}>
                 <MainContainer>
-                    <Text
-                        fontSize="10px"
-                        letterSpacing="0.14em"
-                        textTransform="uppercase"
-                        color="ink.muted"
-                        fontFamily="heading"
-                        mb={4}
-                    >
-                        <FluidText>The archive</FluidText>
-                    </Text>
-                    <Text
-                        as="h1"
-                        fontFamily="heading"
-                        fontStyle="italic"
-                        fontSize={{ base: "5xl", md: "7xl" }}
-                        lineHeight="0.92"
-                        letterSpacing="-0.02em"
-                        mb={6}
-                    >
-                        <FluidText gradient>Writings.</FluidText>
-                    </Text>
-                    <Text
-                        fontFamily="body"
-                        fontSize="sm"
-                        color="ink.muted"
-                        maxW="48ch"
-                        lineHeight="1.7"
-                    >
-                        <FluidText>A collection of write-ups on software development, game design, and the craft of building thoughtful digital systems.</FluidText>
-                    </Text>
+                    {isLoading ? (
+                        <Skeleton
+                            height={{ base: "44px", md: "56px" }}
+                            width="4ch"
+                            borderRadius="sm"
+                            startColor="surface.soft"
+                            endColor="surface.border"
+                            mb={3}
+                        />
+                    ) : (
+                        <Text
+                            as="h1"
+                            fontFamily="heading"
+                            fontStyle="italic"
+                            fontSize={{ base: "4xl", md: "5xl" }}
+                            lineHeight="0.92"
+                            letterSpacing="-0.02em"
+                            mb={3}
+                        >
+                            <FluidText gradient>Blog.</FluidText>
+                        </Text>
+                    )}
+                    {isLoading ? (
+                        <SkeletonText noOfLines={1} maxW="36ch" startColor="surface.soft" endColor="surface.border" />
+                    ) : (
+                        <Text fontFamily="body" fontSize="sm" color="ink.muted" lineHeight="1.7">
+                            <FluidText>Write-ups on software, game design, and building digital systems.</FluidText>
+                        </Text>
+                    )}
                 </MainContainer>
             </Box>
 
@@ -92,8 +91,9 @@ export function BlogContent({ posts }: { posts: FeedItem[] | undefined }) {
                         onSearchChange={setSearch}
                         onTagsChange={setSelectedTags}
                         placeholder="Search posts…"
+                        isLoading={isLoading}
                     />
-                    <Feed items={filtered} />
+                    <Feed items={filtered} isLoading={isLoading} />
                 </MainContainer>
             </Box>
         </>

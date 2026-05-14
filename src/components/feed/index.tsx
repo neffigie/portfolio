@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Flex, Grid, GridItem, LinkBox, LinkOverlay, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, LinkBox, LinkOverlay, Skeleton, SkeletonText, Stack, Text } from "@chakra-ui/react";
 import { Tag, Tags } from "components/tags";
 import { TiltCard } from "components/tilt-card";
 import Image from "next/image";
@@ -15,6 +15,8 @@ export interface FeedProps {
 
     /** The items that make up the feed. */
     items: FeedItem[] | undefined;
+
+    isLoading?: boolean;
 }
 
 /** An item in the feed. */
@@ -44,9 +46,20 @@ export interface FeedItem {
     url: string;
 }
 
-function FeedEntry({ item }: { item: FeedItem }) {
+const PLACEHOLDER_ITEMS: FeedItem[] = Array.from({ length: 3 }, (_, i) => ({
+    id: String(i),
+    image_src: "",
+    image_alt: "",
+    title: "",
+    tags: [],
+    description: "",
+    date: "",
+    url: "#",
+}));
+
+function FeedEntry({ item, isLoading }: { item: FeedItem; isLoading?: boolean }) {
     return (
-        <TiltCard style={{ marginBottom: "1rem" }}>
+        <TiltCard style={{ marginBottom: "1rem", pointerEvents: isLoading ? "none" : undefined }}>
         <LinkBox
             as="article"
             py={{ base: 6, md: 8 }}
@@ -71,52 +84,83 @@ function FeedEntry({ item }: { item: FeedItem }) {
                         overflow="hidden"
                         position="relative"
                         height={{ base: "160px", md: "140px" }}
-                        sx={{ "& img": { transition: "transform 0.6s ease" }, "&:hover img": { transform: "scale(1.06)" } }}
+                        sx={!isLoading ? { "& img": { transition: "transform 0.6s ease" }, "&:hover img": { transform: "scale(1.06)" } } : {}}
                     >
-                        <Image
-                            src={item.image_src}
-                            alt={item.image_alt}
-                            fill
-                            sizes="(max-width: 768px) calc(100vw - 40px), 200px"
-                            style={{ objectFit: "cover" }}
-                        />
+                        {isLoading ? (
+                            <Skeleton
+                                height="100%"
+                                width="100%"
+                                borderRadius="sm"
+                                startColor="surface.soft"
+                                endColor="surface.border"
+                            />
+                        ) : (
+                            <Image
+                                src={item.image_src}
+                                alt={item.image_alt}
+                                fill
+                                sizes="(max-width: 768px) calc(100vw - 40px), 200px"
+                                style={{ objectFit: "cover" }}
+                            />
+                        )}
                     </Box>
                 </GridItem>
 
                 {/* Text block */}
                 <GridItem>
                     <Flex gap={4} mb={3} alignItems="center">
-                        <Text
-                            fontSize="9px"
-                            letterSpacing="0.12em"
-                            textTransform="uppercase"
-                            color="ink.faint"
-                        >
-                            {item.date}
-                        </Text>
-                        <Tags tags={item.tags} />
+                        {isLoading ? (
+                            <Skeleton height="10px" width="80px" startColor="surface.soft" endColor="surface.border" />
+                        ) : (
+                            <Text fontSize="9px" letterSpacing="0.12em" textTransform="uppercase" color="ink.faint">
+                                {item.date}
+                            </Text>
+                        )}
+                        {isLoading ? (
+                            <Flex gap={2}>
+                                <Skeleton height="21px" width="52px" borderRadius="full" startColor="surface.soft" endColor="surface.border" />
+                                <Skeleton height="21px" width="64px" borderRadius="full" startColor="surface.soft" endColor="surface.border" />
+                            </Flex>
+                        ) : (
+                            <Tags tags={item.tags} />
+                        )}
                     </Flex>
 
-                    <Text
-                        className="feed-title"
-                        fontFamily="heading"
-                        fontStyle="italic"
-                        fontSize={{ base: "xl", md: "2xl" }}
-                        lineHeight="1.2"
-                        letterSpacing="-0.01em"
-                        bgGradient="linear(to-br, ink.primary, accent.primary)"
-                        bgClip="text"
-                        mb={3}
-                        transition="color 0.15s ease"
-                    >
-                        <LinkOverlay as={NextLink} href={item.url}>
-                            {item.title}
-                        </LinkOverlay>
-                    </Text>
+                    {isLoading ? (
+                        <Skeleton
+                            height={{ base: "24px", md: "28px" }}
+                            width="70%"
+                            borderRadius="sm"
+                            startColor="surface.soft"
+                            endColor="surface.border"
+                            mb={3}
+                        />
+                    ) : (
+                        <Text
+                            className="feed-title"
+                            fontFamily="heading"
+                            fontStyle="italic"
+                            fontSize={{ base: "xl", md: "2xl" }}
+                            lineHeight="1.2"
+                            letterSpacing="-0.01em"
+                            bgGradient="linear(to-br, ink.primary, accent.primary)"
+                            bgClip="text"
+                            mb={3}
+                            transition="color 0.15s ease"
+                        >
+                            <LinkOverlay as={NextLink} href={item.url}>
+                                {item.title}
+                            </LinkOverlay>
+                        </Text>
+                    )}
 
-                    <Text fontFamily="body" fontSize="sm" color="ink.muted" lineHeight="1.7">
-                        {item.description}
-                    </Text>
+                    {isLoading ? (
+                        <SkeletonText noOfLines={2} spacing={2} startColor="surface.soft" endColor="surface.border" />
+                    ) : (
+                        <Text fontFamily="body" fontSize="sm" color="ink.muted" lineHeight="1.7">
+                            {item.description}
+                        </Text>
+                    )}
                 </GridItem>
             </Grid>
         </LinkBox>
@@ -125,7 +169,9 @@ function FeedEntry({ item }: { item: FeedItem }) {
 }
 
 /** Renders a feed of items (blog posts) in an editorial list layout. */
-export function Feed({ title, subtitle, items }: FeedProps) {
+export function Feed({ title, subtitle, items, isLoading }: FeedProps) {
+    const displayItems = isLoading ? PLACEHOLDER_ITEMS : items;
+
     return (
         <Box>
             {/* Feed header — only rendered if title is provided */}
@@ -151,12 +197,14 @@ export function Feed({ title, subtitle, items }: FeedProps) {
             )}
 
             {/* Items */}
-            {items && items.length > 0 ? (
-                items.map((item) => <FeedEntry key={item.id} item={item} />)
+            {displayItems && displayItems.length > 0 ? (
+                displayItems.map((item) => <FeedEntry key={item.id} item={item} isLoading={isLoading} />)
             ) : (
-                <Text fontSize="sm" color="ink.muted" py={12}>
-                    No posts yet.
-                </Text>
+                !isLoading && (
+                    <Text fontSize="sm" color="ink.muted" py={12}>
+                        No posts yet.
+                    </Text>
+                )
             )}
         </Box>
     );

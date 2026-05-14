@@ -1,6 +1,8 @@
 import { isLoadingRoute } from "config";
 import NProgress from "nprogress";
 
+NProgress.configure({ minimum: 0.12, showSpinner: false, trickleSpeed: 180 });
+
 /**
  * Callback on route start.
  * @param href The route href.

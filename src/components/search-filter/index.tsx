@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Flex, Input } from "@chakra-ui/react";
+import { Box, Flex, Input, Skeleton } from "@chakra-ui/react";
 import { Tag, TagSelect } from "components/tags";
 import { MdClose, MdSearch } from "react-icons/md";
 
@@ -11,6 +11,7 @@ interface SearchFilterProps {
     onSearchChange: (v: string) => void;
     onTagsChange: (v: string[]) => void;
     placeholder?: string;
+    isLoading?: boolean;
 }
 
 /** Search bar + floating tag pills. Search bar fades into the page background. */
@@ -21,6 +22,7 @@ export function SearchFilter({
     onSearchChange,
     onTagsChange,
     placeholder = "Search…",
+    isLoading,
 }: SearchFilterProps) {
     return (
         <Box mb={10}>
@@ -46,6 +48,7 @@ export function SearchFilter({
                         fontSize="sm"
                         color="ink.primary"
                         _placeholder={{ color: "ink.faint" }}
+                        isDisabled={isLoading}
                     />
                     {search && (
                         <Box
@@ -66,7 +69,13 @@ export function SearchFilter({
             </Box>
 
             {/* Tags float freely — no wrapper box, no divider */}
-            {tags.length > 0 && (
+            {isLoading ? (
+                <Flex gap={2} pt={3} flexWrap="wrap">
+                    {[52, 68, 60, 76, 56].map((w, i) => (
+                        <Skeleton key={i} height="32px" width={`${w}px`} borderRadius="full" startColor="surface.soft" endColor="surface.border" />
+                    ))}
+                </Flex>
+            ) : tags.length > 0 && (
                 <TagSelect
                     tags={tags}
                     value={selectedTags}

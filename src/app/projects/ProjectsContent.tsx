@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Skeleton, SkeletonText, Text } from "@chakra-ui/react";
 import { ProjectFeed } from "components";
 import { FeedItem } from "components/feed";
 import { FluidText } from "components/fluid-text";
@@ -9,7 +9,7 @@ import { SearchFilter } from "components/search-filter";
 import { Tag } from "components/tags";
 import { useMemo, useState } from "react";
 
-export function ProjectsContent({ projects }: { projects: FeedItem[] | undefined }) {
+export function ProjectsContent({ projects, isLoading }: { projects: FeedItem[] | undefined; isLoading?: boolean }) {
     const [search, setSearch] = useState("");
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -47,40 +47,37 @@ export function ProjectsContent({ projects }: { projects: FeedItem[] | undefined
     return (
         <>
             {/* ── Page Hero ──────────────────────────────────────── */}
-            <Box as="section" bg="surface.muted" pt={{ base: 16, md: 24 }} pb={{ base: 16, md: 20 }}>
+            <Box as="section" bg="surface.muted" pt={{ base: 10, md: 14 }} pb={{ base: 6, md: 8 }}>
                 <MainContainer>
-                    <Text
-                        fontSize="10px"
-                        letterSpacing="0.14em"
-                        textTransform="uppercase"
-                        color="ink.muted"
-                        fontFamily="heading"
-                        mb={4}
-                    >
-                        <FluidText>The curated collection</FluidText>
-                    </Text>
-                    <Text
-                        as="h1"
-                        fontFamily="heading"
-                        fontStyle="italic"
-                        fontSize={{ base: "5xl", md: "7xl", lg: "8xl" }}
-                        lineHeight="0.92"
-                        letterSpacing="-0.02em"
-                        mb={8}
-                    >
-                        <FluidText gradient>Exhibit</FluidText>
-                        <br />
-                        <FluidText gradient>Pieces.</FluidText>
-                    </Text>
-                    <Text
-                        fontFamily="body"
-                        fontSize="sm"
-                        color="ink.muted"
-                        maxW="50ch"
-                        lineHeight="1.7"
-                    >
-                        <FluidText>A non-standard exploration of digital craftsmanship. Each entry is a study in interaction, form, and purpose — presented as individual moments of intent.</FluidText>
-                    </Text>
+                    {isLoading ? (
+                        <Skeleton
+                            height={{ base: "44px", md: "56px" }}
+                            width="7ch"
+                            borderRadius="sm"
+                            startColor="surface.soft"
+                            endColor="surface.border"
+                            mb={3}
+                        />
+                    ) : (
+                        <Text
+                            as="h1"
+                            fontFamily="heading"
+                            fontStyle="italic"
+                            fontSize={{ base: "4xl", md: "5xl" }}
+                            lineHeight="0.92"
+                            letterSpacing="-0.02em"
+                            mb={3}
+                        >
+                            <FluidText gradient>Projects.</FluidText>
+                        </Text>
+                    )}
+                    {isLoading ? (
+                        <SkeletonText noOfLines={1} maxW="22ch" startColor="surface.soft" endColor="surface.border" />
+                    ) : (
+                        <Text fontFamily="body" fontSize="sm" color="ink.muted" lineHeight="1.7">
+                            <FluidText>Software, games, and creative tooling.</FluidText>
+                        </Text>
+                    )}
                 </MainContainer>
             </Box>
 
@@ -94,8 +91,9 @@ export function ProjectsContent({ projects }: { projects: FeedItem[] | undefined
                         onSearchChange={setSearch}
                         onTagsChange={setSelectedTags}
                         placeholder="Search projects…"
+                        isLoading={isLoading}
                     />
-                    <ProjectFeed items={filtered} />
+                    <ProjectFeed items={filtered} isLoading={isLoading} />
                 </MainContainer>
             </Box>
         </>

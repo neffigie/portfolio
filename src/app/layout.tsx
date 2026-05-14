@@ -7,6 +7,7 @@ import { HandleOnComplete } from "router";
 import { environment } from "environment";
 import { getResumeURL } from "config";
 import "css/giscus/giscus.css";
+import "css/nprogress/nprogress.css";
 
 export const dynamic = "force-dynamic"; // layout fetches resume URL from PocketBase on every request
 

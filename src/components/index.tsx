@@ -18,3 +18,4 @@ export * from "components/fluid-text";
 export * from "components/search-filter";
 export * from "components/tilt-card";
 export * from "components/magnetic";
+export * from "components/loading";

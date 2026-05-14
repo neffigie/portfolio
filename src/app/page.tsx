@@ -1,5 +1,3 @@
-import "css/nprogress/nprogress.css";
-
 import { generatePageMetadata, getProjects, getResumeURL } from "config";
 import { HomeContent } from "./HomeContent";
 

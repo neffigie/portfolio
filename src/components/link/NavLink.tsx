@@ -19,6 +19,7 @@ export function NavLink({
     fontSize,
     letterSpacing,
     onClick,
+    onMouseEnter,
     style,
     variant,
     ...props
@@ -33,6 +34,13 @@ export function NavLink({
         router.push(href, undefined);
     };
 
+    const handleMouseEnter = (event: MouseEvent<HTMLAnchorElement>) => {
+        onMouseEnter?.(event);
+        if (!event.defaultPrevented && shouldPrefetch(href)) {
+            router.prefetch(href);
+        }
+    };
+
     const linkStyle = {
         ...getVariantStyle(variant),
         fontSize,
@@ -41,7 +49,7 @@ export function NavLink({
     };
 
     return (
-        <a href={href} onClick={handleClick} style={linkStyle} {...props}>
+        <a href={href} onClick={handleClick} onMouseEnter={handleMouseEnter} style={linkStyle} {...props}>
             {children}
             {variant === "external" && (
                 <FiExternalLink
@@ -77,6 +85,15 @@ function getVariantStyle(variant: NavLinkProps["variant"]): CSSProperties {
         default:
             return {};
     }
+}
+
+function shouldPrefetch(href: string) {
+    const url = new URL(href, window.location.href);
+    if (url.origin !== window.location.origin) return false;
+    if (!url.pathname.startsWith("/")) return false;
+    if (url.pathname === window.location.pathname && url.search === window.location.search) return false;
+
+    return true;
 }
 
 function shouldUseClientNavigation(href: string, event: MouseEvent<HTMLAnchorElement>) {

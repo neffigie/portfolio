@@ -320,6 +320,50 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
                 });
             };
 
+            // html2canvas can't render background-clip: text — it draws the gradient rectangle
+            // instead of clipping to the text shape. Fix by directly mutating the DOM before
+            // capture, then restoring. This also fixes descendants that inherit color: transparent
+            // from the gradient-text parent (the proxy can't help there since those children
+            // don't have background-clip: text themselves).
+            interface GradientFix { savedBg: string; savedBgClip: string; savedColor: string; savedFill: string; }
+            const gradientFixes = new Map<HTMLElement, GradientFix>();
+
+            const saveAndFix = (el: HTMLElement, fixColor: boolean) => {
+                if (gradientFixes.has(el)) return;
+                gradientFixes.set(el, {
+                    savedBg: el.style.backgroundImage,
+                    savedBgClip: el.style.backgroundClip,
+                    savedColor: el.style.color,
+                    savedFill: el.style.getPropertyValue("-webkit-text-fill-color"),
+                });
+                if (fixColor) {
+                    el.style.setProperty("background-image", "none", "important");
+                    el.style.setProperty("background-clip", "border-box", "important");
+                    el.style.setProperty("-webkit-background-clip", "border-box", "important");
+                }
+                el.style.setProperty("color", "#4A3A38", "important");
+                el.style.setProperty("-webkit-text-fill-color", "unset", "important");
+            };
+
+            document.querySelectorAll<HTMLElement>("body *").forEach(el => {
+                if (el.closest("[data-liquid-glass-panel]")) return;
+                const cs = origGetComputedStyle(el);
+                const hasTextClip =
+                    cs.backgroundClip === "text" ||
+                    cs.getPropertyValue("-webkit-background-clip") === "text";
+                if (!hasTextClip) return;
+                saveAndFix(el, true);
+                // Descendants inherit color: transparent — fix them too.
+                el.querySelectorAll<HTMLElement>("*").forEach(child => {
+                    const cc = origGetComputedStyle(child);
+                    const isTransparent =
+                        cc.color === "rgba(0, 0, 0, 0)" ||
+                        cc.getPropertyValue("-webkit-text-fill-color") === "transparent" ||
+                        cc.getPropertyValue("-webkit-text-fill-color") === "rgba(0, 0, 0, 0)";
+                    if (isTransparent) saveAndFix(child, false);
+                });
+            });
+
             let captured: HTMLCanvasElement | null = null;
             const hiddenDuringCapture = Array.from(
                 document.querySelectorAll<HTMLElement>("[data-glass-ignore]"),
@@ -352,6 +396,14 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
                 hiddenDuringCapture.forEach(({ el, visibility }) => {
                     el.style.visibility = visibility;
                 });
+                // Restore gradient text elements to their original inline styles.
+                gradientFixes.forEach(({ savedBg, savedBgClip, savedColor, savedFill }, el) => {
+                    el.style.backgroundImage = savedBg;
+                    el.style.backgroundClip = savedBgClip;
+                    el.style.setProperty("-webkit-background-clip", savedBgClip);
+                    el.style.color = savedColor;
+                    el.style.setProperty("-webkit-text-fill-color", savedFill);
+                });
                 (window as typeof window & { getComputedStyle: typeof window.getComputedStyle }).getComputedStyle =
                     origGetComputedStyle;
             }
@@ -362,7 +414,25 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
             }
         };
 
+        // Fallback for pages with no loading skeleton (e.g. home page).
         const captureTimer = setTimeout(captureFullPage, 600);
+
+        // When skeleton elements are present, wait for them to be replaced by real content
+        // before capturing. Ensures html2canvas sees real text/images, not loading placeholders.
+        let skeletonObserver: MutationObserver | null = null;
+        if (document.querySelectorAll(".content-skeleton").length > 0) {
+            skeletonObserver = new MutationObserver(() => {
+                if (document.querySelectorAll(".content-skeleton").length > 0) return;
+                skeletonObserver!.disconnect();
+                skeletonObserver = null;
+                clearTimeout(captureTimer);
+                // Two rAFs: first lets React finish in-progress updates, second ensures browser paint.
+                requestAnimationFrame(() => requestAnimationFrame(() => {
+                    if (!cancelled) captureFullPage();
+                }));
+            });
+            skeletonObserver.observe(document.body, { childList: true, subtree: true });
+        }
 
         const onScroll = () => {
             cancelAnimationFrame(captureRafRef.current);
@@ -380,6 +450,7 @@ export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(function G
             cancelled = true;
             clearTimeout(captureTimer);
             clearTimeout(resizeTimer);
+            skeletonObserver?.disconnect();
             cancelAnimationFrame(captureRafRef.current);
             window.removeEventListener("scroll", onScroll);
             window.removeEventListener("resize", onResize);
