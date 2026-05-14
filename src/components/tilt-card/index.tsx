@@ -9,15 +9,13 @@ interface TiltCardProps {
     className?: string;
 }
 
-/** Wraps children with a spring-based 3D tilt + physical drift toward the cursor. */
+/** Wraps children with a spring-based 3D tilt that stays anchored in place. */
 export function TiltCard({ children, style, ...props }: TiltCardProps) {
     const ref = useRef<HTMLDivElement>(null);
     const rawX = useMotionValue(0); // normalised −0.5 → 0.5
     const rawY = useMotionValue(0);
     const cfg = { stiffness: 150, damping: 20 };
 
-    const x       = useSpring(useTransform(rawX, [-0.5, 0.5], [-10, 10]), cfg);
-    const y       = useSpring(useTransform(rawY, [-0.5, 0.5], [-10, 10]), cfg);
     const rotateX = useSpring(useTransform(rawY, [-0.5, 0.5], [2, -2]),   cfg);
     const rotateY = useSpring(useTransform(rawX, [-0.5, 0.5], [-2, 2]),   cfg);
 
@@ -33,7 +31,7 @@ export function TiltCard({ children, style, ...props }: TiltCardProps) {
             ref={ref}
             onMouseMove={track}
             onMouseLeave={reset}
-            style={{ x, y, rotateX, rotateY, transformPerspective: 1000, ...style }}
+            style={{ rotateX, rotateY, transformPerspective: 1000, ...style }}
             {...props}
         >
             {children}
