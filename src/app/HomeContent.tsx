@@ -156,7 +156,7 @@ function ProjectCard({ item, index, big }: { item: FeedItem; index: number; big?
     );
 }
 
-export function HomeContent({ featured, resumeUrl }: { featured: FeedItem[]; resumeUrl: string }) {
+export function HomeContent({ featured }: { featured: FeedItem[] }) {
     const author = environment.NEXT_PUBLIC_METADATA_AUTHOR.replace(/['"]+/g, "");
 
     return (
@@ -221,7 +221,7 @@ export function HomeContent({ featured, resumeUrl }: { featured: FeedItem[]; res
                     </Text>
                     <Box
                         as={Link}
-                        href={resumeUrl}
+                        href="/resume"
                         target="_blank"
                         rel="noopener noreferrer"
                         display="inline-flex"

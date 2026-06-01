@@ -5,14 +5,10 @@ import { HeroScene } from "components/scene/HeroScene";
 import { FieldLines } from "components/scene/FieldLines";
 import { HandleOnComplete } from "router";
 import { environment } from "environment";
-import { getResumeURL } from "config";
 import "css/giscus/giscus.css";
 import "css/nprogress/nprogress.css";
 
-export const dynamic = "force-dynamic"; // layout fetches resume URL from PocketBase on every request
-
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-    const resumeUrl = (await getResumeURL()) ?? "";
     return (
         <html
             lang="en"
@@ -52,7 +48,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                         linkedInUrl={environment.NEXT_PUBLIC_LINKEDIN_URL}
                         githubUrl={environment.NEXT_PUBLIC_GITHUB_URL}
                         itchUrl={environment.NEXT_PUBLIC_ITCH_URL}
-                        resumeUrl={resumeUrl}
                     />
                     <ScrollToTop />
                 </Providers>

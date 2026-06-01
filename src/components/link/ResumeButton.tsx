@@ -5,15 +5,15 @@ import { Box, Flex } from "@chakra-ui/react";
 import { MdOutlineDescription } from "react-icons/md";
 
 export interface ResumeButtonProps {
-    resumeUrl: string;
+    href?: string;
 }
 
 /** Outlined CTA resume link with file icon. */
-export function ResumeButton({ resumeUrl }: ResumeButtonProps) {
+export function ResumeButton({ href = "/resume" }: ResumeButtonProps) {
     return (
         <Box
             as={Link}
-            href={resumeUrl}
+            href={href}
             target="_blank"
             rel="noopener noreferrer"
             display="inline-block"

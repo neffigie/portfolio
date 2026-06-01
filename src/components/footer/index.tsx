@@ -12,10 +12,9 @@ export interface FooterProps {
     linkedInUrl: string;
     githubUrl: string;
     itchUrl: string;
-    resumeUrl: string;
 }
 
-export function Footer({ email, linkedInUrl, githubUrl, itchUrl, resumeUrl }: FooterProps) {
+export function Footer({ email, linkedInUrl, githubUrl, itchUrl }: FooterProps) {
     const author = environment.NEXT_PUBLIC_METADATA_AUTHOR.replace(/['"]+/g, "");
 
     return (
@@ -82,7 +81,7 @@ export function Footer({ email, linkedInUrl, githubUrl, itchUrl, resumeUrl }: Fo
 
                 <Box w="1px" h="16px" bg="surface.border" flexShrink={0} />
 
-                {resumeUrl && <ResumeButton resumeUrl={resumeUrl} />}
+                <ResumeButton />
 
                 <Text fontSize="10px" color="ink.faint" letterSpacing="0.04em" flexShrink={0}>
                     © {new Date().getFullYear()} neffigie

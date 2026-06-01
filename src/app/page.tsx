@@ -1,4 +1,4 @@
-import { generatePageMetadata, getProjects, getResumeURL } from "config";
+import { generatePageMetadata, getProjects } from "config";
 import { HomeContent } from "./HomeContent";
 
 export function generateMetadata() {
@@ -10,7 +10,7 @@ export function generateMetadata() {
 }
 
 export default async function HomePage() {
-    const [allProjects, resumeUrl] = await Promise.all([getProjects(), getResumeURL()]);
+    const allProjects = await getProjects();
     const featured = (allProjects ?? []).slice(0, 3);
-    return <HomeContent featured={featured} resumeUrl={resumeUrl ?? ""} />;
+    return <HomeContent featured={featured} />;
 }
