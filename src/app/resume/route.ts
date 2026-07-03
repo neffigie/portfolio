@@ -1,9 +1,9 @@
 import { getResumeURL } from "config";
-import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export default async function ResumePage() {
+export async function GET() {
     const resumeUrl = await getResumeURL();
-    redirect(resumeUrl);
+    return NextResponse.redirect(resumeUrl);
 }
