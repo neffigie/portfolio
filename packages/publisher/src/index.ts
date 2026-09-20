@@ -1,4 +1,7 @@
 export * from "./canonical.js";
+export * from "./compiler/plugins/headings.js";
+export * from "./compiler/plugins/links.js";
+export * from "./compiler/plugins/prose.js";
 export * from "./compiler/processor.js";
 export * from "./compiler/registry.js";
 export * from "./compiler/text.js";

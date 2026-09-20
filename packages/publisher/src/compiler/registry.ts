@@ -1,4 +1,13 @@
+import { headingAnchorsPlugin } from "./plugins/headings.js";
+import { linkClassificationPlugin } from "./plugins/links.js";
+import { proseNormalizationPlugin } from "./plugins/prose.js";
 import type { ContentPlugin } from "./types.js";
+
+export const CORE_CONTENT_PLUGINS: readonly ContentPlugin[] = [
+  proseNormalizationPlugin,
+  headingAnchorsPlugin,
+  linkClassificationPlugin,
+];
 
 export function orderPlugins(
   plugins: readonly ContentPlugin[],
