@@ -1,0 +1,24 @@
+{
+  "files": {
+    "includes": [
+      "**/*.{js,mjs,cjs,ts,mts,cts,json,jsonc,css}",
+      "!**/node_modules",
+      "!**/.build",
+      "!**/.next",
+      "!**/coverage",
+      "!**/dist",
+      "!**/playwright-report",
+      "!**/site/public",
+      "!**/test-results"
+    ]
+  },
+  "formatter": { "enabled": true, "indentStyle": "space", "indentWidth": 2 },
+  "linter": { "enabled": true, "rules": { "preset": "recommended" } },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "all"
+    }
+  }
+}

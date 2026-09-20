@@ -1,11 +1,41 @@
 {
   "schemaVersion": 1,
   "cases": [
-    { "id": "headings-links", "source": "source/headings-links.html", "expected": "expected/headings-links.html", "features": ["heading-anchor", "internal-link", "external-link"] },
-    { "id": "code", "source": "source/code.html", "expected": "expected/code.html", "features": ["inline-code", "code-block", "unknown-language"] },
-    { "id": "figures", "source": "source/figures.html", "expected": "expected/figures.html", "features": ["data-uri-image", "file-image", "alt", "caption"] },
-    { "id": "lists-quotes", "source": "source/lists-quotes.html", "expected": "expected/lists-quotes.html", "features": ["ordered-list", "unordered-list", "blockquote"] },
-    { "id": "table-subscript", "source": "source/table-subscript.html", "expected": "expected/table-subscript.html", "features": ["table", "subscript"] },
-    { "id": "passthrough", "source": "source/passthrough.html", "expected": "expected/passthrough.html", "features": ["unknown-element", "unknown-attribute", "nested-children"] }
+    {
+      "id": "headings-links",
+      "source": "source/headings-links.html",
+      "expected": "expected/headings-links.html",
+      "features": ["heading-anchor", "internal-link", "external-link"]
+    },
+    {
+      "id": "code",
+      "source": "source/code.html",
+      "expected": "expected/code.html",
+      "features": ["inline-code", "code-block", "unknown-language"]
+    },
+    {
+      "id": "figures",
+      "source": "source/figures.html",
+      "expected": "expected/figures.html",
+      "features": ["data-uri-image", "file-image", "alt", "caption"]
+    },
+    {
+      "id": "lists-quotes",
+      "source": "source/lists-quotes.html",
+      "expected": "expected/lists-quotes.html",
+      "features": ["ordered-list", "unordered-list", "blockquote"]
+    },
+    {
+      "id": "table-subscript",
+      "source": "source/table-subscript.html",
+      "expected": "expected/table-subscript.html",
+      "features": ["table", "subscript"]
+    },
+    {
+      "id": "passthrough",
+      "source": "source/passthrough.html",
+      "expected": "expected/passthrough.html",
+      "features": ["unknown-element", "unknown-attribute", "nested-children"]
+    }
   ]
 }

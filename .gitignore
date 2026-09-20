@@ -7,6 +7,8 @@
 
 # testing
 /coverage
+/playwright-report/
+/test-results/
 
 # next.js
 /.next/
@@ -26,7 +28,9 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
+.env*
 .env*.local
+!.env.example
 
 # vercel
 .vercel
@@ -35,3 +39,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /Portfolio Inspo/
+
+# portfolio v2 generated artifacts
+/.build/
+/cdk.out/
+/infrastructure/cdk.out/
+/site/data/publication.json
+/site/public/
+/site/resources/_gen/
+/site/static/assets/
+/site/static/pagefind/

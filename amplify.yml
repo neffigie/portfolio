@@ -1,17 +1,11 @@
-version: 3
+version: 1
 frontend:
-    phases:
-        preBuild:
-            commands:
-                - nvm install 20
-                - npm ci
-        build:
-            commands:
-                - npm run build
-    artifacts:
-        baseDirectory: .next
-        files:
-            - "**/*"
-    cache:
-        paths:
-            - node_modules/**/*
+  phases:
+    build:
+      commands:
+        - echo "Portfolio V2 preview is not configured; run the AWS publication plan."
+        - exit 1
+  artifacts:
+    baseDirectory: site/public
+    files:
+      - "**/*"
