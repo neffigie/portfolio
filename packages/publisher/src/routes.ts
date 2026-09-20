@@ -66,6 +66,14 @@ export function resolveRoute(
 ): RouteResolution {
   const canonical = canonicalizeSlug(slug);
 
+  if (isUnsafeAuthoredSlug(slug) || canonical.length === 0) {
+    return {
+      classification: "invalid",
+      route: null,
+      code: "route.invalid-slug",
+    };
+  }
+
   if (type === null) {
     if (isReservedSlug(canonical)) {
       return {
@@ -75,14 +83,6 @@ export function resolveRoute(
     }
 
     return { classification: "draft", route: null };
-  }
-
-  if (isUnsafeAuthoredSlug(slug) || canonical.length === 0) {
-    return {
-      classification: "invalid",
-      route: null,
-      code: "route.invalid-slug",
-    };
   }
 
   if (isReservedSlug(canonical) || isProtectedSlug(slug, canonical)) {

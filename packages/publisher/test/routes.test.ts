@@ -53,6 +53,14 @@ describe("route manifest", () => {
     },
   );
 
+  it("does not let a malformed blank-type slug become a reserved route", () => {
+    expect(resolveRoute("/home", null)).toMatchObject({
+      classification: "invalid",
+      route: null,
+      code: "route.invalid-slug",
+    });
+  });
+
   it("canonicalizes authored text to lowercase ASCII kebab case", () => {
     expect(canonicalizeSlug("  Déjà Vu: A Résumé  ")).toBe("deja-vu-a-resume");
   });

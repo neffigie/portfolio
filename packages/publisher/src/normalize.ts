@@ -149,7 +149,11 @@ function normalizeRecord(
   }
 
   const classification =
-    route.classification === "invalid" ? "published" : route.classification;
+    route.classification === "invalid"
+      ? record.type === null
+        ? "draft"
+        : "published"
+      : route.classification;
   const normalized = NormalizedEntrySchema.parse({
     sourceId: record.id,
     title: record.title.trim(),

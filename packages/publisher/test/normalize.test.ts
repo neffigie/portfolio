@@ -123,6 +123,27 @@ describe("normalizeRecords", () => {
     expect(codes(diagnostics)).toContain("route.protected-slug");
   });
 
+  it("reports unsafe draft slugs without publishing the draft", () => {
+    const diagnostics = new DiagnosticCollector();
+    const corpus = normalizeRecords(
+      [
+        ...reservedRecords(),
+        record("unsafe-draft", {
+          slug: "rough/notes",
+          type: null,
+          date: null,
+        }),
+      ],
+      diagnostics,
+    );
+
+    expect(codes(diagnostics)).toContain("route.invalid-slug");
+    expect(corpus.drafts.map(({ sourceId }) => sourceId)).toContain(
+      "unsafe-draft",
+    );
+    expect(corpus.entries).toEqual([]);
+  });
+
   it("reports every missing field required for publication", () => {
     const diagnostics = new DiagnosticCollector();
 
