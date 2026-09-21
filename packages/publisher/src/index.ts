@@ -1,4 +1,7 @@
+export * from "./build-snapshot.js";
 export * from "./canonical.js";
+export * from "./cli.js";
+export * from "./compile-entry.js";
 export * from "./compiler/code-languages.js";
 export * from "./compiler/plugins/code.js";
 export * from "./compiler/plugins/headings.js";

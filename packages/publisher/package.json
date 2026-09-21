@@ -6,7 +6,11 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "bin": {
+    "portfolio-publisher": "./src/cli.ts"
+  },
   "scripts": {
+    "build:content": "tsx src/cli.ts build",
     "test": "vitest run"
   },
   "dependencies": {
@@ -20,6 +24,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@types/hast": "^3.0.5"
+    "@types/hast": "^3.0.5",
+    "tsx": "^4.20.6"
   }
 }
