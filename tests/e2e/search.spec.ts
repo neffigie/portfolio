@@ -1,0 +1,110 @@
+import { expect, test } from "@playwright/test";
+
+const indexResults = (page: import("@playwright/test").Page) =>
+  page.locator("[data-index-root] [data-search-results] > li a");
+
+test("the unfiltered index browses newest first and searches title and body", async ({
+  page,
+}) => {
+  await page.goto("/index/");
+  await expect(
+    page.locator("[data-index-root] [data-search-status]"),
+  ).toHaveText("2 results");
+  await expect(indexResults(page)).toHaveText([
+    "Publication Compiler",
+    "Search as Navigation",
+  ]);
+
+  const query = page.locator("[data-index-root] [data-search-query]");
+  await query.fill("navigation");
+  await expect(indexResults(page)).toHaveText(["Search as Navigation"]);
+  await expect(page).toHaveURL(/\/index\/\?q=navigation$/u);
+
+  await query.fill("canonical");
+  await expect(indexResults(page)).toHaveText(["Publication Compiler"]);
+});
+
+test("type, tag intersection, and sort operate on the same corpus", async ({
+  page,
+}) => {
+  await page.goto("/index/");
+  await expect(
+    page.locator("[data-index-root] [data-search-status]"),
+  ).toHaveText("2 results");
+  await page
+    .locator("[data-index-root] [data-search-type]")
+    .selectOption("writing");
+  await expect(indexResults(page)).toHaveText(["Search as Navigation"]);
+
+  await page.locator("[data-index-root] [data-search-type]").selectOption("");
+  await page
+    .locator("[data-index-root] [data-search-tag]")
+    .fill("AWS, Systems");
+  await expect(indexResults(page)).toHaveText(["Publication Compiler"]);
+  await page.locator("[data-index-root] [data-search-tag]").fill("AWS, Search");
+  await expect(indexResults(page)).toHaveCount(0);
+  await expect(
+    page.locator("[data-index-root] [data-search-status]"),
+  ).toHaveText("No results");
+
+  await page.locator("[data-index-root] [data-search-tag]").fill("");
+  await page
+    .locator("[data-index-root] [data-search-sort]")
+    .selectOption("oldest");
+  await expect(indexResults(page)).toHaveText([
+    "Search as Navigation",
+    "Publication Compiler",
+  ]);
+  await page
+    .locator("[data-index-root] [data-search-sort]")
+    .selectOption("title");
+  await expect(indexResults(page)).toHaveText([
+    "Publication Compiler",
+    "Search as Navigation",
+  ]);
+});
+
+test("overlay state transfers to a reloadable index URL with identical result order", async ({
+  page,
+}) => {
+  await page.goto("/project-one/");
+  await page.getByRole("button", { name: "Search" }).click();
+  const dialog = page.getByRole("dialog", { name: "Search everywhere" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator("[data-pinned-entry]")).toHaveCount(2);
+
+  await dialog.getByRole("searchbox", { name: "Search" }).fill("systems");
+  await dialog.locator("[data-search-tag]").fill("AWS");
+  await expect(dialog.locator("[data-search-status]")).toHaveText("1 result");
+  const overlayHrefs = await dialog
+    .locator("[data-search-results] > li a")
+    .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
+
+  await dialog.getByRole("link", { name: "View in Index" }).click();
+  await expect(page).toHaveURL(/\/index\/\?q=systems&tag=AWS$/u);
+  await expect(
+    page.locator("[data-index-root] [data-search-status]"),
+  ).toHaveText("1 result");
+  const indexHrefs = await indexResults(page).evaluateAll((links) =>
+    links.map((link) => link.getAttribute("href")),
+  );
+  expect(indexHrefs).toEqual(overlayHrefs);
+
+  await page.reload();
+  await expect(indexResults(page)).toHaveText(["Publication Compiler"]);
+});
+
+test("index reconstructs state after browser history navigation", async ({
+  page,
+}) => {
+  await page.goto("/index/?q=compiler");
+  await expect(indexResults(page)).toHaveText(["Publication Compiler"]);
+  await page.evaluate(() => {
+    history.pushState({}, "", "/index/?type=writing&tag=Search");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+  await expect(
+    page.locator("[data-index-root] [data-search-type]"),
+  ).toHaveValue("writing");
+  await expect(indexResults(page)).toHaveText(["Search as Navigation"]);
+});

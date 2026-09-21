@@ -20,10 +20,14 @@
     "lint": "biome check .",
     "typecheck": "tsc --noEmit --project tsconfig.json --pretty false",
     "test": "vitest run",
+    "test:e2e": "playwright test",
+    "check:site": "npm run build:site && npm run test:e2e",
     "check": "npm run lint && npm run typecheck && npm test"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@biomejs/biome": "^2.5.14",
+    "@playwright/test": "^1.63.0",
     "@types/node": "^26.6.2",
     "cheerio": "^1.2.0",
     "esbuild": "^0.28.2",
