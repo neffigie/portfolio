@@ -45,6 +45,7 @@ next-env.d.ts
 /cdk.out/
 /infrastructure/cdk.out/
 /site/data/publication.json
+/site/.hugo_build.lock
 /site/public/
 /site/resources/_gen/
 /site/static/assets/
