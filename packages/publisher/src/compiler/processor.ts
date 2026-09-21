@@ -1,4 +1,4 @@
-import type { Root } from "hast";
+import type { Element, Root, RootContent } from "hast";
 import rehypeParse from "rehype-parse";
 import rehypeStringify from "rehype-stringify";
 import { unified } from "unified";
@@ -14,6 +14,26 @@ import type {
 const parser = unified().use(rehypeParse, { fragment: true });
 const serializer = unified().use(rehypeStringify);
 
+type RuntimeChild = RootContent | Root;
+
+function flattenFragmentRoots(parent: Root | Element): void {
+  const flattened: RootContent[] = [];
+
+  for (const child of parent.children as RuntimeChild[]) {
+    if (child.type === "root") {
+      flattenFragmentRoots(child);
+      flattened.push(...child.children);
+      continue;
+    }
+    if (child.type === "element") {
+      flattenFragmentRoots(child);
+    }
+    flattened.push(child);
+  }
+
+  parent.children = flattened as typeof parent.children;
+}
+
 export async function compileDocument(
   html: string,
   context: CompilationContext,
@@ -23,6 +43,7 @@ export async function compileDocument(
 
   for (const plugin of orderPlugins(plugins)) {
     await plugin.transform(tree, context);
+    flattenFragmentRoots(tree);
   }
 
   return {

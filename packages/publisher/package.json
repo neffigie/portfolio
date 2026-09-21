@@ -10,6 +10,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@shikijs/rehype": "^4.4.3",
     "hast-util-to-text": "^4.0.2",
     "rehype-parse": "^9.0.1",
     "rehype-stringify": "^10.0.1",

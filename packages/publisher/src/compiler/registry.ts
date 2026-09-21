@@ -1,13 +1,28 @@
+import { createCodeHighlightingPlugin } from "./plugins/code.js";
 import { headingAnchorsPlugin } from "./plugins/headings.js";
 import { linkClassificationPlugin } from "./plugins/links.js";
 import { proseNormalizationPlugin } from "./plugins/prose.js";
+import { semanticStructuresPlugin } from "./plugins/structures.js";
 import type { ContentPlugin } from "./types.js";
 
 export const CORE_CONTENT_PLUGINS: readonly ContentPlugin[] = [
   proseNormalizationPlugin,
   headingAnchorsPlugin,
   linkClassificationPlugin,
+  semanticStructuresPlugin,
 ];
+
+export function createContentPlugins(
+  corpusLanguages: ReadonlySet<string>,
+): ContentPlugin[] {
+  return [
+    proseNormalizationPlugin,
+    createCodeHighlightingPlugin(corpusLanguages),
+    headingAnchorsPlugin,
+    linkClassificationPlugin,
+    semanticStructuresPlugin,
+  ];
+}
 
 export function orderPlugins(
   plugins: readonly ContentPlugin[],
