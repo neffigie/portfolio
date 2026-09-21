@@ -12,7 +12,8 @@
   },
   "scripts": {
     "snapshot:fixture": "tsx scripts/build-fixture-snapshot.ts",
-    "build:hugo": "tsx scripts/run-hugo.ts",
+    "build:search": "esbuild packages/search/src/main.ts --bundle --format=esm --target=es2024 --minify --outfile=site/assets/js/search.js",
+    "build:hugo": "npm run build:search && tsx scripts/run-hugo.ts",
     "index:site": "pagefind --site site/public --output-subdir pagefind",
     "build:site": "npm run snapshot:fixture && npm run build:hugo && npm run index:site",
     "format": "biome format --write .",
@@ -25,6 +26,7 @@
     "@biomejs/biome": "^2.5.14",
     "@types/node": "^26.6.2",
     "cheerio": "^1.2.0",
+    "esbuild": "^0.28.2",
     "happy-dom": "^20.14.5",
     "pagefind": "^1.5.2",
     "tsx": "^4.21.0",

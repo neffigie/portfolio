@@ -1,4 +1,4 @@
-import type { SearchResponse } from "./pagefind.js";
+import type { SearchPage, SearchResponse } from "./pagefind.js";
 import {
   normalizeSearchState,
   type SearchState,
@@ -7,7 +7,7 @@ import {
 
 export interface SearchView {
   renderLoading(): void;
-  renderResults(response: SearchResponse): void;
+  renderResults(response: SearchResponse, append?: boolean): void;
   renderPins(): void;
   renderEmpty(): void;
   renderError(message: string): void;
@@ -18,7 +18,7 @@ export interface SearchView {
 export interface SearchControllerOptions {
   mode: "index" | "overlay";
   view: SearchView;
-  search(state: SearchState): Promise<SearchResponse>;
+  search(state: SearchState, page?: SearchPage): Promise<SearchResponse>;
 }
 
 export class SearchController {
@@ -26,6 +26,10 @@ export class SearchController {
   private readonly mode: "index" | "overlay";
   private readonly view: SearchView;
   private readonly search: SearchControllerOptions["search"];
+  private state: SearchState | null = null;
+  private nextOffset = 0;
+  private hasMore = false;
+  private loadingMore = false;
 
   constructor(options: SearchControllerOptions) {
     this.mode = options.mode;
@@ -36,6 +40,9 @@ export class SearchController {
   async run(input: SearchStateInput): Promise<void> {
     const requestId = ++this.requestId;
     const state = normalizeSearchState(input);
+    this.state = state;
+    this.nextOffset = 0;
+    this.hasMore = false;
     this.view.renderFilters(state);
 
     if (
@@ -54,6 +61,8 @@ export class SearchController {
     try {
       const response = await this.search(state);
       if (requestId !== this.requestId) return;
+      this.nextOffset = response.results.length;
+      this.hasMore = response.hasMore;
 
       if (response.total === 0) {
         this.view.renderEmpty();
@@ -70,6 +79,32 @@ export class SearchController {
       const message = "Search is unavailable. Please try again.";
       this.view.renderError(message);
       this.view.announce(message);
+    }
+  }
+
+  async loadMore(): Promise<void> {
+    if (!this.state || !this.hasMore || this.loadingMore) return;
+
+    const requestId = ++this.requestId;
+    const state = this.state;
+    this.loadingMore = true;
+    this.view.renderLoading();
+
+    try {
+      const response = await this.search(state, { offset: this.nextOffset });
+      if (requestId !== this.requestId) return;
+
+      this.nextOffset += response.results.length;
+      this.hasMore = response.hasMore;
+      this.view.renderResults(response, true);
+      this.view.announce(`${this.nextOffset} of ${response.total} results`);
+    } catch {
+      if (requestId !== this.requestId) return;
+      const message = "Search is unavailable. Please try again.";
+      this.view.renderError(message);
+      this.view.announce(message);
+    } finally {
+      this.loadingMore = false;
     }
   }
 }

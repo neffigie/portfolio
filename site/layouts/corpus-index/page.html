@@ -1,4 +1,5 @@
 {{ define "main" }}
+{{ $publication := hugo.Data.publication }}
 <main class="site-main index-page" id="main-content" data-index-root>
 	<h1>{{ .Title }}</h1>
 	<p>Browse every published project and piece of writing.</p>
@@ -16,7 +17,7 @@
 			</select>
 		</label>
 		<label>
-			<span>Tag</span>
+			<span>Tags (comma-separated)</span>
 			<input type="text" name="tag" data-search-tag>
 		</label>
 		<label>
@@ -30,6 +31,11 @@
 		</label>
 	</form>
 	<p class="search-status" role="status" aria-live="polite" data-search-status></p>
-	<ul class="search-results" data-search-results></ul>
+	<ul class="search-results" data-search-results>
+		{{ range $publication.entries }}
+			{{ partial "index-row.html" . }}
+		{{ end }}
+	</ul>
+	<button type="button" data-search-more hidden>Show more results</button>
 </main>
 {{ end }}

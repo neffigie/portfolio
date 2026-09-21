@@ -9,6 +9,7 @@
       "!**/dist",
       "!**/playwright-report",
       "!**/site/public",
+      "!**/site/assets/js/search.js",
       "!**/test-results"
     ]
   },

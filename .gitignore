@@ -48,5 +48,6 @@ next-env.d.ts
 /site/.hugo_build.lock
 /site/public/
 /site/resources/_gen/
+/site/assets/js/search.js
 /site/static/assets/
 /site/static/pagefind/

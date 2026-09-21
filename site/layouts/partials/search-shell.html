@@ -18,7 +18,7 @@
 				</select>
 			</label>
 			<label>
-				<span>Tag</span>
+				<span>Tags (comma-separated)</span>
 				<input type="text" data-search-tag>
 			</label>
 			<label>
@@ -33,6 +33,16 @@
 		</form>
 		<p class="search-status" role="status" aria-live="polite" data-search-status></p>
 		<ul class="search-results" data-search-results></ul>
+		<button type="button" data-search-more hidden>Show more results</button>
+		<template data-search-pins>
+			{{ $publication := hugo.Data.publication }}
+			{{ range $publication.pins }}
+				{{ $pin := . }}
+				{{ range where $publication.entries "sourceId" $pin.sourceId }}
+					{{ partial "pinned-row.html" . }}
+				{{ end }}
+			{{ end }}
+		</template>
 		<footer class="search-panel-footer"><a href="/index/" data-search-view-index>View in Index</a></footer>
 	</div>
 </dialog>

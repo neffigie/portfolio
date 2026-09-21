@@ -1,0 +1,9 @@
+<li class="search-result" data-search-result>
+	<a class="search-result-link" href="{{ .route }}">{{ .title }}</a>
+	{{ with .summary }}<p class="search-result-summary" data-result-summary>{{ . }}</p>{{ end }}
+	<div class="search-result-meta">
+		<span>{{ .type }}</span>
+		<time datetime="{{ .date }}">{{ .date }}</time>
+		{{ range .tags }}<span data-result-tag>{{ .label }}</span>{{ end }}
+	</div>
+</li>

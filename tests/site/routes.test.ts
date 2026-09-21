@@ -71,7 +71,7 @@ describe("permanent route semantics", () => {
     expect($("a[href='/index/']").length).toBeGreaterThan(0);
     expect($("[data-search-open]")).toHaveLength(1);
 
-    const pinnedTitles = $("[data-pinned-entry]")
+    const pinnedTitles = $("main [data-pinned-entry]")
       .toArray()
       .map((row) => $(row).find("a").first().text().trim());
     expect(pinnedTitles).toEqual([

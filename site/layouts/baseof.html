@@ -18,6 +18,8 @@
 		}}
 		{{ $styles := $css | resources.Concat "css/site.css" | minify | fingerprint }}
 		<link rel="stylesheet" href="{{ $styles.RelPermalink }}" integrity="{{ $styles.Data.Integrity }}">
+		{{ $script := resources.Get "js/search.js" | fingerprint }}
+		<script type="module" src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
 	</head>
 	<body>
 		{{ partial "header.html" . }}

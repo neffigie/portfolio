@@ -34,8 +34,10 @@ function recordingView() {
   const events: string[] = [];
   const view: SearchView = {
     renderLoading: () => events.push("loading"),
-    renderResults: (response) =>
-      events.push(`results:${response.results.map((item) => item.title)}`),
+    renderResults: (response, append) =>
+      events.push(
+        `${append ? "append" : "results"}:${response.results.map((item) => item.title)}`,
+      ),
     renderPins: () => events.push("pins"),
     renderEmpty: () => events.push("empty"),
     renderError: (message) => events.push(`error:${message}`),
@@ -153,5 +155,37 @@ describe("shared search controller", () => {
     expect(events).toContain(
       "announce:Search is unavailable. Please try again.",
     );
+  });
+
+  it("loads later batches without replacing earlier results", async () => {
+    const { view, events } = recordingView();
+    const offsets: number[] = [];
+    const firstResult = oneResult.results.at(0);
+    if (!firstResult) throw new Error("Missing result fixture");
+    const controller = new SearchController({
+      mode: "index",
+      view,
+      search: async (_state, page) => {
+        offsets.push(page?.offset ?? 0);
+        return {
+          total: 2,
+          hasMore: offsets.length === 1,
+          results: [
+            {
+              ...firstResult,
+              title: offsets.length === 1 ? "First" : "Second",
+            },
+          ],
+        };
+      },
+    });
+
+    await controller.run({});
+    await controller.loadMore();
+    await controller.loadMore();
+
+    expect(offsets).toEqual([0, 1]);
+    expect(events).toContain("results:First");
+    expect(events).toContain("append:Second");
   });
 });
