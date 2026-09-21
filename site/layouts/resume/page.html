@@ -1,9 +1,9 @@
 {{ define "main" }}
-<main>
-	<article>
+<main class="site-main" id="main-content">
+	<article class="reserved-page">
 		<h1>{{ .Title }}</h1>
-		<p>{{ .Params.summary }}</p>
-		<p><a href="{{ .Params.asset.path }}">Download résumé (PDF)</a></p>
+		<p class="entry-summary">{{ .Params.summary }}</p>
+		<p><a class="resume-download" href="{{ .Params.asset.path }}" download>Download résumé (PDF)</a></p>
 		{{ with .Content }}
 			<div class="prose">{{ . }}</div>
 		{{ end }}

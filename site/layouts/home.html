@@ -1,6 +1,29 @@
 {{ define "main" }}
-<main>
-	<h1>{{ hugo.Data.publication.reserved.home.title }}</h1>
-	<p>{{ hugo.Data.publication.reserved.home.summary }}</p>
+{{ $publication := hugo.Data.publication }}
+{{ $home := $publication.reserved.home }}
+<main class="site-main home" id="main-content">
+	<section class="home-introduction" aria-labelledby="home-title">
+		<h1 id="home-title">{{ $home.title }}</h1>
+		<p class="home-callout">{{ $home.summary }}</p>
+		<div class="prose">{{ $home.html | safe.HTML }}</div>
+	</section>
+
+	<section class="home-search" aria-labelledby="home-search-title">
+		<h2 id="home-search-title">Search the index</h2>
+		<p>Find work and writing by title, text, type, or tag.</p>
+		<a href="/index/">Open the complete index</a>
+	</section>
+
+	<section class="pinned-entries" aria-labelledby="pinned-title">
+		<h2 id="pinned-title">Pinned</h2>
+		<ul class="pinned-list">
+			{{ range $publication.pins }}
+				{{ $pin := . }}
+				{{ range where $publication.entries "sourceId" $pin.sourceId }}
+					{{ partial "pinned-row.html" . }}
+				{{ end }}
+			{{ end }}
+		</ul>
+	</section>
 </main>
 {{ end }}

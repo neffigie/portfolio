@@ -5,12 +5,27 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
 		<link rel="canonical" href="{{ .Permalink }}">
+		{{ $css := slice
+			(resources.Get "css/layers.css")
+			(resources.Get "css/reset.css")
+			(resources.Get "css/tokens.css")
+			(resources.Get "css/base.css")
+			(resources.Get "css/layout.css")
+			(resources.Get "css/components.css")
+			(resources.Get "css/utilities.css")
+			(resources.Get "css/states.css")
+		}}
+		{{ $styles := $css | resources.Concat "css/site.css" | minify | fingerprint }}
+		<link rel="stylesheet" href="{{ $styles.RelPermalink }}" integrity="{{ $styles.Data.Integrity }}">
 	</head>
 	<body>
+		{{ partial "header.html" . }}
 		{{ block "main" . }}
 			<main>
 				<h1>{{ .Title }}</h1>
 			</main>
 		{{ end }}
+		{{ partial "footer.html" . }}
+		{{ partial "search-shell.html" . }}
 	</body>
 </html>

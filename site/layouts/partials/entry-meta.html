@@ -1,0 +1,20 @@
+<dl class="entry-meta">
+	<div>
+		<dt>Type</dt>
+		<dd>{{ .Params.entryType }}</dd>
+	</div>
+	<div>
+		<dt>Published</dt>
+		<dd><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></dd>
+	</div>
+	{{ with .Params.tags }}
+		<div>
+			<dt>Tags</dt>
+			<dd>
+				<ul class="tag-list">
+					{{ range . }}<li>{{ .label }}</li>{{ end }}
+				</ul>
+			</dd>
+		</div>
+	{{ end }}
+</dl>

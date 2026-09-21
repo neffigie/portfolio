@@ -1,5 +1,35 @@
 {{ define "main" }}
-<main>
+<main class="site-main index-page" id="main-content" data-index-root>
 	<h1>{{ .Title }}</h1>
+	<p>Browse every published project and piece of writing.</p>
+	<form class="search-filters" data-search-filters role="search">
+		<label>
+			<span>Search</span>
+			<input type="search" name="q" autocomplete="off" data-search-query>
+		</label>
+		<label>
+			<span>Type</span>
+			<select name="type" data-search-type>
+				<option value="">All types</option>
+				<option value="writing">Writing</option>
+				<option value="project">Projects</option>
+			</select>
+		</label>
+		<label>
+			<span>Tag</span>
+			<input type="text" name="tag" data-search-tag>
+		</label>
+		<label>
+			<span>Sort</span>
+			<select name="sort" data-search-sort>
+				<option value="newest">Newest</option>
+				<option value="oldest">Oldest</option>
+				<option value="title">Title</option>
+				<option value="relevance">Relevance</option>
+			</select>
+		</label>
+	</form>
+	<p class="search-status" role="status" aria-live="polite" data-search-status></p>
+	<ul class="search-results" data-search-results></ul>
 </main>
 {{ end }}

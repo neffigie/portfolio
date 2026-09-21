@@ -1,0 +1,31 @@
+@layer states {
+  .search-dialog::backdrop {
+    background: rgb(0 0 0 / 45%);
+  }
+
+  [aria-busy="true"] {
+    cursor: progress;
+  }
+
+  [hidden] {
+    display: none;
+  }
+
+  @media (max-width: 44rem) {
+    .search-dialog {
+      width: 100%;
+      max-width: none;
+      height: 100%;
+      max-height: none;
+      margin: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto;
+    }
+  }
+}

@@ -6,6 +6,7 @@ export default defineConfig({
       "packages/*",
       {
         test: {
+          fileParallelism: false,
           include: ["tests/**/*.test.ts"],
           name: "site",
           root: ".",

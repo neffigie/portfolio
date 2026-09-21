@@ -1,0 +1,51 @@
+@layer base {
+  html {
+    background: var(--surface-page);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    line-height: var(--line-body);
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  a {
+    color: var(--interactive);
+    text-underline-offset: 0.2em;
+  }
+
+  button,
+  input,
+  select {
+    border: 1px solid var(--border-default);
+    border-radius: 0;
+    background: var(--surface-page);
+    color: inherit;
+    padding: var(--space-1) var(--space-2);
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  h1 {
+    font-size: var(--type-heading);
+    line-height: 1.1;
+  }
+
+  h2,
+  h3 {
+    line-height: 1.25;
+  }
+
+  code,
+  pre {
+    font-family: var(--font-code);
+  }
+}

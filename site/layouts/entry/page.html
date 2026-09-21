@@ -1,9 +1,10 @@
 {{ define "main" }}
-<main>
-	<article>
-		<header>
+<main class="site-main" id="main-content">
+	<article class="entry">
+		<header class="entry-header">
 			<h1>{{ .Title }}</h1>
-			<p>{{ .Params.summary }}</p>
+			<p class="entry-summary">{{ .Params.summary }}</p>
+			{{ partial "entry-meta.html" . }}
 		</header>
 		<div class="prose" data-pagefind-body>
 			{{ .Content }}

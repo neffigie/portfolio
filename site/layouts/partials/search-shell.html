@@ -1,0 +1,38 @@
+<dialog class="search-dialog" id="search-everywhere" aria-labelledby="search-dialog-title" data-search-dialog>
+	<div class="search-panel">
+		<header class="search-panel-header">
+			<h2 id="search-dialog-title">Search everywhere</h2>
+			<form method="dialog"><button type="submit" data-search-close>Close</button></form>
+		</header>
+		<form class="search-filters" data-search-filters role="search">
+			<label>
+				<span>Search</span>
+				<input type="search" autocomplete="off" data-search-query>
+			</label>
+			<label>
+				<span>Type</span>
+				<select data-search-type>
+					<option value="">All types</option>
+					<option value="writing">Writing</option>
+					<option value="project">Projects</option>
+				</select>
+			</label>
+			<label>
+				<span>Tag</span>
+				<input type="text" data-search-tag>
+			</label>
+			<label>
+				<span>Sort</span>
+				<select data-search-sort>
+					<option value="relevance">Relevance</option>
+					<option value="newest">Newest</option>
+					<option value="oldest">Oldest</option>
+					<option value="title">Title</option>
+				</select>
+			</label>
+		</form>
+		<p class="search-status" role="status" aria-live="polite" data-search-status></p>
+		<ul class="search-results" data-search-results></ul>
+		<footer class="search-panel-footer"><a href="/index/" data-search-view-index>View in Index</a></footer>
+	</div>
+</dialog>

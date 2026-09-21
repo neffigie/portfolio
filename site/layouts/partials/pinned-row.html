@@ -1,0 +1,10 @@
+<li class="pinned-entry" data-pinned-entry>
+	<div>
+		<a href="{{ .route }}">{{ .title }}</a>
+		<p>{{ .summary }}</p>
+	</div>
+	<div class="pinned-entry-meta">
+		<span>{{ .type }}</span>
+		<time datetime="{{ time.Format "2006-01-02" .date }}">{{ time.Format "Jan 2, 2006" .date }}</time>
+	</div>
+</li>
