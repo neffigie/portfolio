@@ -72,7 +72,7 @@ export function canonicalStringify(value: unknown): string {
   return serialize(value, new Set<object>());
 }
 
-export function sha256(value: string): string {
+export function sha256(value: string | Uint8Array): string {
   return createHash("sha256").update(value, "utf8").digest("hex");
 }
 
