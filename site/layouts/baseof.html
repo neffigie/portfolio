@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="{{ site.Language.Locale }}">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
+		<link rel="canonical" href="{{ .Permalink }}">
+	</head>
+	<body>
+		{{ block "main" . }}
+			<main>
+				<h1>{{ .Title }}</h1>
+			</main>
+		{{ end }}
+	</body>
+</html>

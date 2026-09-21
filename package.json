@@ -11,6 +11,9 @@
     "node": "24.21.0"
   },
   "scripts": {
+    "snapshot:fixture": "tsx scripts/build-fixture-snapshot.ts",
+    "build:hugo": "tsx scripts/run-hugo.ts",
+    "build:site": "npm run snapshot:fixture && npm run build:hugo",
     "format": "biome format --write .",
     "lint": "biome check .",
     "typecheck": "tsc --noEmit --project tsconfig.json --pretty false",
@@ -20,6 +23,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.14",
     "@types/node": "^26.6.2",
+    "tsx": "^4.21.0",
     "typescript": "^7.0.2",
     "vitest": "^5.0.1"
   }

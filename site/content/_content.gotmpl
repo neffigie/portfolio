@@ -1,0 +1,69 @@
+{{ $publication := hugo.Data.publication }}
+{{ if ne (int $publication.schemaVersion) 1 }}
+	{{ errorf "Unsupported publication snapshot schema version %v; expected 1" $publication.schemaVersion }}
+{{ end }}
+
+{{ range $publication.entries }}
+	{{ $content := dict "mediaType" "text/html" "value" .html }}
+	{{ $dates := dict "date" (time.AsTime .date) "lastmod" (time.AsTime .updated) }}
+	{{ $params := dict
+		"sourceId" .sourceId
+		"summary" .summary
+		"entryType" .type
+		"tags" .tags
+		"pinOrder" .pinOrder
+		"searchableText" .searchableText
+		"entryContentFingerprint" .entryContentFingerprint
+	}}
+	{{ $page := dict
+		"content" $content
+		"dates" $dates
+		"kind" "page"
+		"params" $params
+		"path" .slug
+		"title" .title
+		"type" "entry"
+	}}
+	{{ $.AddPage $page }}
+{{ end }}
+
+{{ with $publication.reserved.about }}
+	{{ $content := dict "mediaType" "text/html" "value" .html }}
+	{{ $dates := dict "lastmod" (time.AsTime .updated) }}
+	{{ $params := dict "sourceId" .sourceId "summary" .summary }}
+	{{ $.AddPage (dict
+		"content" $content
+		"dates" $dates
+		"kind" "page"
+		"params" $params
+		"path" "about"
+		"title" .title
+		"type" "about"
+	)
+	}}
+{{ end }}
+
+{{ with $publication.reserved.resume }}
+	{{ $content := dict "mediaType" "text/html" "value" .html }}
+	{{ $dates := dict "lastmod" (time.AsTime .updated) }}
+	{{ $params := dict "sourceId" .sourceId "summary" .summary "asset" .asset }}
+	{{ $.AddPage (dict
+		"content" $content
+		"dates" $dates
+		"kind" "page"
+		"params" $params
+		"path" "resume"
+		"title" .title
+		"type" "resume"
+	)
+	}}
+{{ end }}
+
+{{ $.AddPage (dict
+	"content" (dict "mediaType" "text/html" "value" "")
+	"kind" "page"
+	"path" "index"
+	"title" "Index"
+	"type" "corpus-index"
+)
+}}

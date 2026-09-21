@@ -1,0 +1,15 @@
+baseURL = 'https://neffigie.dev/'
+locale = 'en-US'
+title = 'Anna Noelle'
+disableKinds = ['taxonomy', 'term']
+
+[outputs]
+home = ['html', 'rss']
+
+[sitemap]
+changeFreq = 'weekly'
+filename = 'sitemap.xml'
+priority = 0.5
+
+[security]
+allowContent = ['^text/html$']

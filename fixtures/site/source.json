@@ -1,0 +1,91 @@
+[
+  {
+    "id": "home-id",
+    "title": "Anna Noelle",
+    "slug": "home",
+    "summary": "Software engineer building durable publishing and search systems.",
+    "bodyHtml": "<p>I design tools that make complex work legible and calm infrastructure easier to operate.</p>",
+    "type": null,
+    "tags": [],
+    "date": null,
+    "pinOrder": null,
+    "asset": null,
+    "created": "2026-09-01T12:00:00.000Z",
+    "updated": "2026-09-20T12:00:00.000Z"
+  },
+  {
+    "id": "about-id",
+    "title": "About Anna Noelle",
+    "slug": "about",
+    "summary": "How I approach software and creative work.",
+    "bodyHtml": "<h2>How I work</h2><p>I keep fieldnotes on systems, interfaces, and the decisions that make them durable.</p>",
+    "type": null,
+    "tags": [],
+    "date": null,
+    "pinOrder": null,
+    "asset": null,
+    "created": "2026-09-01T12:00:00.000Z",
+    "updated": "2026-09-20T12:00:00.000Z"
+  },
+  {
+    "id": "resume-id",
+    "title": "Résumé",
+    "slug": "resume",
+    "summary": "Anna Noelle's current résumé.",
+    "bodyHtml": "",
+    "type": null,
+    "tags": [],
+    "date": null,
+    "pinOrder": null,
+    "asset": {
+      "kind": "pocketbase-file",
+      "recordId": "resume-id",
+      "collectionId": "entries",
+      "fileName": "anna-noelle-resume.pdf"
+    },
+    "created": "2026-09-01T12:00:00.000Z",
+    "updated": "2026-09-20T12:00:00.000Z"
+  },
+  {
+    "id": "project-one-id",
+    "title": "Publication Compiler",
+    "slug": "project-one",
+    "summary": "A deterministic system for turning authored documents into static artifacts.",
+    "bodyHtml": "<h2>Durable publishing</h2><p>Canonical snapshots keep deployments reproducible without coupling the website to its authoring service.</p><blockquote><p>Publishing is a boundary, not a runtime dependency.</p></blockquote>",
+    "type": "project",
+    "tags": ["TypeScript", "AWS", "Systems"],
+    "date": "2026-09-20",
+    "pinOrder": 2,
+    "asset": null,
+    "created": "2026-09-01T12:00:00.000Z",
+    "updated": "2026-09-20T12:00:00.000Z"
+  },
+  {
+    "id": "writing-one-id",
+    "title": "Search as Navigation",
+    "slug": "writing-one",
+    "summary": "Why a living index can replace a growing stack of content silos.",
+    "bodyHtml": "<h2>One corpus</h2><p>The index is the information architecture: query, type, and tags reveal the same body of work from different angles.</p><pre><code class=\"language-ts\">const index = entries.filter(matchesIntent);</code></pre>",
+    "type": "writing",
+    "tags": ["TypeScript", "Search", "Systems"],
+    "date": "2026-08-20",
+    "pinOrder": 1,
+    "asset": null,
+    "created": "2026-09-01T12:00:00.000Z",
+    "updated": "2026-09-20T12:00:00.000Z"
+  },
+  {
+    "id": "draft-id",
+    "title": "Unpublished Notes",
+    "slug": "draft-notes",
+    "summary": "This draft must never enter the public site.",
+    "bodyHtml": "<p>draft-only-canary</p>",
+    "type": null,
+    "tags": ["Draft"],
+    "date": null,
+    "pinOrder": null,
+    "asset": null,
+    "created": "2026-09-01T12:00:00.000Z",
+    "updated": "2026-09-20T12:00:00.000Z"
+  }
+]

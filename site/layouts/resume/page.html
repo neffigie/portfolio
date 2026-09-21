@@ -1,0 +1,12 @@
+{{ define "main" }}
+<main>
+	<article>
+		<h1>{{ .Title }}</h1>
+		<p>{{ .Params.summary }}</p>
+		<p><a href="{{ .Params.asset.path }}">Download résumé (PDF)</a></p>
+		{{ with .Content }}
+			<div class="prose">{{ . }}</div>
+		{{ end }}
+	</article>
+</main>
+{{ end }}
