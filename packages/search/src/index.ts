@@ -1,4 +1,10 @@
 export type {
+  PagefindClient,
+  SearchResponse,
+  SearchResult,
+} from "./pagefind.js";
+export { loadPagefindClient, searchEntries } from "./pagefind.js";
+export type {
   SearchSort,
   SearchState,
   SearchStateInput,

@@ -1,9 +1,14 @@
+{{ define "head" }}
+{{ $labels := slice }}
+{{ range .Params.tags }}{{ $labels = $labels | append .label }}{{ end }}
+<meta data-pagefind-meta="tags[content]" content="{{ $labels | jsonify }}">
+{{ end }}
 {{ define "main" }}
 <main class="site-main" id="main-content">
 	<article class="entry">
 		<header class="entry-header">
-			<h1>{{ .Title }}</h1>
-			<p class="entry-summary">{{ .Params.summary }}</p>
+			<h1 data-pagefind-meta="title" data-pagefind-sort="title">{{ .Title }}</h1>
+			<p class="entry-summary" data-pagefind-meta="summary" data-pagefind-weight="2">{{ .Params.summary }}</p>
 			{{ partial "entry-meta.html" . }}
 		</header>
 		<div class="prose" data-pagefind-body>

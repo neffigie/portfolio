@@ -1,18 +1,18 @@
 <dl class="entry-meta">
 	<div>
 		<dt>Type</dt>
-		<dd>{{ .Params.entryType }}</dd>
+		<dd data-pagefind-filter="type" data-pagefind-meta="type">{{ .Params.entryType }}</dd>
 	</div>
 	<div>
 		<dt>Published</dt>
-		<dd><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></dd>
+		<dd><time datetime="{{ .Date.Format "2006-01-02" }}" data-pagefind-sort="date[datetime]" data-pagefind-meta="date[datetime]">{{ .Date.Format "January 2, 2006" }}</time></dd>
 	</div>
 	{{ with .Params.tags }}
 		<div>
 			<dt>Tags</dt>
 			<dd>
 				<ul class="tag-list">
-					{{ range . }}<li>{{ .label }}</li>{{ end }}
+					{{ range . }}<li data-pagefind-filter="tag">{{ .label }}</li>{{ end }}
 				</ul>
 			</dd>
 		</div>
