@@ -2,6 +2,7 @@ export * from "./canonical.js";
 export * from "./compiler/code-languages.js";
 export * from "./compiler/plugins/code.js";
 export * from "./compiler/plugins/headings.js";
+export * from "./compiler/plugins/images.js";
 export * from "./compiler/plugins/links.js";
 export * from "./compiler/plugins/prose.js";
 export * from "./compiler/plugins/structures.js";

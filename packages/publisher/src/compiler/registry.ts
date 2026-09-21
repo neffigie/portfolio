@@ -1,5 +1,6 @@
 import { createCodeHighlightingPlugin } from "./plugins/code.js";
 import { headingAnchorsPlugin } from "./plugins/headings.js";
+import { responsiveImagesPlugin } from "./plugins/images.js";
 import { linkClassificationPlugin } from "./plugins/links.js";
 import { proseNormalizationPlugin } from "./plugins/prose.js";
 import { semanticStructuresPlugin } from "./plugins/structures.js";
@@ -10,6 +11,7 @@ export const CORE_CONTENT_PLUGINS: readonly ContentPlugin[] = [
   headingAnchorsPlugin,
   linkClassificationPlugin,
   semanticStructuresPlugin,
+  responsiveImagesPlugin,
 ];
 
 export function createContentPlugins(
@@ -18,6 +20,7 @@ export function createContentPlugins(
   return [
     proseNormalizationPlugin,
     createCodeHighlightingPlugin(corpusLanguages),
+    responsiveImagesPlugin,
     headingAnchorsPlugin,
     linkClassificationPlugin,
     semanticStructuresPlugin,

@@ -1,8 +1,15 @@
 import type { Root } from "hast";
 
 import type { DiagnosticCollector } from "../diagnostics.js";
+import type { MediaManifestEntry } from "../model.js";
+
+export interface MediaRequest {
+  source: string;
+}
 
 export interface MediaRequestCollector {
+  request(request: MediaRequest): string;
+  resolve(requestId: string): Promise<MediaManifestEntry>;
   requestIds(): readonly string[];
 }
 

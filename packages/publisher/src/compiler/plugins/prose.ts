@@ -28,6 +28,18 @@ const blockNames = new Set([
   "table",
   "ul",
 ]);
+const embeddedContentNames = new Set([
+  "audio",
+  "canvas",
+  "embed",
+  "iframe",
+  "img",
+  "input",
+  "object",
+  "picture",
+  "svg",
+  "video",
+]);
 
 function reportCorrection(context: CompilationContext, message: string): void {
   context.diagnostics.warning({
@@ -39,10 +51,19 @@ function reportCorrection(context: CompilationContext, message: string): void {
   });
 }
 
+function hasEmbeddedContent(node: Element): boolean {
+  return node.children.some(
+    (child) =>
+      child.type === "element" &&
+      (embeddedContentNames.has(child.tagName) || hasEmbeddedContent(child)),
+  );
+}
+
 function isBlankEditorBlock(node: Element): boolean {
   return (
     (node.tagName === "p" || headingNames.has(node.tagName)) &&
-    toText(node).trim().length === 0
+    toText(node).trim().length === 0 &&
+    !hasEmbeddedContent(node)
   );
 }
 

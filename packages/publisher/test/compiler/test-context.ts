@@ -11,7 +11,15 @@ export function createCompilationContext(
     route: "/entry-1",
     siteOrigin: "https://neffigie.dev",
     diagnostics: new DiagnosticCollector(),
-    media: { requestIds: () => [] },
+    media: {
+      request() {
+        throw new Error("No media expected in this test.");
+      },
+      async resolve() {
+        throw new Error("No media expected in this test.");
+      },
+      requestIds: () => [],
+    },
     ...overrides,
   };
 }

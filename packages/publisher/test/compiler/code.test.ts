@@ -21,6 +21,7 @@ describe("code highlighting", () => {
     ).toEqual([
       "prose-normalization",
       "code-highlighting",
+      "responsive-images",
       "heading-anchors",
       "link-classification",
       "semantic-structures",

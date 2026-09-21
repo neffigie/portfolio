@@ -12,6 +12,12 @@ import {
 
 function context(): CompilationContext {
   const media: MediaRequestCollector = {
+    request() {
+      throw new Error("No media expected in this test.");
+    },
+    async resolve() {
+      throw new Error("No media expected in this test.");
+    },
     requestIds: () => [],
   };
 
