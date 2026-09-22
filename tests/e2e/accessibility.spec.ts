@@ -31,7 +31,7 @@ test("dialog retains keyboard focus and restores it on Escape", async ({
   const dialog = page.getByRole("dialog", { name: "Search everywhere" });
   await expect(dialog).toBeVisible();
   await expect(dialog.getByRole("searchbox", { name: "Search" })).toBeFocused();
-  await expect(dialog.locator("[data-pinned-entry]")).toHaveCount(2);
+  await expect(dialog.locator("[data-pinned-entry]")).toHaveCount(0);
 
   await dialog.getByRole("searchbox", { name: "Search" }).fill("compiler");
   await expect(dialog.locator("[data-search-status]")).toHaveText("1 result");
@@ -57,17 +57,15 @@ test("dialog and page landmarks pass serious/critical axe checks", async ({
   ).toEqual([]);
 });
 
-test("expanded filters and selected tag pills pass axe checks", async ({
+test("index filters and selected tag pills pass axe checks", async ({
   page,
 }) => {
-  await page.goto("/");
-  await page.getByRole("button", { name: "Search", exact: true }).click();
-  const dialog = page.getByRole("dialog", { name: "Search everywhere" });
-  await dialog.getByText("More filters").click();
-  await dialog.locator("[data-tag-picker] summary").click();
-  await dialog.getByRole("checkbox", { name: "AWS" }).check();
+  await page.goto("/index/");
+  const index = page.locator("[data-index-root]");
+  await index.locator("[data-tag-picker] summary").click();
+  await index.getByRole("checkbox", { name: "AWS" }).check();
   await expect(
-    dialog.getByRole("button", { name: "Remove AWS tag" }),
+    index.getByRole("button", { name: "Remove AWS tag" }),
   ).toBeVisible();
 
   const scan = await new AxeBuilder({ page }).analyze();

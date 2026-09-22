@@ -69,32 +69,30 @@ for (const viewport of [
         () => document.documentElement.scrollWidth <= window.innerWidth,
       ),
     ).toBe(true);
-    if (viewport.width === 360) {
-      const bounds = await dialog.boundingBox();
-      expect(bounds?.width).toBeGreaterThanOrEqual(359);
-      expect(bounds?.height).toBeGreaterThanOrEqual(799);
-    }
-    await expect(
-      dialog.getByRole("link", { name: "View in Index" }),
-    ).toBeVisible();
+    const before = await dialog.boundingBox();
+    expect(before?.width).toBeLessThan(viewport.width);
+    expect(before?.height).toBeLessThan(viewport.height / 2);
+    await dialog.getByRole("searchbox", { name: "Search" }).fill("systems");
+    await expect(dialog.locator("[data-search-result]")).toHaveCount(2);
+    await expect(dialog.locator(".search-result-meta").first()).toBeHidden();
+    const after = await dialog.boundingBox();
+    expect(Math.abs((before?.y ?? 0) - (after?.y ?? 0))).toBeLessThan(2);
+    expect(after?.height).toBeLessThan(viewport.height * 0.6);
   });
 }
 
-test("the mobile tag picker and index transfer remain operable", async ({
+test("the mobile index tag picker remains operable beside the quick dialog", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 360, height: 800 });
-  await page.goto("/");
-  await page.getByRole("button", { name: "Search", exact: true }).click();
-  const dialog = page.getByRole("dialog", { name: "Search everywhere" });
-  await dialog.getByText("More filters").click();
-  await dialog.locator("[data-tag-picker] summary").click();
-  await dialog.getByRole("checkbox", { name: "AWS" }).check();
+  await page.goto("/index/");
+  const index = page.locator("[data-index-root]");
+  await index.locator("[data-tag-picker] summary").click();
+  await index.getByRole("checkbox", { name: "AWS" }).check();
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBe(true);
-  await dialog.getByRole("link", { name: "View in Index" }).click();
   await expect(page).toHaveURL(/\/index\/\?tag=AWS$/u);
 });

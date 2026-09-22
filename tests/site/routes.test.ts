@@ -93,19 +93,14 @@ describe("permanent route semantics", () => {
     expect(index("[data-index-root] [data-search-results]")).toHaveLength(1);
   });
 
-  it("offers each published tag once on both search surfaces", async () => {
-    for (const [file, surface] of [
-      ["index.html", "[data-search-dialog]"],
-      ["index/index.html", "[data-index-root]"],
-    ] as const) {
-      const $ = load(await html(file));
-      expect(
-        $(`${surface} [data-tag-picker] [data-tag-option]`)
-          .toArray()
-          .map((element) => $(element).val()),
-      ).toEqual(["AWS", "Search", "Systems", "TypeScript"]);
-      expect($(`${surface} [data-search-tag]`)).toHaveLength(0);
-    }
+  it("offers each published tag once in the full index", async () => {
+    const $ = load(await html("index/index.html"));
+    expect(
+      $("[data-index-root] [data-tag-picker] [data-tag-option]")
+        .toArray()
+        .map((element) => $(element).val()),
+    ).toEqual(["AWS", "Search", "Systems", "TypeScript"]);
+    expect($("[data-index-root] [data-search-tag]")).toHaveLength(0);
   });
 
   it("keeps the résumé route stable while linking the published asset", async () => {

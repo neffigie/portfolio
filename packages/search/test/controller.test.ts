@@ -37,7 +37,6 @@ function recordingView() {
       events.push(
         `${append ? "append" : "results"}:${response.results.map((item) => item.title)}`,
       ),
-    renderPins: () => events.push("pins"),
     renderEmpty: () => events.push("empty"),
     renderError: (message) => events.push(`error:${message}`),
     renderFilters: (state) => events.push(`filters:${state.sort}`),
@@ -47,7 +46,7 @@ function recordingView() {
 }
 
 describe("shared search controller", () => {
-  it("shows pins without loading Pagefind for an empty overlay", async () => {
+  it("keeps an empty overlay blank without loading Pagefind", async () => {
     const { view, events } = recordingView();
     const states: SearchState[] = [];
     const controller = new SearchController({
@@ -62,11 +61,12 @@ describe("shared search controller", () => {
     await controller.run({});
 
     expect(states).toEqual([]);
-    expect(events).toContain("pins");
+    expect(events).toContain("empty");
+    expect(events).toContain("announce:");
     expect(events).not.toContain("loading");
   });
 
-  it("keeps pins for filter-only overlay state and queries when text is entered", async () => {
+  it("ignores index-only filters in overlay searches", async () => {
     const { view, events } = recordingView();
     const states: SearchState[] = [];
     const controller = new SearchController({
@@ -79,12 +79,16 @@ describe("shared search controller", () => {
     });
 
     await controller.run({ type: "project" });
-    await controller.run({ tags: ["AWS"] });
     await controller.run({ query: "compiler", tags: ["AWS"] });
 
     expect(states).toHaveLength(1);
-    expect(states[0]).toMatchObject({ query: "compiler", tags: ["AWS"] });
-    expect(events.filter((event) => event === "pins")).toHaveLength(2);
+    expect(states[0]).toEqual({
+      query: "compiler",
+      type: null,
+      tags: [],
+      sort: "relevance",
+    });
+    expect(events.filter((event) => event === "empty")).toHaveLength(1);
     expect(events.filter((event) => event === "loading")).toHaveLength(1);
     expect(events).toContain("results:Publication Compiler");
   });

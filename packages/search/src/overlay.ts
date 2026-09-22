@@ -2,8 +2,8 @@ import {
   SearchController,
   type SearchControllerOptions,
 } from "./controller.js";
-import { normalizeSearchState, stateToIndexUrl } from "./state.js";
-import { DomSearchView } from "./view.js";
+import { OverlaySearchView } from "./overlay-view.js";
+import { normalizeSearchState } from "./state.js";
 
 function isEditable(target: EventTarget | null): boolean {
   return (
@@ -18,29 +18,19 @@ export function mountOverlay(
   dialog: HTMLDialogElement,
   search: SearchControllerOptions["search"],
 ): void {
-  const view = new DomSearchView(dialog);
+  const view = new OverlaySearchView(dialog);
   const controller = new SearchController({ mode: "overlay", search, view });
-  const viewIndex = dialog.querySelector<HTMLAnchorElement>(
-    "[data-search-view-index]",
-  );
   let invoker: HTMLElement | null = null;
 
   function update(): void {
     const state = view.readState();
-    if (viewIndex) viewIndex.href = stateToIndexUrl(state);
     void controller.run(state);
   }
 
   function open(source: HTMLElement): void {
     if (dialog.open) return;
     invoker = source;
-    view.setSortExplicit(false);
     view.renderFilters(normalizeSearchState({}));
-    view.tags.resetDisclosure();
-    const advanced = dialog.querySelector<HTMLDetailsElement>(
-      "[data-search-advanced]",
-    );
-    if (advanced) advanced.open = false;
     dialog.showModal();
     view.query.focus();
     update();
@@ -80,12 +70,6 @@ export function mountOverlay(
     if (event.target !== view.query) return;
     update();
   });
-  view.form.addEventListener("change", (event) => {
-    if (!(event.target instanceof HTMLSelectElement)) return;
-    if (event.target === view.sort) view.markSortExplicit();
-    update();
-  });
-  view.root.addEventListener("search:tags-change", update);
   view.more?.addEventListener("click", () => void controller.loadMore());
 
   dialog.addEventListener("keydown", (event) => {

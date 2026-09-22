@@ -46,7 +46,6 @@ function surface(): HTMLElement {
     <p role="status" aria-live="polite" data-search-status></p>
     <ul data-search-results></ul>
     <button data-search-more hidden>Show more</button>
-    <template data-search-pins><li data-pinned-entry><a href="/project-one/">Pinned project</a></li></template>
   </section>`;
   const root = document.querySelector<HTMLElement>("[data-search-surface]");
   if (!root) throw new Error("Missing search surface");
@@ -112,14 +111,9 @@ describe("shared DOM search view", () => {
     expect(changes).toEqual([]);
   });
 
-  it("renders pins, results, loading, and live status in one surface", () => {
+  it("renders results, loading, and live status in one surface", () => {
     const root = surface();
     const view = new DomSearchView(root);
-
-    view.renderPins();
-    expect(root.querySelector("[data-pinned-entry]")?.textContent).toContain(
-      "Pinned project",
-    );
 
     view.renderLoading();
     expect(root.getAttribute("aria-busy")).toBe("true");

@@ -26,16 +26,14 @@ describe("built search client", () => {
     }
   });
 
-  it("embeds authored pins for empty Search Everywhere without a network request", async () => {
+  it("ships a query-only Search Everywhere dialog", async () => {
     const $ = load(await readFile(join(publicDirectory, "index.html"), "utf8"));
-    expect($("[data-search-dialog] template[data-search-pins]")).toHaveLength(
-      1,
-    );
-    expect(
-      $("[data-search-dialog] template[data-search-pins]")
-        .html()
-        ?.indexOf("Search as Navigation"),
-    ).toBeGreaterThan(-1);
+    expect($("[data-search-dialog] [data-search-query]")).toHaveLength(1);
+    expect($("[data-search-dialog] [data-search-type]")).toHaveLength(0);
+    expect($("[data-search-dialog] [data-tag-picker]")).toHaveLength(0);
+    expect($("[data-search-dialog] [data-search-sort]")).toHaveLength(0);
+    expect($("[data-search-dialog] [data-search-pins]")).toHaveLength(0);
+    expect($("[data-search-dialog] [data-search-view-index]")).toHaveLength(0);
   });
 
   it("renders the complete newest-first index before JavaScript runs", async () => {

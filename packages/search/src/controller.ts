@@ -8,7 +8,6 @@ import {
 export interface SearchView {
   renderLoading(): void;
   renderResults(response: SearchResponse, append?: boolean): void;
-  renderPins(): void;
   renderEmpty(): void;
   renderError(message: string): void;
   renderFilters(state: SearchState): void;
@@ -39,15 +38,17 @@ export class SearchController {
 
   async run(input: SearchStateInput): Promise<void> {
     const requestId = ++this.requestId;
-    const state = normalizeSearchState(input);
+    const state = normalizeSearchState(
+      this.mode === "overlay" ? { query: input.query } : input,
+    );
     this.state = state;
     this.nextOffset = 0;
     this.hasMore = false;
     this.view.renderFilters(state);
 
     if (this.mode === "overlay" && !state.query) {
-      this.view.renderPins();
-      this.view.announce("Pinned entries");
+      this.view.renderEmpty();
+      this.view.announce("");
       return;
     }
 

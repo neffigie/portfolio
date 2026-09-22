@@ -33,18 +33,9 @@ function fixture(): { dialog: HTMLDialogElement; launcher: HTMLButtonElement } {
       <button data-search-close>Close</button>
       <form data-search-filters>
         <input type="search" data-search-query>
-        <select data-search-type><option value=""></option><option value="project">Project</option></select>
-        <div data-tag-picker><div data-tag-pills></div><details><summary>Add tags</summary>
-          <input type="search" data-tag-filter>
-          <label><input type="checkbox" value="AWS" data-tag-option>AWS</label>
-          <p data-tag-empty hidden>No matching tags.</p>
-        </details></div>
-        <select data-search-sort><option value="newest">Newest</option><option value="relevance">Relevance</option></select>
       </form>
       <p role="status" aria-live="polite" data-search-status></p>
       <ul data-search-results></ul>
-      <template data-search-pins><li data-pinned-entry>Pinned project</li></template>
-      <a data-search-view-index href="/index/">View in Index</a>
     </dialog>`;
   return {
     dialog: required(document, "[data-search-dialog]"),
@@ -57,7 +48,7 @@ describe("Search Everywhere lifecycle", () => {
     document.body.innerHTML = "";
   });
 
-  it("opens from the launcher, shows pins, and restores focus on close", async () => {
+  it("opens from the launcher with an empty result list and restores focus on close", async () => {
     const { dialog, launcher } = fixture();
     mountOverlay(dialog, async () => oneResult);
     launcher.focus();
@@ -67,7 +58,9 @@ describe("Search Everywhere lifecycle", () => {
     expect(document.activeElement).toBe(
       dialog.querySelector("[data-search-query]"),
     );
-    expect(dialog.querySelector("[data-pinned-entry]")).not.toBeNull();
+    expect(
+      dialog.querySelector("[data-search-results]")?.children,
+    ).toHaveLength(0);
     required<HTMLButtonElement>(dialog, "[data-search-close]").click();
     expect(dialog.open).toBe(false);
     expect(document.activeElement).toBe(launcher);
@@ -96,7 +89,7 @@ describe("Search Everywhere lifecycle", () => {
     expect(dialog.open).toBe(true);
   });
 
-  it("handles Escape, repeated opening, and state transfer to Index", async () => {
+  it("handles Escape and clears the query on repeated opening", async () => {
     const { dialog, launcher } = fixture();
     mountOverlay(dialog, async () => oneResult);
     launcher.click();
@@ -106,11 +99,7 @@ describe("Search Everywhere lifecycle", () => {
     await vi.waitFor(() =>
       expect(dialog.querySelector("[data-search-results] a")).not.toBeNull(),
     );
-    expect(
-      dialog
-        .querySelector<HTMLAnchorElement>("[data-search-view-index]")
-        ?.getAttribute("href"),
-    ).toBe("/index/?q=compiler");
+    expect(dialog.querySelector("[data-search-view-index]")).toBeNull();
 
     dialog.dispatchEvent(
       new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
@@ -119,7 +108,9 @@ describe("Search Everywhere lifecycle", () => {
     launcher.click();
     expect(dialog.open).toBe(true);
     expect(query.value).toBe("");
-    expect(dialog.querySelector("[data-pinned-entry]")).not.toBeNull();
+    expect(
+      dialog.querySelector("[data-search-results]")?.children,
+    ).toHaveLength(0);
   });
 
   it("moves from query to results with arrows and activates the first result", async () => {

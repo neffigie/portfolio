@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 const indexResults = (page: import("@playwright/test").Page) =>
   page.locator("[data-index-root] [data-search-results] > li a");
 
-test("Search Everywhere reveals filters on demand and waits for a query", async ({
+test("Search Everywhere starts empty and shows only query results", async ({
   page,
 }) => {
   await page.goto("/");
@@ -11,26 +11,21 @@ test("Search Everywhere reveals filters on demand and waits for a query", async 
   const dialog = page.getByRole("dialog", { name: "Search everywhere" });
   const query = dialog.getByRole("searchbox", { name: "Search" });
   await expect(query).toBeFocused();
-  await expect(dialog.locator("[data-pinned-entry]")).toHaveCount(2);
+  await expect(dialog.locator("[data-pinned-entry]")).toHaveCount(0);
   await expect(dialog.locator("[data-search-result]")).toHaveCount(0);
-  await expect(dialog.locator("[data-search-advanced]")).not.toHaveAttribute(
-    "open",
-    "",
-  );
-  await expect(dialog.locator("[data-search-type]")).not.toBeVisible();
+  await expect(dialog.locator("[data-search-type]")).toHaveCount(0);
+  await expect(dialog.locator("[data-tag-picker]")).toHaveCount(0);
+  await expect(dialog.locator("[data-search-sort]")).toHaveCount(0);
+  await expect(dialog.locator("[data-search-status]")).toBeEmpty();
 
-  await dialog.getByText("More filters").click();
-  await expect(dialog.locator("[data-search-type]")).toBeVisible();
-  await dialog.locator("[data-tag-picker] summary").click();
-  await dialog.getByRole("checkbox", { name: "AWS" }).check();
-  await expect(dialog.locator("[data-pinned-entry]")).toHaveCount(2);
-  await expect(dialog.locator("[data-search-result]")).toHaveCount(0);
-
-  await query.fill("compiler");
+  await query.fill("canonical");
   await expect(dialog.locator("[data-search-status]")).toHaveText("1 result");
   await expect(dialog.locator("[data-search-result]")).toHaveCount(1);
+  await expect(dialog.locator("[data-result-preview]")).toContainText(
+    "Canonical snapshots keep deployments reproducible",
+  );
   await query.fill("");
-  await expect(dialog.locator("[data-pinned-entry]")).toHaveCount(2);
+  await expect(dialog.locator("[data-search-status]")).toBeEmpty();
   await expect(dialog.locator("[data-search-result]")).toHaveCount(0);
 });
 
@@ -98,33 +93,32 @@ test("type, tag intersection, and sort operate on the same corpus", async ({
   ]);
 });
 
-test("overlay state transfers to a reloadable index URL with identical result order", async ({
+test("overlay and index use the same query and supporting passage", async ({
   page,
 }) => {
   await page.goto("/project-one/");
   await page.getByRole("button", { name: "Search" }).click();
   const dialog = page.getByRole("dialog", { name: "Search everywhere" });
   await expect(dialog).toBeVisible();
-  await expect(dialog.locator("[data-pinned-entry]")).toHaveCount(2);
-
-  await dialog.getByRole("searchbox", { name: "Search" }).fill("systems");
-  await dialog.getByText("More filters").click();
-  await dialog.locator("[data-tag-picker] summary").click();
-  await dialog.getByRole("checkbox", { name: "AWS" }).check();
+  await dialog.getByRole("searchbox", { name: "Search" }).fill("canonical");
   await expect(dialog.locator("[data-search-status]")).toHaveText("1 result");
-  const overlayHrefs = await dialog
+  const overlayHref = await dialog
     .locator("[data-search-results] > li a")
-    .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
+    .getAttribute("href");
+  const overlayPassage = await dialog
+    .locator("[data-result-preview]")
+    .textContent();
 
-  await dialog.getByRole("link", { name: "View in Index" }).click();
-  await expect(page).toHaveURL(/\/index\/\?q=systems&tag=AWS$/u);
+  await page.goto("/index/?q=canonical");
   await expect(
     page.locator("[data-index-root] [data-search-status]"),
   ).toHaveText("1 result");
-  const indexHrefs = await indexResults(page).evaluateAll((links) =>
-    links.map((link) => link.getAttribute("href")),
+  expect(await indexResults(page).first().getAttribute("href")).toBe(
+    overlayHref,
   );
-  expect(indexHrefs).toEqual(overlayHrefs);
+  expect(
+    await page.locator("[data-index-root] [data-result-preview]").textContent(),
+  ).toBe(overlayPassage);
 
   await page.reload();
   await expect(indexResults(page)).toHaveText(["Publication Compiler"]);

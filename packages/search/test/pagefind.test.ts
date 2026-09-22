@@ -114,9 +114,8 @@ describe("Pagefind search adapter", () => {
     };
 
     const response = await searchEntries(client, { query: "canonical" });
-    expect(response.results.map(({ supportingText }) => supportingText)).toEqual([
-      "Before canonical after",
-      "Opening title.",
-    ]);
+    expect(
+      response.results.map(({ supportingText }) => supportingText),
+    ).toEqual(["Before canonical after", "Opening title."]);
   });
 });

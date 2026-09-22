@@ -7,7 +7,9 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { buildSite, publicDirectory } from "./build-site.js";
 
 async function page(route: string) {
-  return load(await readFile(join(publicDirectory, route, "index.html"), "utf8"));
+  return load(
+    await readFile(join(publicDirectory, route, "index.html"), "utf8"),
+  );
 }
 
 describe("content-specific views", () => {
