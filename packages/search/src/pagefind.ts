@@ -2,6 +2,7 @@ import { normalizeSearchState, type SearchStateInput } from "./state.js";
 
 export interface PagefindResultData {
   url: string;
+  excerpt?: string;
   plain_excerpt?: string;
   meta: Record<string, string | undefined>;
 }
@@ -24,8 +25,7 @@ export interface PagefindClient {
 export interface SearchResult {
   url: string;
   title: string;
-  summary: string;
-  excerpt: string;
+  supportingText: string;
   type: "writing" | "project";
   date: string;
   tags: string[];
@@ -61,11 +61,14 @@ function parseTags(value: string | undefined): string[] {
 }
 
 function toSearchResult(data: PagefindResultData): SearchResult {
+  const previewText = data.meta.preview ?? "";
+  const supportingText = data.excerpt?.includes("<mark>")
+    ? data.plain_excerpt || previewText
+    : previewText;
   return {
     url: data.url,
     title: data.meta.title ?? "Untitled",
-    summary: data.meta.summary ?? "",
-    excerpt: data.plain_excerpt ?? "",
+    supportingText,
     type: data.meta.type === "writing" ? "writing" : "project",
     date: data.meta.date ?? "",
     tags: parseTags(data.meta.tags),

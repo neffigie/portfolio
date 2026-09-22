@@ -17,12 +17,12 @@ export function renderResultRow(result: SearchResult): HTMLLIElement {
   link.textContent = result.title;
   row.append(link);
 
-  if (result.summary) {
-    const summary = document.createElement("p");
-    summary.className = "search-result-summary";
-    summary.dataset.resultSummary = "";
-    summary.textContent = result.summary;
-    row.append(summary);
+  if (result.supportingText) {
+    const preview = document.createElement("p");
+    preview.className = "search-result-preview";
+    preview.dataset.resultPreview = "";
+    preview.textContent = result.supportingText;
+    row.append(preview);
   }
 
   const metadata = document.createElement("div");

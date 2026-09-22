@@ -12,8 +12,7 @@ const oneResult: SearchResponse = {
     {
       url: "/project-one/",
       title: "Publication Compiler",
-      summary: "A durable pipeline.",
-      excerpt: "Compiler",
+      supportingText: "A durable pipeline.",
       type: "project",
       date: "2026-09-20",
       tags: ["AWS"],

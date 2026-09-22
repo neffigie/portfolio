@@ -12,7 +12,7 @@ function clientWithResults(count = 0): PagefindClient {
           plain_excerpt: `Excerpt ${index}`,
           meta: {
             title: `Entry ${index}`,
-            summary: `Summary ${index}`,
+            preview: `Opening preview ${index}`,
             type: "project",
             date: "2026-09-20",
             tags: '["AWS","Hugo"]',
@@ -80,11 +80,43 @@ describe("Pagefind search adapter", () => {
     expect(response.results[0]).toEqual({
       url: "/entry-10/",
       title: "Entry 10",
-      summary: "Summary 10",
-      excerpt: "Excerpt 10",
+      supportingText: "Opening preview 10",
       type: "project",
       date: "2026-09-20",
       tags: ["AWS", "Hugo"],
     });
+  });
+
+  it("uses a relevant body passage but falls back to opening prose for title-only matches", async () => {
+    const client: PagefindClient = {
+      search: vi.fn(async () => ({
+        results: [
+          {
+            id: "body",
+            data: async () => ({
+              url: "/body/",
+              excerpt: "Before <mark>canonical</mark> after",
+              plain_excerpt: "Before canonical after",
+              meta: { title: "Body result", preview: "Opening body." },
+            }),
+          },
+          {
+            id: "title",
+            data: async () => ({
+              url: "/title/",
+              excerpt: "Unrelated passage",
+              plain_excerpt: "Unrelated passage",
+              meta: { title: "Canonical title", preview: "Opening title." },
+            }),
+          },
+        ],
+      })),
+    };
+
+    const response = await searchEntries(client, { query: "canonical" });
+    expect(response.results.map(({ supportingText }) => supportingText)).toEqual([
+      "Before canonical after",
+      "Opening title.",
+    ]);
   });
 });

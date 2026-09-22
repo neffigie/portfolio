@@ -8,8 +8,7 @@ import { renderResultRow } from "../src/results.js";
 const result: SearchResult = {
   url: "/project-one/",
   title: "Publication Compiler",
-  summary: "A durable publishing pipeline.",
-  excerpt: "A deterministic source snapshot.",
+  supportingText: "A deterministic source snapshot.",
   type: "project",
   date: "2026-09-20",
   tags: ["AWS", "Systems"],
@@ -22,7 +21,7 @@ describe("result row", () => {
     expect(row.tagName).toBe("LI");
     expect(row.querySelector("a")?.getAttribute("href")).toBe("/project-one/");
     expect(row.querySelector("a")?.textContent).toBe("Publication Compiler");
-    expect(row.textContent).toContain("A durable publishing pipeline.");
+    expect(row.textContent).toContain("A deterministic source snapshot.");
     expect(row.textContent).toContain("project");
     expect(row.querySelector("time")?.getAttribute("datetime")).toBe(
       "2026-09-20",
@@ -35,9 +34,9 @@ describe("result row", () => {
     expect(row.querySelector("img")).toBeNull();
   });
 
-  it("omits an absent summary without inventing a placeholder", () => {
-    const row = renderResultRow({ ...result, summary: "" });
-    expect(row.querySelector("[data-result-summary]")).toBeNull();
+  it("omits an absent preview without inventing a placeholder", () => {
+    const row = renderResultRow({ ...result, supportingText: "" });
+    expect(row.querySelector("[data-result-preview]")).toBeNull();
   });
 
   it("treats authored values as text and rejects executable URLs", () => {
@@ -45,6 +44,7 @@ describe("result row", () => {
       ...result,
       url: "javascript:alert(1)",
       title: "<img src=x onerror=alert(1)>",
+      supportingText: "<script>alert(1)</script>",
       tags: ["<script>alert(1)</script>"],
     });
 
@@ -53,5 +53,8 @@ describe("result row", () => {
       "<img src=x onerror=alert(1)>",
     );
     expect(row.querySelector("a")?.getAttribute("href")).toBe("/index/");
+    expect(row.querySelector("[data-result-preview]")?.textContent).toBe(
+      "<script>alert(1)</script>",
+    );
   });
 });
