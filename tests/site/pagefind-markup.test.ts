@@ -17,7 +17,7 @@ describe("Pagefind entry markup", () => {
       expect($("[data-pagefind-body]")).toHaveLength(1);
     }
 
-    for (const route of ["", "about", "resume", "index"]) {
+    for (const route of ["", "resume", "index"]) {
       const file = route ? join(route, "index.html") : "index.html";
       const $ = load(await readFile(join(publicDirectory, file), "utf8"));
       expect($("[data-pagefind-body]")).toHaveLength(0);

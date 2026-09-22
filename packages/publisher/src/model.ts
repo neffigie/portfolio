@@ -140,7 +140,6 @@ export const PublicationSnapshotSchema = z.strictObject({
   generatedAt: instantSchema,
   reserved: z.strictObject({
     home: ReservedContentSchema,
-    about: ReservedContentSchema,
     resume: ReservedResumeSchema,
   }),
   entries: z.array(CompiledEntrySchema),

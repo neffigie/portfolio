@@ -62,14 +62,8 @@ async function corpus(): Promise<SourceRecord[]> {
       title: "Anna Noelle",
       slug: "home",
       summary: "Software engineer and creative builder.",
-      bodyHtml: "<h1>Anna Noelle</h1><p>Selected work and writing.</p>",
-      type: null,
-      date: null,
-    }),
-    record("about-id", {
-      title: "About Anna Noelle",
-      slug: "about",
-      bodyHtml: "<h1>About</h1><p>I build durable systems.</p>",
+      bodyHtml:
+        "<h1>Anna Noelle</h1><p>Selected work and writing. I build durable systems.</p>",
       type: null,
       date: null,
     }),

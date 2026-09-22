@@ -8,11 +8,6 @@ const routes = [
     canonical: "https://neffigie.dev/index/",
   },
   {
-    path: "/about/",
-    title: "About Anna Noelle · Anna Noelle",
-    canonical: "https://neffigie.dev/about/",
-  },
-  {
     path: "/resume/",
     title: "Résumé · Anna Noelle",
     canonical: "https://neffigie.dev/resume/",
@@ -86,7 +81,11 @@ test("internal links in the built site resolve", async ({ page, request }) => {
   }
 });
 
-test("unknown routes return a missing-page status", async ({ request }) => {
-  const response = await request.get("/not-a-real-entry/");
-  expect(response.status()).toBe(404);
+test("unknown and removed routes return a missing-page status", async ({
+  request,
+}) => {
+  for (const route of ["/not-a-real-entry/", "/about/"]) {
+    const response = await request.get(route);
+    expect(response.status(), route).toBe(404);
+  }
 });

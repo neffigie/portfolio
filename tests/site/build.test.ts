@@ -22,7 +22,7 @@ describe("Hugo publication build", () => {
   it("renders the permanent flat route structure", async () => {
     await expectFile("project-one/index.html");
     await expectFile("writing-one/index.html");
-    await expectFile("about/index.html");
+    await expectNoFile("about/index.html");
     await expectFile("resume/index.html");
     await expectFile("index/index.html");
     await expectFile("404.html");

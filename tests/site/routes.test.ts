@@ -14,7 +14,6 @@ interface RouteExpectation {
 const routes: RouteExpectation[] = [
   { file: "index.html", canonical: "https://neffigie.dev/" },
   { file: "index/index.html", canonical: "https://neffigie.dev/index/" },
-  { file: "about/index.html", canonical: "https://neffigie.dev/about/" },
   { file: "resume/index.html", canonical: "https://neffigie.dev/resume/" },
   {
     file: "project-one/index.html",
@@ -66,7 +65,8 @@ describe("permanent route semantics", () => {
       "Software engineer building durable publishing and search systems.",
     );
     expect(text).toContain("calm infrastructure");
-    expect($("a[href='/about/']")).toHaveLength(1);
+    expect(text).toContain("fieldnotes");
+    expect($("a[href='/about/']")).toHaveLength(0);
     expect($("a[href='/resume/']")).toHaveLength(1);
     expect($("a[href='/index/']").length).toBeGreaterThan(0);
     expect($("[data-search-open]")).toHaveLength(1);

@@ -27,22 +27,6 @@
 	{{ $.AddPage $page }}
 {{ end }}
 
-{{ with $publication.reserved.about }}
-	{{ $content := dict "mediaType" "text/html" "value" .html }}
-	{{ $dates := dict "lastmod" (time.AsTime .updated) }}
-	{{ $params := dict "sourceId" .sourceId "summary" .summary }}
-	{{ $.AddPage (dict
-		"content" $content
-		"dates" $dates
-		"kind" "page"
-		"params" $params
-		"path" "about"
-		"title" .title
-		"type" "about"
-	)
-	}}
-{{ end }}
-
 {{ with $publication.reserved.resume }}
 	{{ $content := dict "mediaType" "text/html" "value" .html }}
 	{{ $dates := dict "lastmod" (time.AsTime .updated) }}

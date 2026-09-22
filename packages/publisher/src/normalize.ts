@@ -14,7 +14,6 @@ import {
 
 export interface NormalizedCorpus {
   home: NormalizedEntry | null;
-  about: NormalizedEntry | null;
   resume: NormalizedEntry | null;
   entries: NormalizedEntry[];
   drafts: NormalizedEntry[];
@@ -89,16 +88,11 @@ function reportReservedFields(
           ["title", entry.title],
           ["asset", entry.asset],
         ]
-      : slug === "home"
-        ? [
-            ["title", entry.title],
-            ["summary", entry.summary],
-            ["body", entry.bodyHtml],
-          ]
-        : [
-            ["title", entry.title],
-            ["body", entry.bodyHtml],
-          ];
+      : [
+          ["title", entry.title],
+          ["summary", entry.summary],
+          ["body", entry.bodyHtml],
+        ];
 
   for (const [field, value] of values) {
     if (value === null || (typeof value === "string" && value.length === 0)) {
@@ -204,7 +198,6 @@ export function normalizeRecords(
   );
   const corpus: NormalizedCorpus = {
     home: null,
-    about: null,
     resume: null,
     entries: [],
     drafts: [],

@@ -71,13 +71,6 @@ const baseInput: SnapshotInput = {
       html: "<p>Introduction</p>",
       updated: "2026-09-20T12:00:00.000Z",
     },
-    about: {
-      sourceId: "about-id",
-      title: "About",
-      summary: "About Anna Noelle.",
-      html: "<p>About body</p>",
-      updated: "2026-09-20T12:00:00.000Z",
-    },
     resume: {
       sourceId: "resume-id",
       title: "Résumé",
@@ -128,10 +121,6 @@ describe("assembleSnapshot", () => {
       reserved: {
         resume: {
           ...baseInput.reserved.resume,
-          updated: "2026-09-21T12:00:00.000Z",
-        },
-        about: {
-          ...baseInput.reserved.about,
           updated: "2026-09-21T12:00:00.000Z",
         },
         home: {

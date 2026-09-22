@@ -42,7 +42,6 @@ function reservedRecords(): SourceRecord[] {
       type: null,
       date: null,
     }),
-    record("about-id", { slug: "about", type: null, date: null }),
     record("resume-id", {
       slug: "resume",
       type: null,
@@ -83,7 +82,7 @@ describe("normalizeRecords", () => {
     expect(diagnostics.items).toEqual([]);
     expect(corpus.home?.route).toBe("/");
     expect(corpus.home?.title).toBe("Anna Noelle");
-    expect(corpus.about?.route).toBe("/about");
+    expect(corpus).not.toHaveProperty("about");
     expect(corpus.resume?.route).toBe("/resume");
     expect(corpus.drafts.map(({ slug }) => slug)).toEqual(["rough-notes"]);
     expect(corpus.entries.map(({ route }) => route)).toEqual(["/my-project"]);
@@ -97,11 +96,9 @@ describe("normalizeRecords", () => {
     expect(codes(diagnostics)).toEqual([
       "route.missing-reserved",
       "route.missing-reserved",
-      "route.missing-reserved",
     ]);
     expect(diagnostics.items.map(({ message }) => message)).toEqual([
       expect.stringContaining("home"),
-      expect.stringContaining("about"),
       expect.stringContaining("resume"),
     ]);
   });

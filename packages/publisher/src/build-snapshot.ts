@@ -198,7 +198,7 @@ async function publishResumeAsset(
 
 function requiredReserved(
   entry: NormalizedEntry | null,
-  slug: "home" | "about" | "resume",
+  slug: "home" | "resume",
 ): NormalizedEntry {
   if (entry === null) {
     throw new TypeError(`Missing normalized reserved ${slug} entry.`);
@@ -224,12 +224,10 @@ export async function buildPublicationSnapshot(
     diagnostics.throwIfErrors();
 
     const home = requiredReserved(corpus.home, "home");
-    const about = requiredReserved(corpus.about, "about");
     const resume = requiredReserved(corpus.resume, "resume");
     const revisionFingerprint = sourceRevisionFingerprint(records);
     const languages = detectCorpusLanguages([
       home.bodyHtml,
-      about.bodyHtml,
       resume.bodyHtml,
       ...corpus.entries.map(({ bodyHtml }) => bodyHtml),
     ]);
@@ -270,7 +268,6 @@ export async function buildPublicationSnapshot(
     };
 
     const compiledHome = await compileReserved(home);
-    const compiledAbout = await compileReserved(about);
     const compiledResume = await compileReserved(resume);
     if (resume.asset === null) {
       throw new TypeError("Normalized résumé has no asset.");
@@ -301,7 +298,6 @@ export async function buildPublicationSnapshot(
       generatedAt: dependencies.generatedAt,
       reserved: {
         home: compiledHome,
-        about: compiledAbout,
         resume: { ...compiledResume, asset: resumeAsset },
       },
       entries,

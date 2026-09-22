@@ -1,15 +1,8 @@
 import type { EntryType } from "./model.js";
 
 export const ROUTE_MANIFEST = {
-  reserved: { home: "/", about: "/about", resume: "/resume" },
-  protectedSegments: [
-    "about",
-    "index",
-    "resume",
-    "assets",
-    "pagefind",
-    "404.html",
-  ],
+  reserved: { home: "/", resume: "/resume" },
+  protectedSegments: ["index", "resume", "assets", "pagefind", "404.html"],
 } as const;
 
 export type ReservedSlug = keyof typeof ROUTE_MANIFEST.reserved;

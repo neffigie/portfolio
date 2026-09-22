@@ -9,21 +9,15 @@ import {
 describe("route manifest", () => {
   it("declares every reserved route and protected segment", () => {
     expect(ROUTE_MANIFEST).toEqual({
-      reserved: { home: "/", about: "/about", resume: "/resume" },
-      protectedSegments: [
-        "about",
-        "index",
-        "resume",
-        "assets",
-        "pagefind",
-        "404.html",
-      ],
+      reserved: { home: "/", resume: "/resume" },
+      protectedSegments: ["index", "resume", "assets", "pagefind", "404.html"],
     });
   });
 
   it.each([
     ["home", null, { classification: "reserved", route: "/" }],
-    ["about", null, { classification: "reserved", route: "/about" }],
+    ["about", null, { classification: "draft", route: null }],
+    ["about", "writing", { classification: "published", route: "/about" }],
     ["resume", null, { classification: "reserved", route: "/resume" }],
     ["rough-notes", null, { classification: "draft", route: null }],
     [

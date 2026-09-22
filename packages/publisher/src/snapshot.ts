@@ -14,7 +14,6 @@ export interface SnapshotInput {
   generatedAt: string;
   reserved: {
     home: ReservedContent;
-    about: ReservedContent;
     resume: ReservedResume;
   };
   entries: readonly CompiledEntry[];
@@ -64,12 +63,6 @@ function contentIdentityMaterial(snapshot: PublicationSnapshot): unknown {
       title: snapshot.reserved.home.title,
       summary: snapshot.reserved.home.summary,
       html: snapshot.reserved.home.html,
-    },
-    about: {
-      sourceId: snapshot.reserved.about.sourceId,
-      title: snapshot.reserved.about.title,
-      summary: snapshot.reserved.about.summary,
-      html: snapshot.reserved.about.html,
     },
     resume: {
       sourceId: snapshot.reserved.resume.sourceId,

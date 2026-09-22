@@ -38,13 +38,6 @@ const validSnapshot: PublicationSnapshot = {
       html: "<p>Introduction</p>",
       updated: "2026-09-20T12:00:00.000Z",
     },
-    about: {
-      sourceId: "about-record",
-      title: "About",
-      summary: "About Anna Noelle.",
-      html: "<p>About body</p>",
-      updated: "2026-09-20T12:00:00.000Z",
-    },
     resume: {
       sourceId: "resume-record",
       title: "Résumé",
@@ -126,5 +119,20 @@ describe("source-independent publication schemas", () => {
     expect(PublicationSnapshotSchema.parse(validSnapshot)).toEqual(
       validSnapshot,
     );
+  });
+
+  it("requires only home and résumé as reserved content", () => {
+    expect(PublicationSnapshotSchema.parse(validSnapshot).reserved).toEqual(
+      validSnapshot.reserved,
+    );
+    expect(() =>
+      PublicationSnapshotSchema.parse({
+        ...validSnapshot,
+        reserved: {
+          ...validSnapshot.reserved,
+          about: { title: "Unreleased page" },
+        },
+      }),
+    ).toThrow();
   });
 });
