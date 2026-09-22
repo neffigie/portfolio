@@ -3,6 +3,37 @@ import { expect, test } from "@playwright/test";
 const indexResults = (page: import("@playwright/test").Page) =>
   page.locator("[data-index-root] [data-search-results] > li a");
 
+test("Search Everywhere reveals filters on demand and waits for a query", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Search", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Search everywhere" });
+  const query = dialog.getByRole("searchbox", { name: "Search" });
+  await expect(query).toBeFocused();
+  await expect(dialog.locator("[data-pinned-entry]")).toHaveCount(2);
+  await expect(dialog.locator("[data-search-result]")).toHaveCount(0);
+  await expect(dialog.locator("[data-search-advanced]")).not.toHaveAttribute(
+    "open",
+    "",
+  );
+  await expect(dialog.locator("[data-search-type]")).not.toBeVisible();
+
+  await dialog.getByText("More filters").click();
+  await expect(dialog.locator("[data-search-type]")).toBeVisible();
+  await dialog.locator("[data-tag-picker] summary").click();
+  await dialog.getByRole("checkbox", { name: "AWS" }).check();
+  await expect(dialog.locator("[data-pinned-entry]")).toHaveCount(2);
+  await expect(dialog.locator("[data-search-result]")).toHaveCount(0);
+
+  await query.fill("compiler");
+  await expect(dialog.locator("[data-search-status]")).toHaveText("1 result");
+  await expect(dialog.locator("[data-search-result]")).toHaveCount(1);
+  await query.fill("");
+  await expect(dialog.locator("[data-pinned-entry]")).toHaveCount(2);
+  await expect(dialog.locator("[data-search-result]")).toHaveCount(0);
+});
+
 test("the unfiltered index browses newest first and searches title and body", async ({
   page,
 }) => {
@@ -77,6 +108,7 @@ test("overlay state transfers to a reloadable index URL with identical result or
   await expect(dialog.locator("[data-pinned-entry]")).toHaveCount(2);
 
   await dialog.getByRole("searchbox", { name: "Search" }).fill("systems");
+  await dialog.getByText("More filters").click();
   await dialog.locator("[data-tag-picker] summary").click();
   await dialog.getByRole("checkbox", { name: "AWS" }).check();
   await expect(dialog.locator("[data-search-status]")).toHaveText("1 result");

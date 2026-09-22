@@ -79,3 +79,22 @@ for (const viewport of [
     ).toBeVisible();
   });
 }
+
+test("the mobile tag picker and index transfer remain operable", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 800 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Search", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Search everywhere" });
+  await dialog.getByText("More filters").click();
+  await dialog.locator("[data-tag-picker] summary").click();
+  await dialog.getByRole("checkbox", { name: "AWS" }).check();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await dialog.getByRole("link", { name: "View in Index" }).click();
+  await expect(page).toHaveURL(/\/index\/\?tag=AWS$/u);
+});

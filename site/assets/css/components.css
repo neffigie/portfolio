@@ -111,19 +111,20 @@
   }
 
   .search-panel {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: var(--space-3);
-    grid-template-rows: auto auto auto minmax(0, 1fr) auto auto;
     max-height: inherit;
     min-height: 0;
     padding: var(--space-4);
   }
 
   .search-panel .search-results {
+    flex: 1 1 auto;
+    min-height: 0;
     overflow-y: auto;
   }
 
-  .search-panel-header,
   .search-panel-footer {
     display: flex;
     align-items: center;
@@ -134,6 +135,20 @@
   .search-status {
     min-height: 1.5em;
     color: var(--text-muted);
+  }
+
+  .search-query-row input {
+    font-size: 1.125rem;
+  }
+
+  .search-advanced summary {
+    width: fit-content;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+
+  .search-advanced-controls {
+    margin-top: var(--space-2);
   }
 
   .tag-picker {

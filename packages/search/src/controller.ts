@@ -45,12 +45,7 @@ export class SearchController {
     this.hasMore = false;
     this.view.renderFilters(state);
 
-    if (
-      this.mode === "overlay" &&
-      !state.query &&
-      !state.type &&
-      state.tags.length === 0
-    ) {
+    if (this.mode === "overlay" && !state.query) {
       this.view.renderPins();
       this.view.announce("Pinned entries");
       return;

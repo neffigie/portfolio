@@ -56,3 +56,24 @@ test("dialog and page landmarks pass serious/critical axe checks", async ({
     ),
   ).toEqual([]);
 });
+
+test("expanded filters and selected tag pills pass axe checks", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Search", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Search everywhere" });
+  await dialog.getByText("More filters").click();
+  await dialog.locator("[data-tag-picker] summary").click();
+  await dialog.getByRole("checkbox", { name: "AWS" }).check();
+  await expect(
+    dialog.getByRole("button", { name: "Remove AWS tag" }),
+  ).toBeVisible();
+
+  const scan = await new AxeBuilder({ page }).analyze();
+  expect(
+    scan.violations.filter((violation) =>
+      ["serious", "critical"].includes(violation.impact ?? ""),
+    ),
+  ).toEqual([]);
+});

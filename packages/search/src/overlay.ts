@@ -2,7 +2,7 @@ import {
   SearchController,
   type SearchControllerOptions,
 } from "./controller.js";
-import { stateToIndexUrl } from "./state.js";
+import { normalizeSearchState, stateToIndexUrl } from "./state.js";
 import { DomSearchView } from "./view.js";
 
 function isEditable(target: EventTarget | null): boolean {
@@ -34,6 +34,13 @@ export function mountOverlay(
   function open(source: HTMLElement): void {
     if (dialog.open) return;
     invoker = source;
+    view.setSortExplicit(false);
+    view.renderFilters(normalizeSearchState({}));
+    view.tags.resetDisclosure();
+    const advanced = dialog.querySelector<HTMLDetailsElement>(
+      "[data-search-advanced]",
+    );
+    if (advanced) advanced.open = false;
     dialog.showModal();
     view.query.focus();
     update();

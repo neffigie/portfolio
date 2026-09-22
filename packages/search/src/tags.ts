@@ -71,6 +71,13 @@ export class TagPicker {
     this.sync();
   }
 
+  resetDisclosure(): void {
+    this.filter.value = "";
+    this.filterOptions();
+    const disclosure = this.root.querySelector<HTMLDetailsElement>("details");
+    if (disclosure) disclosure.open = false;
+  }
+
   private notify(): void {
     this.root.dispatchEvent(new Event("search:tags-change", { bubbles: true }));
   }

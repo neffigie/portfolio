@@ -1,32 +1,35 @@
 <dialog class="search-dialog" id="search-everywhere" aria-labelledby="search-dialog-title" data-search-dialog>
 	<div class="search-panel">
-		<header class="search-panel-header">
-			<h2 id="search-dialog-title">Search everywhere</h2>
-			<form method="dialog"><button type="submit" data-search-close>Close</button></form>
-		</header>
+		<h2 class="visually-hidden" id="search-dialog-title">Search everywhere</h2>
 		<form class="search-filters" data-search-filters role="search">
-			<label>
-				<span>Search</span>
-				<input type="search" autocomplete="off" data-search-query>
-			</label>
-			<label>
-				<span>Type</span>
-				<select data-search-type>
-					<option value="">All types</option>
-					<option value="writing">Writing</option>
-					<option value="project">Projects</option>
-				</select>
-			</label>
-			{{ partial "tag-picker.html" . }}
-			<label>
-				<span>Sort</span>
-				<select data-search-sort>
-					<option value="relevance">Relevance</option>
-					<option value="newest">Newest</option>
-					<option value="oldest">Oldest</option>
-					<option value="title">Title</option>
-				</select>
-			</label>
+			<div class="search-query-row">
+				<label class="visually-hidden" for="search-everywhere-query">Search</label>
+				<input id="search-everywhere-query" type="search" placeholder="Search everywhere" autocomplete="off" data-search-query>
+				<button type="button" data-search-close>Close</button>
+			</div>
+			<details class="search-advanced" data-search-advanced>
+				<summary>More filters</summary>
+				<div class="search-advanced-controls">
+					<label>
+						<span>Type</span>
+						<select data-search-type>
+							<option value="">All types</option>
+							<option value="writing">Writing</option>
+							<option value="project">Projects</option>
+						</select>
+					</label>
+					{{ partial "tag-picker.html" . }}
+					<label>
+						<span>Sort</span>
+						<select data-search-sort>
+							<option value="relevance">Relevance</option>
+							<option value="newest">Newest</option>
+							<option value="oldest">Oldest</option>
+							<option value="title">Title</option>
+						</select>
+					</label>
+				</div>
+			</details>
 		</form>
 		<p class="search-status" role="status" aria-live="polite" data-search-status></p>
 		<ul class="search-results" data-search-results></ul>

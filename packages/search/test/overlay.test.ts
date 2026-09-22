@@ -119,6 +119,8 @@ describe("Search Everywhere lifecycle", () => {
     expect(dialog.open).toBe(false);
     launcher.click();
     expect(dialog.open).toBe(true);
+    expect(query.value).toBe("");
+    expect(dialog.querySelector("[data-pinned-entry]")).not.toBeNull();
   });
 
   it("moves from query to results with arrows and activates the first result", async () => {

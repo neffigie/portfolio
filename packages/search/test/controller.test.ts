@@ -67,7 +67,7 @@ describe("shared search controller", () => {
     expect(events).not.toContain("loading");
   });
 
-  it("queries for any text, type, or tag filter in the overlay", async () => {
+  it("keeps pins for filter-only overlay state and queries when text is entered", async () => {
     const { view, events } = recordingView();
     const states: SearchState[] = [];
     const controller = new SearchController({
@@ -81,10 +81,12 @@ describe("shared search controller", () => {
 
     await controller.run({ type: "project" });
     await controller.run({ tags: ["AWS"] });
-    await controller.run({ query: "compiler" });
+    await controller.run({ query: "compiler", tags: ["AWS"] });
 
-    expect(states).toHaveLength(3);
-    expect(events.filter((event) => event === "loading")).toHaveLength(3);
+    expect(states).toHaveLength(1);
+    expect(states[0]).toMatchObject({ query: "compiler", tags: ["AWS"] });
+    expect(events.filter((event) => event === "pins")).toHaveLength(2);
+    expect(events.filter((event) => event === "loading")).toHaveLength(1);
     expect(events).toContain("results:Publication Compiler");
   });
 
