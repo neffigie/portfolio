@@ -81,11 +81,20 @@ test("internal links in the built site resolve", async ({ page, request }) => {
   }
 });
 
-test("unknown and removed routes return a missing-page status", async ({
-  request,
+test("unknown and removed routes show the navigable 404 page", async ({
+  page,
 }) => {
   for (const route of ["/not-a-real-entry/", "/about/"]) {
-    const response = await request.get(route);
-    expect(response.status(), route).toBe(404);
+    const response = await page.goto(route);
+    expect(response?.status(), route).toBe(404);
+    await expect(
+      page.getByRole("heading", { name: "Page not found" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("navigation", { name: "Primary" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "Return home" }),
+    ).toHaveAttribute("href", "/");
   }
 });

@@ -16,6 +16,7 @@
     "build:hugo": "npm run build:search && tsx scripts/run-hugo.ts",
     "index:site": "pagefind --site site/public --output-subdir pagefind",
     "build:site": "npm run snapshot:fixture && npm run build:hugo && npm run index:site",
+    "preview": "python3 scripts/serve-site.py",
     "format": "biome format --write .",
     "lint": "biome check .",
     "typecheck": "tsc --noEmit --project tsconfig.json --pretty false",

@@ -13,7 +13,7 @@ export default defineConfig({
     viewport: { width: 1440, height: 900 },
   },
   webServer: {
-    command: "python3 -m http.server 4173 -d site/public",
+    command: "python3 scripts/serve-site.py",
     url: "http://127.0.0.1:4173/",
     reuseExistingServer: !process.env.CI,
     stderr: "ignore",
