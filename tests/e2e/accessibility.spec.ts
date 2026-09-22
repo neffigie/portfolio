@@ -25,7 +25,7 @@ test("dialog retains keyboard focus and restores it on Escape", async ({
   page,
 }) => {
   await page.goto("/");
-  const launcher = page.getByRole("button", { name: "Search" });
+  const launcher = page.getByRole("button", { name: "Search", exact: true });
   await launcher.focus();
   await page.keyboard.press("Control+k");
   const dialog = page.getByRole("dialog", { name: "Search everywhere" });
@@ -48,7 +48,7 @@ test("dialog and page landmarks pass serious/critical axe checks", async ({
   page,
 }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Search" }).click();
+  await page.getByRole("button", { name: "Search", exact: true }).click();
   const scan = await new AxeBuilder({ page }).analyze();
   expect(
     scan.violations.filter((violation) =>

@@ -7,7 +7,9 @@
   }
 
   body {
-    min-height: 100vh;
+    display: flex;
+    min-height: 100dvh;
+    flex-direction: column;
   }
 
   a {

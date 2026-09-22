@@ -67,9 +67,10 @@ describe("permanent route semantics", () => {
     expect(text).toContain("calm infrastructure");
     expect(text).toContain("fieldnotes");
     expect($("a[href='/about/']")).toHaveLength(0);
-    expect($("a[href='/resume/']")).toHaveLength(1);
+    expect($("main a[href='/resume/']")).toHaveLength(1);
     expect($("a[href='/index/']").length).toBeGreaterThan(0);
-    expect($("[data-search-open]")).toHaveLength(1);
+    expect($("main [data-search-open]")).toHaveLength(1);
+    expect($("#home-search-title")).toHaveLength(0);
 
     const pinnedTitles = $("main [data-pinned-entry]")
       .toArray()
