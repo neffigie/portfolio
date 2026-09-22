@@ -1,3 +1,5 @@
+// @vitest-environment happy-dom
+
 import { describe, expect, it, vi } from "vitest";
 
 import { type PagefindClient, searchEntries } from "../src/pagefind.js";
@@ -117,5 +119,29 @@ describe("Pagefind search adapter", () => {
     expect(
       response.results.map(({ supportingText }) => supportingText),
     ).toEqual(["Before canonical after", "Opening title."]);
+  });
+
+  it("decodes Pagefind entities before presenting a body passage as text", async () => {
+    const client: PagefindClient = {
+      search: vi.fn(async () => ({
+        results: [
+          {
+            id: "entity",
+            data: async () => ({
+              url: "/entity/",
+              excerpt: "Use <mark>C&amp;C</mark> &lt;code&gt;",
+              plain_excerpt: "Use C&amp;C &lt;code&gt;",
+              meta: {
+                title: "Entity example",
+                preview: "Opening &amp; literal.",
+              },
+            }),
+          },
+        ],
+      })),
+    };
+
+    const response = await searchEntries(client, { query: "C&C" });
+    expect(response.results[0]?.supportingText).toBe("Use C&C <code>");
   });
 });

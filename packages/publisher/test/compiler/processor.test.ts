@@ -95,6 +95,16 @@ describe("compileDocument", () => {
     expect(result.previewText).toBe("");
   });
 
+  it("skips an inline-code-only paragraph before later prose", async () => {
+    const result = await compileDocument(
+      "<p><code>npm install</code></p><p>Readable prose.</p>",
+      context(),
+      [],
+    );
+
+    expect(result.previewText).toBe("Readable prose.");
+  });
+
   it("rejects duplicate plugin names", async () => {
     await expect(
       compileDocument("<p>Text</p>", context(), [

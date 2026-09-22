@@ -60,10 +60,18 @@ function parseTags(value: string | undefined): string[] {
   }
 }
 
+function decodePagefindExcerpt(encoded: string): string {
+  const decoder = document.createElement("textarea");
+  decoder.innerHTML = encoded;
+  return decoder.value;
+}
+
 function toSearchResult(data: PagefindResultData): SearchResult {
   const previewText = data.meta.preview ?? "";
   const supportingText = data.excerpt?.includes("<mark>")
-    ? data.plain_excerpt || previewText
+    ? data.plain_excerpt
+      ? decodePagefindExcerpt(data.plain_excerpt)
+      : previewText
     : previewText;
   return {
     url: data.url,

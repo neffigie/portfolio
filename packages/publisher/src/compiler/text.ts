@@ -37,12 +37,23 @@ const nonProseContainers = new Set([
 ]);
 
 export function extractOpeningPreview(tree: Root): string {
+  function hasProseText(parent: Element): boolean {
+    return parent.children.some((child) => {
+      if (child.type === "text") return child.value.trim().length > 0;
+      return (
+        child.type === "element" &&
+        !nonProseContainers.has(child.tagName) &&
+        hasProseText(child)
+      );
+    });
+  }
+
   function visit(parent: Root | Element): string {
     for (const child of parent.children) {
       if (child.type !== "element" || nonProseContainers.has(child.tagName)) {
         continue;
       }
-      if (child.tagName === "p") {
+      if (child.tagName === "p" && hasProseText(child)) {
         const text = toText(child).replace(/\s+/gu, " ").trim();
         if (text) return text;
       }
