@@ -10,7 +10,6 @@ const baseRecord: SourceRecord = {
   id: "record",
   title: "Title",
   slug: "entry",
-  summary: "Summary",
   bodyHtml: "<p>Body</p>",
   type: "writing",
   tags: [],
@@ -149,7 +148,6 @@ describe("normalizeRecords", () => {
         ...reservedRecords(),
         record("incomplete", {
           title: "  ",
-          summary: " ",
           bodyHtml: "",
           date: null,
         }),
@@ -159,7 +157,7 @@ describe("normalizeRecords", () => {
 
     expect(
       codes(diagnostics).filter((code) => code === "schema.published-field"),
-    ).toHaveLength(4);
+    ).toHaveLength(3);
   });
 
   it("rejects draft pins and duplicate published pin orders", () => {

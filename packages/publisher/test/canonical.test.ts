@@ -11,7 +11,6 @@ const recordA: SourceRecord = {
   id: "a",
   title: "Home",
   slug: "home",
-  summary: "Anna Noelle",
   bodyHtml: "<p>Home</p>",
   type: null,
   tags: [],

@@ -18,7 +18,7 @@ const entryA: CompiledEntry = {
   title: "Compiler Design",
   slug: "compiler-design",
   route: "/compiler-design",
-  summary: "How the content compiler works.",
+  previewText: "Content",
   type: "project",
   tags: [{ key: "typescript", label: "TypeScript" }],
   date: "2026-09-20T00:00:00.000Z",
@@ -67,14 +67,12 @@ const baseInput: SnapshotInput = {
     home: {
       sourceId: "home-id",
       title: "Anna Noelle",
-      summary: "Software engineer and creative builder.",
       html: "<p>Introduction</p>",
       updated: "2026-09-20T12:00:00.000Z",
     },
     resume: {
       sourceId: "resume-id",
       title: "Résumé",
-      summary: "Anna Noelle's résumé.",
       html: "",
       updated: "2026-09-20T12:00:00.000Z",
       asset: {

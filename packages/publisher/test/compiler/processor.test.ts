@@ -75,6 +75,26 @@ describe("compileDocument", () => {
     expect(calls).toEqual(["third", "first"]);
   });
 
+  it("uses the first prose paragraph as a preview after headings and figures", async () => {
+    const result = await compileDocument(
+      '<h2>Heading</h2><figure><figcaption>Image caption</figcaption></figure><pre><code>const x = 1</code></pre><p>Opening <em>prose</em>.</p><p>Later prose.</p>',
+      context(),
+      [],
+    );
+
+    expect(result.previewText).toBe("Opening prose.");
+  });
+
+  it("leaves the preview empty when there is no prose paragraph", async () => {
+    const result = await compileDocument(
+      "<h2>Visual work</h2><figure><figcaption>Photo</figcaption></figure>",
+      context(),
+      [],
+    );
+
+    expect(result.previewText).toBe("");
+  });
+
   it("rejects duplicate plugin names", async () => {
     await expect(
       compileDocument("<p>Text</p>", context(), [

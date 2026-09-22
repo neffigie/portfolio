@@ -4,7 +4,7 @@ import rehypeStringify from "rehype-stringify";
 import { unified } from "unified";
 
 import { orderPlugins } from "./registry.js";
-import { extractSearchableText } from "./text.js";
+import { extractOpeningPreview, extractSearchableText } from "./text.js";
 import type {
   CompilationContext,
   CompiledDocument,
@@ -49,6 +49,7 @@ export async function compileDocument(
   return {
     html: serializer.stringify(tree),
     searchableText: extractSearchableText(tree),
+    previewText: extractOpeningPreview(tree),
     mediaRequestIds: [...context.media.requestIds()],
   };
 }

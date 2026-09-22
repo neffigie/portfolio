@@ -15,7 +15,6 @@ const entry: NormalizedEntry = {
   title: "A deliberate compiler",
   slug: "deliberate-compiler",
   route: "/deliberate-compiler",
-  summary: "How the publishing boundary works.",
   bodyHtml: "<h2>Compiler boundary</h2><p>One durable artifact.</p>",
   type: "writing",
   tags: [{ key: "architecture", label: "Architecture" }],

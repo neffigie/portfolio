@@ -61,13 +61,11 @@ function contentIdentityMaterial(snapshot: PublicationSnapshot): unknown {
     home: {
       sourceId: snapshot.reserved.home.sourceId,
       title: snapshot.reserved.home.title,
-      summary: snapshot.reserved.home.summary,
       html: snapshot.reserved.home.html,
     },
     resume: {
       sourceId: snapshot.reserved.resume.sourceId,
       title: snapshot.reserved.resume.title,
-      summary: snapshot.reserved.resume.summary,
       html: snapshot.reserved.resume.html,
       asset: snapshot.reserved.resume.asset,
     },

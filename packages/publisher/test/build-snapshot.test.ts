@@ -38,7 +38,6 @@ function record(
     id,
     title: id,
     slug: id,
-    summary: `${id} summary`,
     bodyHtml: `<p>${id} body</p>`,
     type: "writing",
     tags: [],
@@ -61,7 +60,6 @@ async function corpus(): Promise<SourceRecord[]> {
     record("home-id", {
       title: "Anna Noelle",
       slug: "home",
-      summary: "Software engineer and creative builder.",
       bodyHtml:
         "<h1>Anna Noelle</h1><p>Selected work and writing. I build durable systems.</p>",
       type: null,
@@ -70,7 +68,6 @@ async function corpus(): Promise<SourceRecord[]> {
     record("resume-id", {
       title: "Résumé",
       slug: "resume",
-      summary: "Anna Noelle's résumé.",
       bodyHtml: "",
       type: null,
       date: null,

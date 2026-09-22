@@ -27,7 +27,6 @@ export const SourceRecordSchema = z.strictObject({
   id: z.string().min(1),
   title: z.string(),
   slug: z.string(),
-  summary: z.string(),
   bodyHtml: z.string(),
   type: EntryTypeSchema.nullable(),
   tags: z.array(z.string()),
@@ -50,7 +49,6 @@ export const NormalizedEntrySchema = z.strictObject({
   title: z.string(),
   slug: z.string(),
   route: z.string().nullable(),
-  summary: z.string(),
   bodyHtml: z.string(),
   type: EntryTypeSchema.nullable(),
   tags: z.array(NormalizedTagSchema),
@@ -87,7 +85,7 @@ export const CompiledEntrySchema = z.strictObject({
   title: z.string().min(1),
   slug: z.string().min(1),
   route: z.string().startsWith("/"),
-  summary: z.string().min(1),
+  previewText: z.string(),
   type: EntryTypeSchema,
   tags: z.array(NormalizedTagSchema),
   date: instantSchema,
@@ -104,7 +102,6 @@ export type CompiledEntry = z.infer<typeof CompiledEntrySchema>;
 const reservedContentShape = {
   sourceId: z.string().min(1),
   title: z.string().min(1),
-  summary: z.string(),
   html: z.string(),
   updated: instantSchema,
 };

@@ -30,5 +30,6 @@ export interface ContentPlugin {
 export interface CompiledDocument {
   html: string;
   searchableText: string;
+  previewText: string;
   mediaRequestIds: string[];
 }

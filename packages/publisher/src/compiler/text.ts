@@ -27,3 +27,30 @@ export function extractSearchableText(tree: Root): string {
   removeGeneratedText(searchableTree);
   return toText(searchableTree).replace(/\s+/gu, " ").trim();
 }
+
+const nonProseContainers = new Set([
+  "figure",
+  "figcaption",
+  "pre",
+  "code",
+  "table",
+]);
+
+export function extractOpeningPreview(tree: Root): string {
+  function visit(parent: Root | Element): string {
+    for (const child of parent.children) {
+      if (child.type !== "element" || nonProseContainers.has(child.tagName)) {
+        continue;
+      }
+      if (child.tagName === "p") {
+        const text = toText(child).replace(/\s+/gu, " ").trim();
+        if (text) return text;
+      }
+      const nested = visit(child);
+      if (nested) return nested;
+    }
+    return "";
+  }
+
+  return visit(tree);
+}

@@ -14,7 +14,6 @@ const validSource: SourceRecord = {
   id: "entry-1",
   title: "Compiler Design",
   slug: "compiler-design",
-  summary: "How the document compiler works.",
   bodyHtml: "<p>Content</p>",
   type: "project",
   tags: ["TypeScript", "Hugo"],
@@ -34,14 +33,12 @@ const validSnapshot: PublicationSnapshot = {
     home: {
       sourceId: "home-record",
       title: "Anna Noelle",
-      summary: "Software engineer and creative builder.",
       html: "<p>Introduction</p>",
       updated: "2026-09-20T12:00:00.000Z",
     },
     resume: {
       sourceId: "resume-record",
       title: "Résumé",
-      summary: "Anna Noelle's résumé.",
       html: "",
       updated: "2026-09-20T12:00:00.000Z",
       asset: {
@@ -63,6 +60,10 @@ const validSnapshot: PublicationSnapshot = {
 };
 
 describe("SourceRecordSchema", () => {
+  it("accepts authored content without a separate summary", () => {
+    expect(SourceRecordSchema.parse(validSource)).toEqual(validSource);
+  });
+
   it("accepts the neutral source record contract", () => {
     expect(SourceRecordSchema.parse(validSource).type).toBe("project");
   });
@@ -89,7 +90,7 @@ describe("source-independent publication schemas", () => {
       title: "Compiler Design",
       slug: "compiler-design",
       route: "/compiler-design",
-      summary: "How the document compiler works.",
+      previewText: "Content",
       type: "project",
       tags: [{ key: "typescript", label: "TypeScript" }],
       date: "2026-09-20T00:00:00.000Z",

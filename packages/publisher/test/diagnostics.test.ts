@@ -37,7 +37,7 @@ describe("DiagnosticCollector", () => {
     collector.error({
       category: "schema",
       code: "schema.published-field",
-      message: "Published entry is missing a summary.",
+      message: "Published entry is missing a body.",
       recordId: "entry-1",
       stage: "normalization",
     });

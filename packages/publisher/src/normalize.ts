@@ -59,7 +59,6 @@ function reportPublishedFields(
 ): void {
   const missing = [
     ["title", entry.title],
-    ["summary", entry.summary],
     ["body", entry.bodyHtml],
     ["date", entry.date],
   ] as const;
@@ -90,7 +89,6 @@ function reportReservedFields(
         ]
       : [
           ["title", entry.title],
-          ["summary", entry.summary],
           ["body", entry.bodyHtml],
         ];
 
@@ -153,7 +151,6 @@ function normalizeRecord(
     title: record.title.trim(),
     slug: canonicalizeSlug(record.slug),
     route: route.route,
-    summary: record.summary.trim(),
     bodyHtml: record.bodyHtml.trim(),
     type: record.type,
     tags: normalizeTags(record.tags),

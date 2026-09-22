@@ -261,7 +261,6 @@ export async function buildPublicationSnapshot(
       return {
         sourceId: entry.sourceId,
         title: entry.title,
-        summary: entry.summary,
         html: document.html,
         updated: entry.updated,
       };
