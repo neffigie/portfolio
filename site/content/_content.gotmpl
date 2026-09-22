@@ -8,7 +8,7 @@
 	{{ $dates := dict "date" (time.AsTime .date) "lastmod" (time.AsTime .updated) }}
 	{{ $params := dict
 		"sourceId" .sourceId
-		"summary" .summary
+		"previewText" .previewText
 		"entryType" .type
 		"tags" .tags
 		"pinOrder" .pinOrder
@@ -30,7 +30,7 @@
 {{ with $publication.reserved.resume }}
 	{{ $content := dict "mediaType" "text/html" "value" .html }}
 	{{ $dates := dict "lastmod" (time.AsTime .updated) }}
-	{{ $params := dict "sourceId" .sourceId "summary" .summary "asset" .asset }}
+	{{ $params := dict "sourceId" .sourceId "asset" .asset }}
 	{{ $.AddPage (dict
 		"content" $content
 		"dates" $dates

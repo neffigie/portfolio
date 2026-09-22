@@ -4,7 +4,6 @@
 <main class="site-main home" id="main-content">
 	<section class="home-introduction" aria-labelledby="home-title">
 		<h1 id="home-title">{{ $home.title }}</h1>
-		<p class="home-callout">{{ $home.summary }}</p>
 		<div class="prose">{{ $home.html | safe.HTML }}</div>
 		<p><a href="/resume/">View résumé</a></p>
 	</section>

@@ -1,7 +1,7 @@
 <li class="pinned-entry" data-pinned-entry>
 	<div>
 		<a href="{{ .route }}">{{ .title }}</a>
-		<p>{{ .summary }}</p>
+		{{ with .previewText }}<p>{{ . }}</p>{{ end }}
 	</div>
 	<div class="pinned-entry-meta">
 		<span>{{ .type }}</span>

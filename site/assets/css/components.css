@@ -14,8 +14,7 @@
     text-decoration: none;
   }
 
-  .home-callout,
-  .entry-summary {
+  .home-introduction > .prose > p:first-of-type {
     color: var(--text-muted);
     font-size: 1.125rem;
   }
@@ -91,7 +90,7 @@
     font-weight: 600;
   }
 
-  .search-result-summary {
+  .search-result-preview {
     max-width: var(--measure-reading);
   }
 

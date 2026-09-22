@@ -32,9 +32,8 @@ describe("Pagefind entry markup", () => {
     expect($("[data-pagefind-meta='title']").text()).toBe(
       "Publication Compiler",
     );
-    expect($("[data-pagefind-meta='summary']").text()).toContain(
-      "deterministic system",
-    );
+    expect($("meta[data-pagefind-meta='preview[content]']").attr("content"))
+      .toContain("Canonical snapshots keep deployments reproducible");
     expect($("[data-pagefind-filter='type']").text()).toBe("project");
     expect(
       $("[data-pagefind-filter='tag']")
