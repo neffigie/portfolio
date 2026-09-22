@@ -32,7 +32,16 @@ function surface(): HTMLElement {
     <form data-search-filters>
       <input type="search" data-search-query>
       <select data-search-type><option value=""></option><option value="project">Project</option></select>
-      <input data-search-tag>
+      <div data-tag-picker>
+        <div data-tag-pills></div>
+        <details><summary>Add tags</summary>
+          <input type="search" data-tag-filter>
+          <label><input type="checkbox" value="AWS" data-tag-option>AWS</label>
+          <label><input type="checkbox" value="Systems" data-tag-option>Systems</label>
+          <label><input type="checkbox" value="Search" data-tag-option>Search</label>
+          <p data-tag-empty hidden>No matching tags.</p>
+        </details>
+      </div>
       <select data-search-sort><option value="newest">Newest</option><option value="relevance">Relevance</option></select>
     </form>
     <p role="status" aria-live="polite" data-search-status></p>
@@ -50,12 +59,15 @@ describe("shared DOM search view", () => {
     document.body.innerHTML = "";
   });
 
-  it("reads comma-separated tags into shared state", () => {
+  it("reads selected tag options into shared state", () => {
     const root = surface();
     required<HTMLInputElement>(root, "[data-search-query]").value = "compiler";
     required<HTMLSelectElement>(root, "[data-search-type]").value = "project";
-    required<HTMLInputElement>(root, "[data-search-tag]").value =
-      " AWS, Systems, aws ";
+    for (const option of root.querySelectorAll<HTMLInputElement>(
+      '[data-tag-option][value="AWS"], [data-tag-option][value="Systems"]',
+    )) {
+      option.checked = true;
+    }
 
     expect(new DomSearchView(root).readState()).toEqual({
       query: "compiler",
@@ -63,6 +75,42 @@ describe("shared DOM search view", () => {
       tags: ["AWS", "Systems"],
       sort: "relevance",
     });
+  });
+
+  it("hydrates tag pills and removes a selected tag", () => {
+    const root = surface();
+    const view = new DomSearchView(root);
+    const changes: string[] = [];
+    root.addEventListener("search:tags-change", () => changes.push("changed"));
+
+    view.renderFilters({
+      query: "",
+      type: null,
+      tags: ["AWS", "Systems"],
+      sort: "newest",
+    });
+    expect(root.querySelectorAll("[data-tag-pills] button")).toHaveLength(2);
+    expect(view.readState().tags).toEqual(["AWS", "Systems"]);
+
+    required<HTMLButtonElement>(root, '[data-remove-tag="AWS"]').click();
+    expect(view.readState().tags).toEqual(["Systems"]);
+    expect(changes).toEqual(["changed"]);
+  });
+
+  it("filters available tags without changing the corpus state", () => {
+    const root = surface();
+    const view = new DomSearchView(root);
+    const changes: string[] = [];
+    root.addEventListener("search:tags-change", () => changes.push("changed"));
+    const filter = required<HTMLInputElement>(root, "[data-tag-filter]");
+    filter.value = "sys";
+    filter.dispatchEvent(new Event("input", { bubbles: true }));
+
+    expect(
+      root.querySelectorAll("label:not([hidden]) [data-tag-option]"),
+    ).toHaveLength(1);
+    expect(view.readState().tags).toEqual([]);
+    expect(changes).toEqual([]);
   });
 
   it("renders pins, results, loading, and live status in one surface", () => {

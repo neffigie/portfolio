@@ -18,9 +18,7 @@ export function mountIndexPage(
     void controller.run(parseSearchParams(params));
   }
 
-  view.form.addEventListener("submit", (event) => event.preventDefault());
-  view.form.addEventListener("input", (event) => {
-    if (!(event.target instanceof HTMLInputElement)) return;
+  function update(): void {
     const state = view.readState();
     window.history.replaceState(
       window.history.state,
@@ -28,18 +26,19 @@ export function mountIndexPage(
       stateToIndexUrl(state),
     );
     void controller.run(state);
+  }
+
+  view.form.addEventListener("submit", (event) => event.preventDefault());
+  view.form.addEventListener("input", (event) => {
+    if (event.target !== view.query) return;
+    update();
   });
   view.form.addEventListener("change", (event) => {
     if (!(event.target instanceof HTMLSelectElement)) return;
     if (event.target === view.sort) view.markSortExplicit();
-    const state = view.readState();
-    window.history.replaceState(
-      window.history.state,
-      "",
-      stateToIndexUrl(state),
-    );
-    void controller.run(state);
+    update();
   });
+  view.root.addEventListener("search:tags-change", update);
   view.more?.addEventListener("click", () => void controller.loadMore());
   window.addEventListener("popstate", restoreFromUrl);
   restoreFromUrl();

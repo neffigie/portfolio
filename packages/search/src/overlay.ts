@@ -70,7 +70,7 @@ export function mountOverlay(
 
   view.form.addEventListener("submit", (event) => event.preventDefault());
   view.form.addEventListener("input", (event) => {
-    if (!(event.target instanceof HTMLInputElement)) return;
+    if (event.target !== view.query) return;
     update();
   });
   view.form.addEventListener("change", (event) => {
@@ -78,6 +78,7 @@ export function mountOverlay(
     if (event.target === view.sort) view.markSortExplicit();
     update();
   });
+  view.root.addEventListener("search:tags-change", update);
   view.more?.addEventListener("click", () => void controller.loadMore());
 
   dialog.addEventListener("keydown", (event) => {

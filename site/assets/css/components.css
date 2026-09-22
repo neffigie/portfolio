@@ -135,4 +135,79 @@
     min-height: 1.5em;
     color: var(--text-muted);
   }
+
+  .tag-picker {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+
+  .tag-picker-label {
+    line-height: 1.25;
+  }
+
+  .tag-pill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+
+  .tag-pill-list:empty {
+    display: none;
+  }
+
+  .tag-pill {
+    border-radius: 999px;
+    background: var(--surface-subtle);
+    font-size: var(--type-small);
+    padding-inline: var(--space-2);
+  }
+
+  .tag-picker summary {
+    border: 1px solid var(--border-default);
+    cursor: pointer;
+    list-style: none;
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .tag-picker summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .tag-picker summary::after {
+    content: "⌄";
+    float: right;
+  }
+
+  .tag-picker-menu {
+    width: 100%;
+    max-height: 19rem;
+    overflow-y: auto;
+    border: 1px solid var(--border-default);
+    background: var(--surface-page);
+    padding: var(--space-2);
+  }
+
+  .tag-picker-menu input[type="search"] {
+    width: 100%;
+  }
+
+  .tag-picker-options {
+    display: grid;
+    gap: var(--space-1);
+    margin-top: var(--space-2);
+  }
+
+  .tag-picker-options label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .tag-picker-options input[type="checkbox"] {
+    accent-color: var(--interactive);
+    padding: 0;
+  }
 }

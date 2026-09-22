@@ -1,0 +1,25 @@
+{{ $tagLabels := dict }}
+{{ range hugo.Data.publication.entries }}
+	{{ range .tags }}
+		{{ $tagLabels = merge $tagLabels (dict .key .label) }}
+	{{ end }}
+{{ end }}
+<div class="tag-picker" data-tag-picker>
+	<span class="tag-picker-label">Tags</span>
+	<div class="tag-pill-list" data-tag-pills aria-live="polite"></div>
+	<details data-tag-disclosure>
+		<summary>Add tags</summary>
+		<div class="tag-picker-menu">
+			<label>
+				<span>Find a tag</span>
+				<input type="search" autocomplete="off" data-tag-filter>
+			</label>
+			<div class="tag-picker-options" role="group" aria-label="Available tags">
+				{{ range $key, $label := $tagLabels }}
+					<label><input type="checkbox" value="{{ $label }}" data-tag-option> {{ $label }}</label>
+				{{ end }}
+			</div>
+			<p data-tag-empty hidden>No matching tags.</p>
+		</div>
+	</details>
+</div>

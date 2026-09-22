@@ -19,7 +19,12 @@ function fixture(): HTMLElement {
     <form data-search-filters>
       <input type="search" data-search-query>
       <select data-search-type><option value=""></option><option value="project">Project</option></select>
-      <input data-search-tag>
+      <div data-tag-picker><div data-tag-pills></div><details><summary>Add tags</summary>
+        <input type="search" data-tag-filter>
+        <label><input type="checkbox" value="AWS" data-tag-option>AWS</label>
+        <label><input type="checkbox" value="Systems" data-tag-option>Systems</label>
+        <p data-tag-empty hidden>No matching tags.</p>
+      </details></div>
       <select data-search-sort><option value="newest">Newest</option><option value="title">Title</option><option value="relevance">Relevance</option></select>
     </form>
     <p role="status" aria-live="polite" data-search-status></p>
@@ -70,8 +75,10 @@ describe("index page lifecycle", () => {
       sort: "title",
     });
     expect(
-      root.querySelector<HTMLInputElement>("[data-search-tag]")?.value,
-    ).toBe("AWS, Systems");
+      [
+        ...root.querySelectorAll<HTMLButtonElement>("[data-tag-pills] button"),
+      ].map((button) => button.dataset.removeTag),
+    ).toEqual(["AWS", "Systems"]);
 
     const query = required<HTMLInputElement>(root, "[data-search-query]");
     query.value = "search";
@@ -80,6 +87,35 @@ describe("index page lifecycle", () => {
     expect(window.location.search).toBe(
       "?q=search&type=project&tag=AWS&tag=Systems&sort=title",
     );
+  });
+
+  it("updates the shareable URL when tag pills are added or removed", async () => {
+    const states: SearchState[] = [];
+    const root = fixture();
+    mountIndexPage(root, async (state) => {
+      states.push(state);
+      return empty;
+    });
+    await vi.waitFor(() => expect(states).toHaveLength(1));
+
+    const option = required<HTMLInputElement>(
+      root,
+      '[data-tag-option][value="AWS"]',
+    );
+    option.checked = true;
+    option.dispatchEvent(new Event("change", { bubbles: true }));
+    await vi.waitFor(() => expect(states).toHaveLength(2));
+    expect(window.location.search).toBe("?tag=AWS");
+    expect(root.querySelectorAll("[data-tag-pills] button")).toHaveLength(1);
+
+    const filter = required<HTMLInputElement>(root, "[data-tag-filter]");
+    filter.value = "sys";
+    filter.dispatchEvent(new Event("input", { bubbles: true }));
+    expect(states).toHaveLength(2);
+
+    required<HTMLButtonElement>(root, '[data-remove-tag="AWS"]').click();
+    await vi.waitFor(() => expect(states).toHaveLength(3));
+    expect(window.location.search).toBe("");
   });
 
   it("restores state when browser history changes", async () => {

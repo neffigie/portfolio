@@ -35,7 +35,11 @@ function fixture(): { dialog: HTMLDialogElement; launcher: HTMLButtonElement } {
       <form data-search-filters>
         <input type="search" data-search-query>
         <select data-search-type><option value=""></option><option value="project">Project</option></select>
-        <input data-search-tag>
+        <div data-tag-picker><div data-tag-pills></div><details><summary>Add tags</summary>
+          <input type="search" data-tag-filter>
+          <label><input type="checkbox" value="AWS" data-tag-option>AWS</label>
+          <p data-tag-empty hidden>No matching tags.</p>
+        </details></div>
         <select data-search-sort><option value="newest">Newest</option><option value="relevance">Relevance</option></select>
       </form>
       <p role="status" aria-live="polite" data-search-status></p>

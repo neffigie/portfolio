@@ -5,6 +5,7 @@ import {
   type SearchState,
   type SearchStateInput,
 } from "./state.js";
+import { TagPicker } from "./tags.js";
 
 function required<T extends Element>(root: ParentNode, selector: string): T {
   const element = root.querySelector<T>(selector);
@@ -17,7 +18,7 @@ export class DomSearchView {
   readonly form: HTMLFormElement;
   readonly query: HTMLInputElement;
   readonly type: HTMLSelectElement;
-  readonly tag: HTMLInputElement;
+  readonly tags: TagPicker;
   readonly sort: HTMLSelectElement;
   readonly results: HTMLUListElement;
   readonly status: HTMLElement;
@@ -29,7 +30,7 @@ export class DomSearchView {
     this.form = required(root, "[data-search-filters]");
     this.query = required(root, "[data-search-query]");
     this.type = required(root, "[data-search-type]");
-    this.tag = required(root, "[data-search-tag]");
+    this.tags = new TagPicker(required(root, "[data-tag-picker]"));
     this.sort = required(root, "[data-search-sort]");
     this.results = required(root, "[data-search-results]");
     this.status = required(root, "[data-search-status]");
@@ -48,7 +49,7 @@ export class DomSearchView {
     const input: SearchStateInput = {
       query: this.query.value,
       type: this.type.value,
-      tags: this.tag.value.split(","),
+      tags: this.tags.values(),
     };
     if (this.sortExplicit) input.sort = this.sort.value;
     return normalizeSearchState(input);
@@ -58,12 +59,7 @@ export class DomSearchView {
     if (this.query.value.trim() !== state.query) this.query.value = state.query;
     this.type.value = state.type ?? "";
 
-    const currentTags = normalizeSearchState({
-      tags: this.tag.value.split(","),
-    }).tags;
-    if (currentTags.join("\0") !== state.tags.join("\0")) {
-      this.tag.value = state.tags.join(", ");
-    }
+    this.tags.render(state.tags);
 
     this.sort.value = state.sort;
     const defaultSort = state.query ? "relevance" : "newest";

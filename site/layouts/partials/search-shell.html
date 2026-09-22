@@ -17,10 +17,7 @@
 					<option value="project">Projects</option>
 				</select>
 			</label>
-			<label>
-				<span>Tags (comma-separated)</span>
-				<input type="text" data-search-tag>
-			</label>
+			{{ partial "tag-picker.html" . }}
 			<label>
 				<span>Sort</span>
 				<select data-search-sort>
