@@ -14,6 +14,10 @@ type HookEvent = {
   record: { id: string };
 };
 type Handler = (event: HookEvent) => void;
+type HookRuntime = {
+  $http: { send: ReturnType<typeof vi.fn> };
+  process: { env: { AMPLIFY_BUILD_WEBHOOK_URL?: string | undefined } };
+};
 
 function hookEvent(): HookEvent & { logs: Logger } {
   const logs = { error: vi.fn(), info: vi.fn() };
@@ -30,6 +34,7 @@ async function loadHook(options: {
   send?: ReturnType<typeof vi.fn>;
 }): Promise<{
   handlers: Map<Operation, Handler>;
+  runtime: HookRuntime;
   send: ReturnType<typeof vi.fn>;
 }> {
   const handlers = new Map<Operation, Handler>();
@@ -47,26 +52,39 @@ async function loadHook(options: {
     "utf8",
   );
 
-  runInNewContext(source, {
+  const runtime: HookRuntime = {
     $http: { send },
-    onRecordAfterCreateSuccess: register("create"),
-    onRecordAfterDeleteSuccess: register("delete"),
-    onRecordAfterUpdateSuccess: register("update"),
     process: {
       env: {
         AMPLIFY_BUILD_WEBHOOK_URL: options.webhookUrl,
       },
     },
+  };
+
+  runInNewContext(source, {
+    ...runtime,
+    onRecordAfterCreateSuccess: register("create"),
+    onRecordAfterDeleteSuccess: register("delete"),
+    onRecordAfterUpdateSuccess: register("update"),
   });
 
-  return { handlers, send };
+  return { handlers, runtime, send };
 }
 
-function runHandler(handlers: Map<Operation, Handler>, operation: Operation) {
+function runHandler(
+  handlers: Map<Operation, Handler>,
+  operation: Operation,
+  runtime: HookRuntime,
+) {
   const current = hookEvent();
   const handler = handlers.get(operation);
   expect(handler).toBeTypeOf("function");
-  expect(() => handler?.(current)).not.toThrow();
+  expect(() =>
+    runInNewContext(`(${handler?.toString()})(event)`, {
+      ...runtime,
+      event: current,
+    }),
+  ).not.toThrow();
   return current;
 }
 
@@ -78,14 +96,17 @@ describe("PocketHost Amplify publication hook", () => {
   it.each(["create", "update", "delete"] as const)(
     "continues %s and posts one build request",
     async (operation) => {
-      const { handlers, send } = await loadHook({
+      const { handlers, runtime, send } = await loadHook({
         webhookUrl: "https://example.test/amplify-hook",
       });
 
-      const current = runHandler(handlers, operation);
+      const current = runHandler(handlers, operation, runtime);
 
       expect(current.next).toHaveBeenCalledTimes(1);
       expect(send).toHaveBeenCalledTimes(1);
+      expect(current.next.mock.invocationCallOrder[0]).toBeLessThan(
+        send.mock.invocationCallOrder[0] ?? 0,
+      );
       expect(send).toHaveBeenCalledWith({
         body: "{}",
         headers: { "content-type": "application/json" },
@@ -107,9 +128,9 @@ describe("PocketHost Amplify publication hook", () => {
   it.each([undefined, "   "])(
     "continues without sending when the webhook URL is %s",
     async (webhookUrl) => {
-      const { handlers, send } = await loadHook({ webhookUrl });
+      const { handlers, runtime, send } = await loadHook({ webhookUrl });
 
-      const current = runHandler(handlers, "update");
+      const current = runHandler(handlers, "update", runtime);
 
       expect(current.next).toHaveBeenCalledTimes(1);
       expect(send).not.toHaveBeenCalled();
@@ -126,14 +147,14 @@ describe("PocketHost Amplify publication hook", () => {
 
   it("continues and hides the webhook URL when the request throws", async () => {
     const webhookUrl = "https://example.test/private-amplify-hook";
-    const { handlers } = await loadHook({
+    const { handlers, runtime } = await loadHook({
       webhookUrl,
       send: vi.fn(() => {
         throw new Error(`Request to ${webhookUrl} failed`);
       }),
     });
 
-    const current = runHandler(handlers, "create");
+    const current = runHandler(handlers, "create", runtime);
 
     expect(current.next).toHaveBeenCalledTimes(1);
     expect(current.logs.error).toHaveBeenCalledWith(
@@ -151,12 +172,12 @@ describe("PocketHost Amplify publication hook", () => {
     "continues and logs an unsuccessful HTTP %i response",
     async (statusCode) => {
       const webhookUrl = "https://example.test/private-amplify-hook";
-      const { handlers } = await loadHook({
+      const { handlers, runtime } = await loadHook({
         webhookUrl,
         send: vi.fn(() => ({ statusCode })),
       });
 
-      const current = runHandler(handlers, "delete");
+      const current = runHandler(handlers, "delete", runtime);
 
       expect(current.next).toHaveBeenCalledTimes(1);
       expect(current.logs.error).toHaveBeenCalledWith(
@@ -174,12 +195,12 @@ describe("PocketHost Amplify publication hook", () => {
   );
 
   it("accepts an HTTP 204 response", async () => {
-    const { handlers } = await loadHook({
+    const { handlers, runtime } = await loadHook({
       webhookUrl: "https://example.test/amplify-hook",
       send: vi.fn(() => ({ statusCode: 204 })),
     });
 
-    const current = runHandler(handlers, "update");
+    const current = runHandler(handlers, "update", runtime);
 
     expect(current.logs.error).not.toHaveBeenCalled();
     expect(current.logs.info).toHaveBeenCalledOnce();
