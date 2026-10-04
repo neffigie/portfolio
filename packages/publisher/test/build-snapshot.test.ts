@@ -219,6 +219,55 @@ describe("buildPublicationSnapshot", () => {
     }
   });
 
+  it("replaces an existing publication after the new snapshot validates", async () => {
+    const outputDirectory = await temporaryOutput("replace-existing");
+    const records = await corpus();
+    await buildPublicationSnapshot(records, dependencies(outputDirectory));
+
+    const revised = records.map((entry) =>
+      entry.id === "writing-id"
+        ? {
+            ...entry,
+            title: "Revised Writing",
+            updated: "2026-09-21T12:00:00.000Z",
+          }
+        : entry,
+    );
+    const artifacts = await buildPublicationSnapshot(
+      revised,
+      dependencies(outputDirectory),
+    );
+
+    expect(
+      artifacts.snapshot.entries.find(
+        ({ sourceId }) => sourceId === "writing-id",
+      )?.title,
+    ).toBe("Revised Writing");
+    const written = JSON.parse(
+      await readFile(join(outputDirectory, "snapshot.json"), "utf8"),
+    ) as { entries: Array<{ sourceId: string; title: string }> };
+    expect(
+      written.entries.find(({ sourceId }) => sourceId === "writing-id")?.title,
+    ).toBe("Revised Writing");
+  });
+
+  it("preserves the existing publication when its replacement fails", async () => {
+    const outputDirectory = await temporaryOutput("preserve-existing");
+    await buildPublicationSnapshot(
+      await corpus(),
+      dependencies(outputDirectory),
+    );
+    const previous = await readFile(join(outputDirectory, "snapshot.json"));
+
+    await expect(
+      buildPublicationSnapshot([], dependencies(outputDirectory)),
+    ).rejects.toBeInstanceOf(CompilationFailure);
+
+    expect(await readFile(join(outputDirectory, "snapshot.json"))).toEqual(
+      previous,
+    );
+  });
+
   it("removes only its partial directory when validation fails", async () => {
     const outputDirectory = await temporaryOutput("invalid");
 

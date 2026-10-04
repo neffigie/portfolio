@@ -2,9 +2,9 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { load } from "cheerio";
-import { beforeAll, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import { buildSite, publicDirectory, repositoryRoot } from "./build-site.js";
+import { publicDirectory, repositoryRoot } from "./build-site.js";
 
 interface RouteExpectation {
   file: string;
@@ -34,8 +34,6 @@ function headingLevels(document: string): number[] {
 }
 
 describe("permanent route semantics", () => {
-  beforeAll(buildSite, 30_000);
-
   it.each(routes)("renders landmarks and metadata for $file", async (route) => {
     const $ = load(await html(route.file));
 
@@ -55,7 +53,7 @@ describe("permanent route semantics", () => {
     }
   });
 
-  it("orders the homepage around identity, authored context, search, and pins", async () => {
+  it("orders the homepage around identity, authored context, and pins", async () => {
     const document = await html("index.html");
     const $ = load(document);
     const text = $("main").text();
@@ -68,8 +66,10 @@ describe("permanent route semantics", () => {
     expect(text).toContain("fieldnotes");
     expect($("a[href='/about/']")).toHaveLength(0);
     expect($("main a[href='/resume/']")).toHaveLength(1);
-    expect($("a[href='/index/']").length).toBeGreaterThan(0);
-    expect($("main [data-search-open]")).toHaveLength(1);
+    expect($("header a[href='/index/']")).toHaveLength(1);
+    expect($("header [data-search-open]")).toHaveLength(1);
+    expect($("main a[href='/index/']")).toHaveLength(0);
+    expect($("main [data-search-open]")).toHaveLength(0);
     expect($("#home-search-title")).toHaveLength(0);
 
     const pinnedTitles = $("main [data-pinned-entry]")
@@ -111,6 +111,27 @@ describe("permanent route semantics", () => {
       /^\/assets\/resume\/[0-9a-f]{64}\/anna-noelle-resume\.pdf$/u,
     );
     expect($.html().toLowerCase()).not.toContain("pocketbase");
+  });
+
+  it("renders the static social links as labeled monochrome icons", async () => {
+    const $ = load(await html("index.html"));
+    const socialLinks = $("footer nav[aria-label='Social links'] a");
+
+    expect(
+      socialLinks.toArray().map((link) => ({
+        label: $(link).attr("aria-label"),
+        href: $(link).attr("href"),
+      })),
+    ).toEqual([
+      { label: "Email", href: "mailto:neffigie@gmail.com" },
+      {
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/in/anna-noelle/",
+      },
+      { label: "GitHub", href: "https://github.com/neffigie" },
+    ]);
+    expect(socialLinks.find("svg[aria-hidden='true']")).toHaveLength(3);
+    expect(socialLinks.first().find("svg[fill='none']")).toHaveLength(1);
   });
 
   it("loads the permanent CSS layer contract", async () => {

@@ -7,6 +7,7 @@ import {
   type ReservedContent,
   type ReservedResume,
 } from "./model.js";
+import { compareText } from "./ordering.js";
 import { CONTRACT_VERSION } from "./version.js";
 
 export interface SnapshotInput {
@@ -22,16 +23,6 @@ export interface SnapshotInput {
     version: string;
     contentPipelineVersion: number;
   };
-}
-
-function compareText(left: string, right: string): number {
-  if (left < right) {
-    return -1;
-  }
-  if (left > right) {
-    return 1;
-  }
-  return 0;
 }
 
 function compareEntries(left: CompiledEntry, right: CompiledEntry): number {

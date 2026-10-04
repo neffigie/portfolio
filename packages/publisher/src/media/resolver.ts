@@ -3,6 +3,7 @@ import { type Metadata, type Sharp, default as sharp } from "sharp";
 import { canonicalStringify, sha256 } from "../canonical.js";
 import type { DiagnosticCollector } from "../diagnostics.js";
 import { type MediaManifestEntry, MediaManifestEntrySchema } from "../model.js";
+import { compareText } from "../ordering.js";
 import {
   DataUriError,
   decodeDataUri,
@@ -32,10 +33,6 @@ export class MediaResolutionError extends Error {
     super(message);
     this.name = "MediaResolutionError";
   }
-}
-
-function compareText(left: string, right: string): number {
-  return left < right ? -1 : left > right ? 1 : 0;
 }
 
 function isSupportedFormat(

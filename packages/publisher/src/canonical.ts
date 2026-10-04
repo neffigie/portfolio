@@ -1,17 +1,8 @@
 import { createHash } from "node:crypto";
 
 import type { SourceRecord } from "./model.js";
+import { compareText } from "./ordering.js";
 import { canonicalizeSlug, ROUTE_MANIFEST } from "./routes.js";
-
-function compareText(left: string, right: string): number {
-  if (left < right) {
-    return -1;
-  }
-  if (left > right) {
-    return 1;
-  }
-  return 0;
-}
 
 function serialize(value: unknown, active: Set<object>): string {
   if (

@@ -6,7 +6,7 @@ export default defineConfig({
       "packages/*",
       {
         test: {
-          fileParallelism: false,
+          globalSetup: ["tests/site/global-setup.ts"],
           include: ["tests/**/*.test.ts"],
           name: "site",
           root: ".",

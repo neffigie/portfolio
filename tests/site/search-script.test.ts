@@ -2,13 +2,11 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { load } from "cheerio";
-import { beforeAll, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import { buildSite, publicDirectory } from "./build-site.js";
+import { publicDirectory } from "./build-site.js";
 
 describe("built search client", () => {
-  beforeAll(buildSite, 30_000);
-
   it("ships one module client on every public route", async () => {
     for (const route of [
       "index.html",

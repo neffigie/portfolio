@@ -11,6 +11,12 @@ PUBLIC_DIRECTORY = Path(__file__).resolve().parents[1] / "site" / "public"
 
 
 class PortfolioHandler(SimpleHTTPRequestHandler):
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        super().end_headers()
+
     def send_error(self, code, message=None, explain=None):
         if code == HTTPStatus.NOT_FOUND:
             error_page = Path(self.directory) / "404.html"

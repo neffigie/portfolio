@@ -8,6 +8,7 @@ const result = spawnSync(
     "site",
     "--destination",
     "public",
+    "--cleanDestinationDir",
     "--minify",
     "--panicOnWarning",
     "--printPathWarnings",

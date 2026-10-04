@@ -2,13 +2,11 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { load } from "cheerio";
-import { beforeAll, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import { buildSite, publicDirectory } from "./build-site.js";
+import { publicDirectory } from "./build-site.js";
 
 describe("Pagefind entry markup", () => {
-  beforeAll(buildSite, 30_000);
-
   it("indexes only published entry content", async () => {
     for (const route of ["project-one", "writing-one"]) {
       const $ = load(

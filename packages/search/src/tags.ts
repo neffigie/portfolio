@@ -1,10 +1,5 @@
+import { requiredElement } from "./dom.js";
 import { normalizeSearchState } from "./state.js";
-
-function required<T extends Element>(root: ParentNode, selector: string): T {
-  const element = root.querySelector<T>(selector);
-  if (!element) throw new Error(`Missing tag picker element: ${selector}`);
-  return element;
-}
 
 export class TagPicker {
   readonly root: HTMLElement;
@@ -16,12 +11,12 @@ export class TagPicker {
 
   constructor(root: HTMLElement) {
     this.root = root;
-    this.filter = required(root, "[data-tag-filter]");
+    this.filter = requiredElement(root, "[data-tag-filter]", "tag picker");
     this.options = [
       ...root.querySelectorAll<HTMLInputElement>("[data-tag-option]"),
     ];
-    this.pills = required(root, "[data-tag-pills]");
-    this.empty = required(root, "[data-tag-empty]");
+    this.pills = requiredElement(root, "[data-tag-pills]", "tag picker");
+    this.empty = requiredElement(root, "[data-tag-empty]", "tag picker");
     this.selected = normalizeSearchState({
       tags: this.options
         .filter((option) => option.checked)
@@ -99,6 +94,7 @@ export class TagPicker {
       return button;
     });
     this.pills.replaceChildren(...buttons);
+    this.pills.scrollLeft = this.pills.scrollWidth;
   }
 
   private filterOptions(): void {

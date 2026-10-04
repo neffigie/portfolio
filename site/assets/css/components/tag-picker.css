@@ -1,0 +1,115 @@
+@layer components {
+  .tag-picker {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+
+  .tag-picker-label {
+    line-height: 1.5rem;
+  }
+
+  .tag-picker-field {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-1);
+    height: 2.5rem;
+    border: 1px solid var(--border-default);
+    padding: 0.1875rem var(--space-2);
+  }
+
+  .tag-pill-list {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--space-1);
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tag-pill-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tag-pill-list:empty {
+    display: none;
+  }
+
+  .tag-picker details {
+    min-width: 1.5rem;
+  }
+
+  .tag-pill-list:empty + details {
+    grid-column: 1 / -1;
+  }
+
+  .tag-pill {
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: var(--surface-subtle);
+    font-size: var(--type-small);
+    line-height: 1.5rem;
+    padding-block: 0;
+    padding-inline: var(--space-2);
+  }
+
+  .tag-picker summary {
+    display: flex;
+    align-items: center;
+    min-height: 1.5rem;
+    cursor: pointer;
+    list-style: none;
+    line-height: 1.5rem;
+  }
+
+  .tag-picker summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .tag-picker summary::after {
+    content: "⌄";
+    margin-left: auto;
+  }
+
+  .tag-pill-list:not(:empty) + details summary span {
+    display: none;
+  }
+
+  .tag-picker-menu {
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 19rem;
+    overflow-y: auto;
+    border: 1px solid var(--border-default);
+    background: var(--surface-page);
+    padding: var(--space-2);
+  }
+
+  .tag-picker-menu input[type="search"] {
+    width: 100%;
+  }
+
+  .tag-picker-options {
+    display: grid;
+    gap: var(--space-1);
+    margin-top: var(--space-2);
+  }
+
+  .tag-picker-options label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .tag-picker-options input[type="checkbox"] {
+    accent-color: var(--interactive);
+    padding: 0;
+  }
+}

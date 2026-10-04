@@ -4,19 +4,21 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "packages/*",
-    "infrastructure"
+    "packages/*"
   ],
   "engines": {
     "node": "24.21.0"
   },
   "scripts": {
     "snapshot:fixture": "tsx scripts/build-fixture-snapshot.ts",
+    "snapshot:pocketbase": "node --env-file-if-exists=.env.local --import tsx scripts/build-pocketbase-snapshot.ts",
     "build:search": "esbuild packages/search/src/main.ts --bundle --format=esm --target=es2024 --minify --outfile=site/assets/js/search.js",
     "build:hugo": "npm run build:search && tsx scripts/run-hugo.ts",
     "index:site": "pagefind --site site/public --output-subdir pagefind",
     "build:site": "npm run snapshot:fixture && npm run build:hugo && npm run index:site",
-    "preview": "python3 scripts/serve-site.py",
+    "build:site:pocketbase": "npm run snapshot:pocketbase && npm run build:hugo && npm run index:site",
+    "preview": "npm run build:site:pocketbase && python3 scripts/serve-site.py",
+    "preview:fixture": "npm run build:site && python3 scripts/serve-site.py",
     "format": "biome format --write .",
     "lint": "biome check .",
     "typecheck": "tsc --noEmit --project tsconfig.json --pretty false",

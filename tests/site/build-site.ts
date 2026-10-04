@@ -2,8 +2,6 @@ import { spawnSync } from "node:child_process";
 import { rm } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
-import { expect } from "vitest";
-
 export const repositoryRoot = fileURLToPath(new URL("../../", import.meta.url));
 export const publicDirectory = fileURLToPath(
   new URL("../../site/public/", import.meta.url),
@@ -16,8 +14,10 @@ export async function buildSite(): Promise<void> {
     encoding: "utf8",
     env: process.env,
   });
-  expect(
-    result.status,
-    [result.stdout, result.stderr].filter(Boolean).join("\n"),
-  ).toBe(0);
+  if (result.status !== 0) {
+    throw new Error(
+      [result.stdout, result.stderr].filter(Boolean).join("\n") ||
+        `Site build exited with status ${result.status ?? "unknown"}`,
+    );
+  }
 }

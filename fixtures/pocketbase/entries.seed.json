@@ -1,0 +1,50 @@
+{
+  "resumeAsset": "../site/anna-noelle-resume.pdf",
+  "records": [
+    {
+      "title": "Anna Noelle",
+      "slug": "home",
+      "body": "<p>Software engineer building durable publishing and search systems.</p><p>I design tools that make complex work legible and calm infrastructure easier to operate.</p><p>I keep fieldnotes on systems, interfaces, and the decisions that make them durable.</p>",
+      "type": "",
+      "tags": [],
+      "date": "",
+      "pin_order": 0
+    },
+    {
+      "title": "Résumé",
+      "slug": "resume",
+      "body": "",
+      "type": "",
+      "tags": [],
+      "date": "",
+      "pin_order": 0
+    },
+    {
+      "title": "Publication Compiler",
+      "slug": "project-one",
+      "body": "<h2>Durable publishing</h2><p>Canonical snapshots keep deployments reproducible without coupling the website to its authoring service.</p><blockquote><p>Publishing is a boundary, not a runtime dependency.</p></blockquote>",
+      "type": "project",
+      "tags": ["TypeScript", "AWS", "Systems"],
+      "date": "2026-09-20 00:00:00.000Z",
+      "pin_order": 2
+    },
+    {
+      "title": "Search as Navigation",
+      "slug": "writing-one",
+      "body": "<h2>One corpus</h2><p>The index is the information architecture: query, type, and tags reveal the same body of work from different angles.</p><pre><code class=\"language-ts\">const index = entries.filter(matchesIntent);</code></pre>",
+      "type": "writing",
+      "tags": ["TypeScript", "Search", "Systems"],
+      "date": "2026-08-20 00:00:00.000Z",
+      "pin_order": 1
+    },
+    {
+      "title": "Unpublished Notes",
+      "slug": "draft-notes",
+      "body": "<p>draft-only-canary</p>",
+      "type": "",
+      "tags": ["Draft"],
+      "date": "",
+      "pin_order": 0
+    }
+  ]
+}

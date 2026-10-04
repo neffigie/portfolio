@@ -1,8 +1,8 @@
 import { access } from "node:fs/promises";
 
-import { beforeAll, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import { buildSite, publicDirectory } from "./build-site.js";
+import { publicDirectory } from "./build-site.js";
 
 async function expectFile(path: string): Promise<void> {
   await expect(
@@ -17,8 +17,6 @@ async function expectNoFile(path: string): Promise<void> {
 }
 
 describe("Hugo publication build", () => {
-  beforeAll(buildSite, 30_000);
-
   it("renders the permanent flat route structure", async () => {
     await expectFile("project-one/index.html");
     await expectFile("writing-one/index.html");

@@ -2,9 +2,9 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { load } from "cheerio";
-import { beforeAll, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import { buildSite, publicDirectory } from "./build-site.js";
+import { publicDirectory } from "./build-site.js";
 
 async function page(route: string) {
   return load(
@@ -13,8 +13,6 @@ async function page(route: string) {
 }
 
 describe("content-specific views", () => {
-  beforeAll(buildSite, 30_000);
-
   it("renders the complete authored Home body without a duplicate summary", async () => {
     const $ = await page("");
     expect($(".home-introduction .prose p")).toHaveLength(3);

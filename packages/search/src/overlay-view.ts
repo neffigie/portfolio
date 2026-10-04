@@ -1,5 +1,6 @@
+import { requiredElement } from "./dom.js";
 import { normalizeSearchState, type SearchState } from "./state.js";
-import { requiredSearchElement, SearchResultsView } from "./view.js";
+import { SearchResultsView } from "./view.js";
 
 export class OverlaySearchView extends SearchResultsView {
   readonly form: HTMLFormElement;
@@ -7,8 +8,8 @@ export class OverlaySearchView extends SearchResultsView {
 
   constructor(root: HTMLElement) {
     super(root);
-    this.form = requiredSearchElement(root, "[data-search-filters]");
-    this.query = requiredSearchElement(root, "[data-search-query]");
+    this.form = requiredElement(root, "[data-search-filters]", "search");
+    this.query = requiredElement(root, "[data-search-query]", "search");
   }
 
   readState(): SearchState {

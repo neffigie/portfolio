@@ -3,7 +3,7 @@ frontend:
   phases:
     build:
       commands:
-        - echo "Portfolio V2 preview is not configured; run the AWS publication plan."
+        - echo "Portfolio deployment is not configured; connect the publication pipeline first."
         - exit 1
   artifacts:
     baseDirectory: site/public

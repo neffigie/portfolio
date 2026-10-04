@@ -9,6 +9,11 @@ export interface DataUriAsset {
 
 export type MediaSource = SourceAsset | DataUriAsset;
 
+export type MediaSourceResolver = (
+  source: string,
+  ownerId: string,
+) => MediaSource;
+
 export interface FetchedAsset {
   bytes: Uint8Array;
   mimeType: string;

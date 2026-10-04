@@ -1,3 +1,4 @@
+import { requiredElement } from "./dom.js";
 import type { SearchResponse } from "./pagefind.js";
 import { renderResultRow } from "./results.js";
 import {
@@ -7,15 +8,6 @@ import {
 } from "./state.js";
 import { TagPicker } from "./tags.js";
 
-export function requiredSearchElement<T extends Element>(
-  root: ParentNode,
-  selector: string,
-): T {
-  const element = root.querySelector<T>(selector);
-  if (!element) throw new Error(`Missing search element: ${selector}`);
-  return element;
-}
-
 export class SearchResultsView {
   readonly root: HTMLElement;
   readonly results: HTMLUListElement;
@@ -24,8 +16,8 @@ export class SearchResultsView {
 
   constructor(root: HTMLElement) {
     this.root = root;
-    this.results = requiredSearchElement(root, "[data-search-results]");
-    this.status = requiredSearchElement(root, "[data-search-status]");
+    this.results = requiredElement(root, "[data-search-results]", "search");
+    this.status = requiredElement(root, "[data-search-status]", "search");
     this.more = root.querySelector("[data-search-more]");
   }
 
@@ -69,11 +61,13 @@ export class DomSearchView extends SearchResultsView {
 
   constructor(root: HTMLElement) {
     super(root);
-    this.form = requiredSearchElement(root, "[data-search-filters]");
-    this.query = requiredSearchElement(root, "[data-search-query]");
-    this.type = requiredSearchElement(root, "[data-search-type]");
-    this.tags = new TagPicker(requiredSearchElement(root, "[data-tag-picker]"));
-    this.sort = requiredSearchElement(root, "[data-search-sort]");
+    this.form = requiredElement(root, "[data-search-filters]", "search");
+    this.query = requiredElement(root, "[data-search-query]", "search");
+    this.type = requiredElement(root, "[data-search-type]", "search");
+    this.tags = new TagPicker(
+      requiredElement(root, "[data-tag-picker]", "search"),
+    );
+    this.sort = requiredElement(root, "[data-search-sort]", "search");
   }
 
   markSortExplicit(): void {

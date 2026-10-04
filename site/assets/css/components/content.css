@@ -1,0 +1,65 @@
+@layer components {
+  .home-introduction > .prose > p:first-of-type {
+    color: var(--text-muted);
+    font-size: 1.125rem;
+  }
+
+  .prose,
+  .entry-header,
+  .home-introduction,
+  .pinned-entries {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .entry > .prose {
+    margin-top: var(--space-3);
+  }
+
+  .prose
+    :is(p, blockquote, pre, figure, table, ul, ol)
+    + :is(p, blockquote, pre, figure, table, ul, ol) {
+    margin-top: var(--space-3);
+  }
+
+  .prose pre,
+  .prose blockquote {
+    border-left: 3px solid var(--border-default);
+    overflow-x: auto;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .heading-anchor {
+    margin-left: var(--space-1);
+  }
+
+  .entry-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    font-size: var(--type-small);
+  }
+
+  .entry-meta dt {
+    color: var(--text-muted);
+  }
+
+  .pinned-list {
+    list-style: none;
+  }
+
+  .pinned-entry {
+    display: grid;
+    gap: var(--space-2);
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding-block: var(--space-3);
+    border-top: 1px solid var(--border-default);
+  }
+
+  .pinned-entry-meta {
+    color: var(--text-muted);
+    display: grid;
+    font-size: var(--type-small);
+    text-align: right;
+  }
+}

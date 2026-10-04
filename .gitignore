@@ -5,14 +5,13 @@ node_modules/
 /.pnp
 .pnp.js
 
+# editors
+/.idea/
+
 # testing
 coverage/
 /playwright-report/
 /test-results/
-
-# next.js
-/.next/
-/out/
 
 # production
 /build
@@ -32,12 +31,8 @@ yarn-error.log*
 .env*.local
 !.env.example
 
-# vercel
-.vercel
-
 # typescript
 *.tsbuildinfo
-next-env.d.ts
 /Portfolio Inspo/
 
 # portfolio v2 generated artifacts

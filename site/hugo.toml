@@ -3,6 +3,11 @@ locale = 'en-US'
 title = 'Anna Noelle'
 disableKinds = ['taxonomy', 'term']
 
+[params.social]
+email = 'mailto:neffigie@gmail.com'
+linkedin = 'https://www.linkedin.com/in/anna-noelle/'
+github = 'https://github.com/neffigie'
+
 [outputs]
 home = ['html', 'rss']
 
