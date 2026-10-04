@@ -2,13 +2,13 @@
 {{ $publication := hugo.Data.publication }}
 {{ $home := $publication.reserved.home }}
 <main class="site-main home" id="main-content">
-	<section class="home-introduction" aria-labelledby="home-title">
+	<section class="home-introduction reading-column" aria-labelledby="home-title">
 		<h1 id="home-title">{{ $home.title }}</h1>
 		<div class="prose">{{ $home.html | safe.HTML }}</div>
 		<p><a href="/resume/">View résumé</a></p>
 	</section>
 
-	<section class="pinned-entries" aria-labelledby="pinned-title">
+	<section class="pinned-entries reading-column" aria-labelledby="pinned-title">
 		<h2 id="pinned-title">Pinned</h2>
 		<ul class="pinned-list">
 			{{ range $publication.pins }}

@@ -10,15 +10,8 @@
     padding-block: var(--space-4);
   }
 
-  .entry,
-  .reserved-page,
-  .home-introduction,
-  .pinned-entries {
+  .reading-column {
     max-width: var(--measure-reading);
-  }
-
-  .reserved-page {
-    margin-inline: auto;
   }
 
   .home {

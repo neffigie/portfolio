@@ -17,6 +17,30 @@ test("entry body is separated from its metadata", async ({ page }) => {
   expect(marginTop).toBeGreaterThan(0);
 });
 
+test("content pages share the same left alignment across routes", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const contentRegions = [
+    ["/", ".home-introduction"],
+    ["/resume/", ".reserved-page"],
+    ["/index/", ".site-main"],
+    ["/project-one/", ".entry"],
+  ] as const;
+  const leftEdges: number[] = [];
+
+  for (const [route, selector] of contentRegions) {
+    await page.goto(route);
+    leftEdges.push(
+      await page
+        .locator(selector)
+        .evaluate((element) => element.getBoundingClientRect().left),
+    );
+  }
+
+  expect(Math.max(...leftEdges) - Math.min(...leftEdges)).toBeLessThan(2);
+});
+
 test("short utility pages anchor the footer within one desktop viewport", async ({
   page,
 }) => {
