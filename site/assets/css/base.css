@@ -4,6 +4,7 @@
     color: var(--text-primary);
     font-family: var(--font-body);
     line-height: var(--line-body);
+    scrollbar-gutter: stable;
   }
 
   body {

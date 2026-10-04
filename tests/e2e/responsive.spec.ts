@@ -41,6 +41,17 @@ test("content pages share the same left alignment across routes", async ({
   expect(Math.max(...leftEdges) - Math.min(...leftEdges)).toBeLessThan(2);
 });
 
+test("page frame reserves space for the vertical scrollbar", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const scrollbarGutter = await page.evaluate(
+    () => getComputedStyle(document.documentElement).scrollbarGutter,
+  );
+
+  expect(scrollbarGutter).toBe("stable");
+});
+
 test("résumé content is vertically centered like the home page", async ({
   page,
 }) => {
