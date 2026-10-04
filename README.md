@@ -1,6 +1,6 @@
 # Anna Noelle Portfolio
 
-The source for [neffigie.dev](https://neffigie.dev/), a static personal reference site for Anna Noelle's work, writing, and résumé.
+The source for [neffigie.com](https://neffigie.com/), a static personal reference site for my work, writing, and résumé.
 
 PocketBase is the authoring environment. The TypeScript publisher compiles its content into a validated, canonical snapshot; Hugo renders that snapshot into the site; and Pagefind creates the client-side search index. The generated site is intended for AWS Amplify hosting and does not depend on PocketBase at request time.
 
