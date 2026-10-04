@@ -2,7 +2,7 @@
 <main class="site-main page-main-centered" id="main-content">
 	<article class="reserved-page reading-column">
 		<h1>{{ .Title }}</h1>
-		<p><a class="resume-download" href="{{ .Params.asset.path }}" download>Download résumé (PDF)</a></p>
+		<p><a class="resume-download" href="{{ .Params.asset.path }}" target="_blank" rel="noopener noreferrer">View résumé (PDF)</a></p>
 		{{ with .Content }}
 			<div class="prose">{{ . }}</div>
 		{{ end }}

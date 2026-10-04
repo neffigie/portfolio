@@ -61,7 +61,7 @@ entry, so the page, asset, metadata, and search index are deployed together.
 ├── site/                Hugo configuration, layouts, styles, and generated inputs
 ├── scripts/             Snapshot, Hugo, and local-preview entry points
 ├── fixtures/            Deterministic records, media, schema, and expected output
-├── tests/               Publication, rendered-site, and browser checks
+├── tests/               PocketBase hook regression and browser integration checks
 ├── amplify.yml          Amplify build and artifact configuration
 └── package.json         Workspace scripts and tool versions
 ```
@@ -123,6 +123,27 @@ Local environment files are ignored. Do not put real credentials in
 | `npm run check` | Run lint, type-checking, and unit/integration tests |
 | `npm run check:site` | Build the fixture site and run browser tests |
 
+### Test scope
+
+Tests cover the boundaries of the publication system rather than fixing the
+current implementation or visual layout in place:
+
+| Suite | Contract it protects |
+| --- | --- |
+| `packages/publisher/test` | Publication validation and failure recovery, content preservation, deterministic assets, and the PocketBase API/file adapter |
+| `packages/search/test` | Shareable URL state, Pagefind integration, stale-result handling, pagination, and safe result rendering |
+| `tests/pocketbase` | Serialized PocketBase handlers request builds without leaking the webhook URL or disrupting saved records |
+| `tests/e2e` | Generated routes, working internal links, feeds, real Pagefind searches, browser history, and keyboard/accessibility behavior |
+
+The browser suite uses a local fixture build. It does not prove that the
+PocketHost upload, secret, or Amplify deployment is configured correctly; use
+the publication smoke test below for that. Pixel geometry, exact Hugo markup,
+generated HTML snapshots, and comparisons between live editorial content and
+fixtures are deliberately outside the automated test contract.
+
+Test reports and PocketHost sync-state files are local generated artifacts and
+are ignored by Git.
+
 ## Publishing from PocketBase
 
 There are two one-time account changes: create an Amplify incoming webhook,
@@ -173,17 +194,18 @@ From the repository root, deploy the `pocketbase` directory to your instance:
 
 ```sh
 cd pocketbase
-phio deploy YOUR_INSTANCE
+phio deploy neffigie
 ```
 
-Replace `YOUR_INSTANCE` with the PocketHost instance name/subdomain, not its
-full URL. Running from `pocketbase` is important: it makes the local `pb_hooks`
-directory land in the correct place at the root of the PocketHost instance.
+The included `pocketbase/.phioconfig` links this directory to `neffigie` and
+marks it as the deployment root. Keep that file: without it, `phio` walks up
+to the portfolio's `package.json` and selects the wrong directory. The upload
+output should include `pb_hooks/amplify-publication.pb.js`.
 
 You can inspect the instance logs with:
 
 ```sh
-phio logs YOUR_INSTANCE
+phio logs neffigie
 ```
 
 PocketHost normally reloads `pb_hooks` after a file change. If the hook does

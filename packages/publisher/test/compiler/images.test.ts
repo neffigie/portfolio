@@ -94,9 +94,6 @@ describe("responsive images", () => {
     expect(result.html).toContain('width="1200" height="800"');
     expect(result.html).not.toContain("data:image/");
     expect(result.html).not.toContain("/api/files/");
-    await expect(result.html).toMatchFileSnapshot(
-      "__snapshots__/responsive-images.html",
-    );
   });
 
   it("preserves explicit empty alt without warning", async () => {

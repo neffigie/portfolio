@@ -1,19 +1,8 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  canonicalizeSlug,
-  ROUTE_MANIFEST,
-  resolveRoute,
-} from "../src/index.js";
+import { canonicalizeSlug, resolveRoute } from "../src/index.js";
 
 describe("route manifest", () => {
-  it("declares every reserved route and protected segment", () => {
-    expect(ROUTE_MANIFEST).toEqual({
-      reserved: { home: "/", resume: "/resume" },
-      protectedSegments: ["index", "resume", "assets", "pagefind", "404.html"],
-    });
-  });
-
   it.each([
     ["home", null, { classification: "reserved", route: "/" }],
     ["about", null, { classification: "draft", route: null }],

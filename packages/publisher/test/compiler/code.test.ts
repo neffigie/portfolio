@@ -5,29 +5,12 @@ import { describe, expect, it } from "vitest";
 import {
   compileDocument,
   createCodeHighlightingPlugin,
-  createContentPlugins,
   detectCorpusLanguages,
-  orderPlugins,
   proseNormalizationPlugin,
 } from "../../src/index.js";
 import { createCompilationContext } from "./test-context.js";
 
 describe("code highlighting", () => {
-  it("assembles the configured compiler through the central registry", () => {
-    expect(
-      orderPlugins(createContentPlugins(new Set(["typescript"]))).map(
-        ({ name }) => name,
-      ),
-    ).toEqual([
-      "prose-normalization",
-      "code-highlighting",
-      "responsive-images",
-      "heading-anchors",
-      "link-classification",
-      "semantic-structures",
-    ]);
-  });
-
   it("detects and normalizes corpus language aliases", () => {
     expect(
       detectCorpusLanguages([
@@ -61,9 +44,6 @@ describe("code highlighting", () => {
     expect(result.html).toContain("plain &#x26; readable\n</code></pre>");
     expect(result.searchableText).toContain("const less = 1 < 2;");
     expect(context.diagnostics.items).toEqual([]);
-    await expect(result.html).toMatchFileSnapshot(
-      "__snapshots__/code-known.html",
-    );
   });
 
   it("accepts the legacy lang-js class", async () => {

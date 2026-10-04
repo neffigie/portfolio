@@ -4,6 +4,7 @@
       "**/*.{js,mjs,cjs,ts,mts,cts,json,jsonc,css}",
       "!**/node_modules",
       "!**/.build",
+      "!**/.ftp-deploy-sync-state.json",
       "!**/.next",
       "!**/coverage",
       "!**/dist",

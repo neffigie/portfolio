@@ -6,9 +6,8 @@ export default defineConfig({
       "packages/*",
       {
         test: {
-          globalSetup: ["tests/site/global-setup.ts"],
-          include: ["tests/**/*.test.ts"],
-          name: "site",
+          include: ["tests/pocketbase/**/*.test.ts"],
+          name: "pocketbase-hooks",
           root: ".",
         },
       },

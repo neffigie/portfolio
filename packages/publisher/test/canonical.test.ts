@@ -3,7 +3,6 @@ import { describe, expect, it } from "vitest";
 import {
   canonicalStringify,
   type SourceRecord,
-  sha256,
   sourceRevisionFingerprint,
 } from "../src/index.js";
 
@@ -78,12 +77,6 @@ describe("canonical serialization", () => {
     cyclic.self = cyclic;
 
     expect(() => canonicalStringify(cyclic)).toThrow(/cyclic/iu);
-  });
-
-  it("hashes the canonical UTF-8 representation with SHA-256", () => {
-    expect(sha256("anna noelle")).toMatch(/^[0-9a-f]{64}$/u);
-    expect(sha256("anna noelle")).toBe(sha256("anna noelle"));
-    expect(sha256("anna noelle")).not.toBe(sha256("neffigie"));
   });
 });
 

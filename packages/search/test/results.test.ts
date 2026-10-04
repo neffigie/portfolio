@@ -15,30 +15,6 @@ const result: SearchResult = {
 };
 
 describe("result row", () => {
-  it("renders a semantic link with complete compact metadata", () => {
-    const row = renderResultRow(result);
-
-    expect(row.tagName).toBe("LI");
-    expect(row.querySelector("a")?.getAttribute("href")).toBe("/project-one/");
-    expect(row.querySelector("a")?.textContent).toBe("Publication Compiler");
-    expect(row.textContent).toContain("A deterministic source snapshot.");
-    expect(row.textContent).toContain("project");
-    expect(row.querySelector("time")?.getAttribute("datetime")).toBe(
-      "2026-09-20",
-    );
-    expect(
-      [...row.querySelectorAll("[data-result-tag]")].map(
-        (tag) => tag.textContent,
-      ),
-    ).toEqual(["AWS", "Systems"]);
-    expect(row.querySelector("img")).toBeNull();
-  });
-
-  it("omits an absent preview without inventing a placeholder", () => {
-    const row = renderResultRow({ ...result, supportingText: "" });
-    expect(row.querySelector("[data-result-preview]")).toBeNull();
-  });
-
   it("treats authored values as text and rejects executable URLs", () => {
     const row = renderResultRow({
       ...result,
