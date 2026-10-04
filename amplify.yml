@@ -1,11 +1,17 @@
 version: 1
 frontend:
   phases:
+    preBuild:
+      commands:
+        - nvm install 24.21.0 && nvm use 24.21.0
+        - npm ci
     build:
       commands:
-        - echo "Portfolio deployment is not configured; connect the publication pipeline first."
-        - exit 1
+        - HUGO_BINARY=./node_modules/.bin/hugo npm run build:site:pocketbase
   artifacts:
     baseDirectory: site/public
     files:
       - "**/*"
+  cache:
+    paths:
+      - node_modules/**/*

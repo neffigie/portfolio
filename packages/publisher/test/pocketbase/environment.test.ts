@@ -9,6 +9,40 @@ const completeEnvironment = {
 };
 
 describe("readPocketBaseEnvironment", () => {
+  it("reads Amplify Parameter Store secrets from the secret bundle", () => {
+    expect(
+      readPocketBaseEnvironment({
+        secrets: JSON.stringify(completeEnvironment),
+      }),
+    ).toEqual({
+      url: completeEnvironment.POCKETBASE_URL,
+      superuserEmail: completeEnvironment.POCKETBASE_SUPERUSER_EMAIL,
+      superuserPassword: completeEnvironment.POCKETBASE_SUPERUSER_PASSWORD,
+    });
+  });
+
+  it("lets direct environment values override bundled secrets", () => {
+    expect(
+      readPocketBaseEnvironment({
+        secrets: JSON.stringify(completeEnvironment),
+        POCKETBASE_URL: "https://override.example.test",
+      }).url,
+    ).toBe("https://override.example.test");
+  });
+
+  it("rejects a malformed secret bundle without echoing its contents", () => {
+    const secret = "private-password-value";
+    let message = "";
+    try {
+      readPocketBaseEnvironment({ secrets: `{"password":"${secret}"` });
+    } catch (error) {
+      message = String(error);
+    }
+
+    expect(message).toContain("Amplify secrets");
+    expect(message).not.toContain(secret);
+  });
+
   it.each([
     ["http://neffigie.pockethost.io/", "http://neffigie.pockethost.io"],
     ["https://neffigie.pockethost.io/", "https://neffigie.pockethost.io"],
