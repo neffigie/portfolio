@@ -14,7 +14,7 @@
     max-width: var(--measure-reading);
   }
 
-  .home {
+  .page-main-centered {
     display: grid;
     align-content: center;
     gap: var(--space-4);

@@ -41,6 +41,30 @@ test("content pages share the same left alignment across routes", async ({
   expect(Math.max(...leftEdges) - Math.min(...leftEdges)).toBeLessThan(2);
 });
 
+test("résumé content is vertically centered like the home page", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/resume/");
+  const centers = await page.evaluate(() => {
+    const main = document.querySelector("main")?.getBoundingClientRect();
+    const content = document
+      .querySelector(".reserved-page")
+      ?.getBoundingClientRect();
+    return main && content
+      ? {
+          main: main.top + main.height / 2,
+          content: content.top + content.height / 2,
+        }
+      : null;
+  });
+
+  expect(centers).not.toBeNull();
+  expect(Math.abs((centers?.main ?? 0) - (centers?.content ?? 0))).toBeLessThan(
+    2,
+  );
+});
+
 test("short utility pages anchor the footer within one desktop viewport", async ({
   page,
 }) => {
