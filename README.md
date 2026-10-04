@@ -156,28 +156,43 @@ used by `npm run build:site:pocketbase`:
 This secret belongs only in PocketHost. It is intentionally absent from
 `.env.example` and must never be committed.
 
-### 3. Upload the hook to PocketHost
+### 3. Deploy the hook with PocketHost's `phio` tool
 
-Run the following from the repository root. Replace the three uppercase
-placeholders first:
+PocketHost's `phio` command handles file transfer and creates its deployment
+key automatically. You do not need to configure SFTP or create an SSH key
+yourself.
+
+Install `phio`, then sign in with your PocketHost account:
 
 ```sh
-sftp -i "YOUR_KEY_PATH" -P 2222 "YOUR_EMAIL@ftp.pockethost.io"
+npm install --global phio
+phio login
 ```
 
-At the `sftp>` prompt, run:
+From the repository root, deploy the `pocketbase` directory to your instance:
 
-```text
-cd YOUR_INSTANCE/pb_hooks
-put pocketbase/pb_hooks/amplify-publication.pb.js
-ls
-bye
+```sh
+cd pocketbase
+phio deploy YOUR_INSTANCE
 ```
 
-`YOUR_INSTANCE` is the PocketHost instance name/subdomain, not its full URL.
+Replace `YOUR_INSTANCE` with the PocketHost instance name/subdomain, not its
+full URL. Running from `pocketbase` is important: it makes the local `pb_hooks`
+directory land in the correct place at the root of the PocketHost instance.
+
+You can inspect the instance logs with:
+
+```sh
+phio logs YOUR_INSTANCE
+```
+
 PocketHost normally reloads `pb_hooks` after a file change. If the hook does
-not appear in the instance logs, restart the instance once from the PocketHost
+not appear in the logs, restart the instance once from the PocketHost
 dashboard.
+
+The **Webhooks** page in the PocketHost dashboard is not used for this
+connection. That feature schedules GET requests to routes inside the instance;
+it does not send record-change events to external services such as Amplify.
 
 ### 4. Publish older changes and verify the connection
 
