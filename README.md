@@ -1,6 +1,6 @@
 # Anna Noelle Portfolio
 
-[neffigie.dev](https://neffigie.dev/) is Anna Noelle's portfolio: a durable
+[neffigie.com](https://neffigie.com/) is Anna Noelle's portfolio: a durable
 record of selected projects and writing, with a canonical public résumé.
 PocketBase is the authoring system, while Hugo produces the complete static
 site served by AWS Amplify.
