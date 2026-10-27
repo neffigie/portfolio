@@ -15,6 +15,7 @@ function imageProperties(
   authored: Properties,
   media: MediaManifestEntry,
   context: CompilationContext,
+  loading: "eager" | "lazy",
 ): Properties {
   const properties = { ...authored };
   const hasAlt = Object.hasOwn(properties, "alt");
@@ -42,6 +43,12 @@ function imageProperties(
   properties.alt = alt;
   properties.width = media.width;
   properties.height = media.height;
+  if (!Object.hasOwn(properties, "loading")) {
+    properties.loading = loading;
+  }
+  if (!Object.hasOwn(properties, "decoding")) {
+    properties.decoding = "async";
+  }
   return properties;
 }
 
@@ -49,6 +56,7 @@ function renderPicture(
   authored: Element,
   media: MediaManifestEntry,
   context: CompilationContext,
+  loading: "eager" | "lazy",
 ): Element {
   const children: Element[] = [];
   if (media.variants.length > 0) {
@@ -57,6 +65,7 @@ function renderPicture(
       tagName: "source",
       properties: {
         type: "image/webp",
+        sizes: "(max-width: 38rem) calc(100vw - 2rem), 36rem",
         srcSet: media.variants
           .map(({ path, width }) => `${path} ${width}w`)
           .join(", "),
@@ -67,7 +76,7 @@ function renderPicture(
   children.push({
     type: "element",
     tagName: "img",
-    properties: imageProperties(authored.properties, media, context),
+    properties: imageProperties(authored.properties, media, context, loading),
     children: [],
   });
   return {
@@ -121,6 +130,7 @@ export const responsiveImagesPlugin: ContentPlugin = {
           image.node,
           media,
           context,
+          position === 0 ? "eager" : "lazy",
         );
       }
     }

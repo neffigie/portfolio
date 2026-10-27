@@ -143,6 +143,7 @@ describe("responsive images", () => {
     expect(result.html).toContain('class="diagram"');
     expect(result.html).toContain('title="Diagram"');
     expect(result.html).toContain('loading="eager"');
-    expect(result.html.match(/loading=/gu)).toHaveLength(1);
+    expect(result.html).toContain('loading="lazy"');
+    expect(result.html.match(/loading=/gu)).toHaveLength(2);
   });
 });

@@ -26,6 +26,19 @@
     margin-top: var(--space-3);
   }
 
+  .prose picture {
+    max-width: 36rem;
+    margin-inline: auto;
+  }
+
+  .prose picture img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    margin-inline: auto;
+  }
+
   .prose
     :is(p, blockquote, pre, figure, table, ul, ol)
     + :is(p, blockquote, pre, figure, table, ul, ol) {
