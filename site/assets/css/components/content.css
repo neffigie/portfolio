@@ -1,4 +1,14 @@
 @layer components {
+  #home-title {
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
+  }
+
+  .home-mark {
+    --brand-mark-height: 1.5em;
+  }
+
   .home-introduction > .prose > p:first-of-type {
     color: var(--text-muted);
     font-size: 1.125rem;

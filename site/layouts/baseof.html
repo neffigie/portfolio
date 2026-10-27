@@ -5,6 +5,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
 		<link rel="canonical" href="{{ .Permalink }}">
+		<link rel="icon" href="/images/anna-noelle-favicon-16-v2.png" sizes="16x16" type="image/png">
+		<link rel="icon" href="/images/anna-noelle-favicon-32-v2.png" sizes="32x32" type="image/png">
 		{{ block "head" . }}{{ end }}
 		{{ $css := slice
 			(resources.Get "css/layers.css")
