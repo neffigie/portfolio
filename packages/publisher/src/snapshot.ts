@@ -1,11 +1,10 @@
 import { canonicalStringify, sha256 } from "./canonical.js";
 import {
-  type CompiledEntry,
+  isListedPostKind,
   type MediaManifestEntry,
+  type Post,
   type PublicationSnapshot,
   PublicationSnapshotSchema,
-  type ReservedContent,
-  type ReservedResume,
 } from "./model.js";
 import { compareText } from "./ordering.js";
 import { CONTRACT_VERSION } from "./version.js";
@@ -13,11 +12,7 @@ import { CONTRACT_VERSION } from "./version.js";
 export interface SnapshotInput {
   sourceRevisionFingerprint: string;
   generatedAt: string;
-  reserved: {
-    home: ReservedContent;
-    resume: ReservedResume;
-  };
-  entries: readonly CompiledEntry[];
+  posts: readonly Post[];
   media: readonly MediaManifestEntry[];
   compiler: {
     version: string;
@@ -25,8 +20,19 @@ export interface SnapshotInput {
   };
 }
 
-function compareEntries(left: CompiledEntry, right: CompiledEntry): number {
-  const dateComparison = compareText(right.date, left.date);
+const specialKindOrder = { home: 0, resume: 1 } as const;
+
+function comparePosts(left: Post, right: Post): number {
+  const leftListed = isListedPostKind(left.kind);
+  const rightListed = isListedPostKind(right.kind);
+  if (!leftListed || !rightListed) {
+    if (leftListed !== rightListed) return leftListed ? 1 : -1;
+    return (
+      specialKindOrder[left.kind as keyof typeof specialKindOrder] -
+      specialKindOrder[right.kind as keyof typeof specialKindOrder]
+    );
+  }
+  const dateComparison = compareText(right.date ?? "", left.date ?? "");
   return dateComparison === 0
     ? compareText(left.slug, right.slug)
     : dateComparison;
@@ -48,57 +54,27 @@ function normalizeMedia(
 }
 
 function contentIdentityMaterial(snapshot: PublicationSnapshot): unknown {
-  const withoutReservedUpdates = {
-    home: {
-      sourceId: snapshot.reserved.home.sourceId,
-      title: snapshot.reserved.home.title,
-      html: snapshot.reserved.home.html,
-    },
-    resume: {
-      sourceId: snapshot.reserved.resume.sourceId,
-      title: snapshot.reserved.resume.title,
-      html: snapshot.reserved.resume.html,
-      asset: snapshot.reserved.resume.asset,
-    },
-  };
-  const entries = snapshot.entries.map(
-    ({
-      sourceRevisionFingerprint: _sourceRevision,
-      updated: _updated,
-      ...entry
-    }) => entry,
-  );
-
   return {
     schemaVersion: snapshot.schemaVersion,
-    reserved: withoutReservedUpdates,
-    entries,
-    pins: snapshot.pins,
+    posts: snapshot.posts.map(
+      ({
+        sourceRevisionFingerprint: _sourceRevision,
+        updated: _updated,
+        ...post
+      }) => post,
+    ),
     media: snapshot.media,
     compiler: snapshot.compiler,
   };
 }
 
 export function assembleSnapshot(input: SnapshotInput): PublicationSnapshot {
-  const entries = [...input.entries].sort(compareEntries);
-  const pins = entries
-    .filter(
-      (entry): entry is CompiledEntry & { pinOrder: number } =>
-        entry.pinOrder !== null,
-    )
-    .map(({ sourceId, route, pinOrder }) => ({ sourceId, route, pinOrder }))
-    .sort(
-      (left, right) =>
-        left.pinOrder - right.pinOrder || compareText(left.route, right.route),
-    );
   const candidate = PublicationSnapshotSchema.parse({
     schemaVersion: CONTRACT_VERSION,
     sourceRevisionFingerprint: input.sourceRevisionFingerprint,
     fullContentFingerprint: "0".repeat(64),
     generatedAt: input.generatedAt,
-    reserved: input.reserved,
-    entries,
-    pins,
+    posts: [...input.posts].sort(comparePosts),
     media: normalizeMedia(input.media),
     compiler: {
       name: "@portfolio/publisher",

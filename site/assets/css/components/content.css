@@ -14,12 +14,48 @@
     font-size: 1.125rem;
   }
 
-  .prose,
   .entry-header,
   .home-introduction,
   .pinned-entries {
     display: grid;
     gap: var(--space-2);
+  }
+
+  /* Authored post HTML flows as ordinary blocks with one vertical rhythm:
+     blocks sit a full step apart, a heading opens a larger gap above itself
+     and stays close to the content it introduces. */
+  .prose {
+    overflow-wrap: anywhere;
+  }
+
+  .prose > * + * {
+    margin-top: var(--space-4);
+  }
+
+  .prose > * + :is(h2, h3, h4, h5, h6) {
+    margin-top: calc(var(--space-4) + var(--space-2));
+  }
+
+  .prose > :is(h2, h3, h4, h5, h6) + * {
+    margin-top: var(--space-2);
+  }
+
+  .prose :is(blockquote, li) > * + * {
+    margin-top: var(--space-2);
+  }
+
+  .prose :is(ul, ol) {
+    padding-inline-start: 1.5em;
+  }
+
+  .prose li + li,
+  .prose li > :is(ul, ol) {
+    margin-top: var(--space-1);
+  }
+
+  .prose .table-scroll {
+    max-width: 100%;
+    overflow-x: auto;
   }
 
   .entry > .prose {
@@ -37,12 +73,6 @@
     max-width: 100%;
     height: auto;
     margin-inline: auto;
-  }
-
-  .prose
-    :is(p, blockquote, pre, figure, table, ul, ol)
-    + :is(p, blockquote, pre, figure, table, ul, ol) {
-    margin-top: var(--space-3);
   }
 
   .prose pre,

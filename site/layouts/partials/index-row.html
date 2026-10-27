@@ -1,9 +1,9 @@
 <li class="search-result" data-search-result>
-	<a class="search-result-link" href="{{ .route }}">{{ .title }}</a>
-	{{ with .previewText }}<p class="search-result-preview" data-result-preview>{{ . }}</p>{{ end }}
+	<a class="search-result-link" href="{{ .RelPermalink }}">{{ .Title }}</a>
+	{{ with .Params.previewText }}<p class="search-result-preview" data-result-preview>{{ . }}</p>{{ end }}
 	<div class="search-result-meta">
-		<span>{{ .type }}</span>
-		<time datetime="{{ .date }}">{{ .date }}</time>
-		{{ range .tags }}<span data-result-tag>{{ .label }}</span>{{ end }}
+		<span>{{ .Params.postKind }}</span>
+		<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+		{{ range .Params.tags }}<span data-result-tag>{{ .label }}</span>{{ end }}
 	</div>
 </li>

@@ -1,7 +1,10 @@
-baseURL = 'https://neffigie.dev/'
+# baseURL is supplied by scripts/run-hugo.ts from scripts/publication.ts.
 locale = 'en-US'
 title = 'Anna Noelle'
 disableKinds = ['taxonomy', 'term']
+
+[params]
+description = 'Selected projects and writing by Anna Noelle, with her résumé.'
 
 [params.social]
 email = 'mailto:neffigie@gmail.com'

@@ -1,5 +1,18 @@
 import type { SearchResult } from "./pagefind.js";
 
+// Matches the server-rendered rows: Hugo formats dates as "Jan 2, 2006" in UTC.
+const dateFormat = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+function displayDate(value: string): string {
+  const timestamp = Date.parse(value);
+  return Number.isNaN(timestamp) ? value : dateFormat.format(timestamp);
+}
+
 function internalHref(url: string): string {
   return url.startsWith("/") && !url.startsWith("//") && !url.includes("\\")
     ? url
@@ -34,7 +47,7 @@ export function renderResultRow(result: SearchResult): HTMLLIElement {
 
   const date = document.createElement("time");
   date.dateTime = result.date;
-  date.textContent = result.date;
+  date.textContent = displayDate(result.date);
   metadata.append(date);
 
   for (const label of result.tags) {

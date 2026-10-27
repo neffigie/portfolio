@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  compileEntry,
+  compilePost,
   createContentPlugins,
   DiagnosticCollector,
   type MediaRequestCollector,
@@ -38,11 +38,11 @@ function noMedia(): MediaRequestCollector {
   };
 }
 
-describe("compileEntry", () => {
+describe("compilePost", () => {
   it("compiles a published entry and fingerprints its rendered content", async () => {
-    const compiled = await compileEntry(entry, {
+    const compiled = await compilePost(entry, {
       sourceRevisionFingerprint,
-      siteOrigin: "https://neffigie.dev",
+      siteOrigin: "https://www.neffigie.com",
       diagnostics: new DiagnosticCollector(),
       media: noMedia(),
       plugins: createContentPlugins(new Set()),
@@ -50,37 +50,36 @@ describe("compileEntry", () => {
 
     expect(compiled).toMatchObject({
       sourceId: "entry-1",
+      kind: "writing",
       route: "/deliberate-compiler",
       searchableText: "Compiler boundary One durable artifact.",
       mediaHashes: [],
       sourceRevisionFingerprint,
     });
     expect(compiled.html).toContain('id="compiler-boundary"');
-    expect(compiled.entryContentFingerprint).toMatch(/^[0-9a-f]{64}$/u);
+    expect(compiled.contentFingerprint).toMatch(/^[0-9a-f]{64}$/u);
   });
 
   it("changes the content fingerprint when rendered content changes", async () => {
     const dependencies = {
       sourceRevisionFingerprint,
-      siteOrigin: "https://neffigie.dev",
+      siteOrigin: "https://www.neffigie.com",
       diagnostics: new DiagnosticCollector(),
       media: noMedia(),
       plugins: createContentPlugins(new Set()),
     };
-    const first = await compileEntry(entry, dependencies);
-    const second = await compileEntry(
+    const first = await compilePost(entry, dependencies);
+    const second = await compilePost(
       { ...entry, bodyHtml: "<p>A different body.</p>" },
       { ...dependencies, media: noMedia() },
     );
 
-    expect(second.entryContentFingerprint).not.toBe(
-      first.entryContentFingerprint,
-    );
+    expect(second.contentFingerprint).not.toBe(first.contentFingerprint);
   });
 
   it("rejects entries outside the published contract", async () => {
     await expect(
-      compileEntry(
+      compilePost(
         {
           ...entry,
           classification: "draft",
@@ -90,12 +89,45 @@ describe("compileEntry", () => {
         },
         {
           sourceRevisionFingerprint,
-          siteOrigin: "https://neffigie.dev",
+          siteOrigin: "https://www.neffigie.com",
           diagnostics: new DiagnosticCollector(),
           media: noMedia(),
           plugins: createContentPlugins(new Set()),
         },
       ),
-    ).rejects.toThrow(/published entry/iu);
+    ).rejects.toThrow(/as a post/iu);
+  });
+
+  it("compiles a special post as its slug's kind regardless of type", async () => {
+    const compiled = await compilePost(
+      {
+        ...entry,
+        slug: "resume",
+        route: "/resume",
+        classification: "reserved",
+        bodyHtml: "",
+        pinOrder: null,
+      },
+      {
+        sourceRevisionFingerprint,
+        siteOrigin: "https://www.neffigie.com",
+        diagnostics: new DiagnosticCollector(),
+        media: noMedia(),
+        plugins: createContentPlugins(new Set()),
+      },
+      {
+        hash: "b".repeat(64),
+        path: "/assets/resume/cv.pdf",
+        fileName: "cv.pdf",
+        mimeType: "application/pdf",
+      },
+    );
+
+    expect(compiled).toMatchObject({
+      kind: "resume",
+      html: "",
+      pinOrder: null,
+      asset: { fileName: "cv.pdf" },
+    });
   });
 });

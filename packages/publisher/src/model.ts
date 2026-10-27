@@ -80,35 +80,6 @@ export const MediaManifestEntrySchema = z.strictObject({
 });
 export type MediaManifestEntry = z.infer<typeof MediaManifestEntrySchema>;
 
-export const CompiledEntrySchema = z.strictObject({
-  sourceId: z.string().min(1),
-  title: z.string().min(1),
-  slug: z.string().min(1),
-  route: z.string().startsWith("/"),
-  previewText: z.string(),
-  type: EntryTypeSchema,
-  tags: z.array(NormalizedTagSchema),
-  date: instantSchema,
-  updated: instantSchema,
-  pinOrder: z.number().int().positive().nullable(),
-  html: z.string().min(1),
-  searchableText: z.string(),
-  mediaHashes: z.array(fingerprintSchema),
-  entryContentFingerprint: fingerprintSchema,
-  sourceRevisionFingerprint: fingerprintSchema,
-});
-export type CompiledEntry = z.infer<typeof CompiledEntrySchema>;
-
-const reservedContentShape = {
-  sourceId: z.string().min(1),
-  title: z.string().min(1),
-  html: z.string(),
-  updated: instantSchema,
-};
-
-export const ReservedContentSchema = z.strictObject(reservedContentShape);
-export type ReservedContent = z.infer<typeof ReservedContentSchema>;
-
 export const PublishedAssetSchema = z.strictObject({
   hash: fingerprintSchema,
   path: z.string().startsWith("/"),
@@ -117,35 +88,91 @@ export const PublishedAssetSchema = z.strictObject({
 });
 export type PublishedAsset = z.infer<typeof PublishedAssetSchema>;
 
-export const ReservedResumeSchema = z.strictObject({
-  ...reservedContentShape,
-  asset: PublishedAssetSchema,
-});
-export type ReservedResume = z.infer<typeof ReservedResumeSchema>;
+export const PostKindSchema = z.enum(["home", "resume", "writing", "project"]);
+export type PostKind = z.infer<typeof PostKindSchema>;
 
-export const PinSchema = z.strictObject({
-  sourceId: z.string().min(1),
-  route: z.string().startsWith("/"),
-  pinOrder: z.number().int().positive(),
-});
-export type Pin = z.infer<typeof PinSchema>;
+export function isListedPostKind(
+  kind: PostKind,
+): kind is Extract<PostKind, EntryType> {
+  return kind === "writing" || kind === "project";
+}
 
-export const PublicationSnapshotSchema = z.strictObject({
-  schemaVersion: z.literal(CONTRACT_VERSION),
-  sourceRevisionFingerprint: fingerprintSchema,
-  fullContentFingerprint: fingerprintSchema,
-  generatedAt: instantSchema,
-  reserved: z.strictObject({
-    home: ReservedContentSchema,
-    resume: ReservedResumeSchema,
-  }),
-  entries: z.array(CompiledEntrySchema),
-  pins: z.array(PinSchema),
-  media: z.array(MediaManifestEntrySchema),
-  compiler: z.strictObject({
-    name: z.literal("@portfolio/publisher"),
-    version: z.string().min(1),
-    contentPipelineVersion: z.number().int().positive(),
-  }),
-});
+export const PostSchema = z
+  .strictObject({
+    sourceId: z.string().min(1),
+    kind: PostKindSchema,
+    title: z.string().min(1),
+    slug: z.string().min(1),
+    route: z.string().startsWith("/"),
+    previewText: z.string(),
+    tags: z.array(NormalizedTagSchema),
+    date: instantSchema.nullable(),
+    updated: instantSchema,
+    pinOrder: z.number().int().positive().nullable(),
+    html: z.string(),
+    searchableText: z.string(),
+    asset: PublishedAssetSchema.nullable(),
+    mediaHashes: z.array(fingerprintSchema),
+    contentFingerprint: fingerprintSchema,
+    sourceRevisionFingerprint: fingerprintSchema,
+  })
+  .superRefine((post, context) => {
+    if (isListedPostKind(post.kind)) {
+      if (post.date === null) {
+        context.addIssue({
+          code: "custom",
+          path: ["date"],
+          message: `A ${post.kind} post requires a date.`,
+        });
+      }
+      if (post.html.length === 0) {
+        context.addIssue({
+          code: "custom",
+          path: ["html"],
+          message: `A ${post.kind} post requires a body.`,
+        });
+      }
+    } else if (post.pinOrder !== null) {
+      context.addIssue({
+        code: "custom",
+        path: ["pinOrder"],
+        message: `The ${post.kind} post cannot be pinned.`,
+      });
+    }
+    if (post.kind === "resume" && post.asset === null) {
+      context.addIssue({
+        code: "custom",
+        path: ["asset"],
+        message: "The résumé post requires its PDF asset.",
+      });
+    }
+  });
+export type Post = z.infer<typeof PostSchema>;
+
+export const PublicationSnapshotSchema = z
+  .strictObject({
+    schemaVersion: z.literal(CONTRACT_VERSION),
+    sourceRevisionFingerprint: fingerprintSchema,
+    fullContentFingerprint: fingerprintSchema,
+    generatedAt: instantSchema,
+    posts: z.array(PostSchema),
+    media: z.array(MediaManifestEntrySchema),
+    compiler: z.strictObject({
+      name: z.literal("@portfolio/publisher"),
+      version: z.string().min(1),
+      contentPipelineVersion: z.number().int().positive(),
+    }),
+  })
+  .superRefine((snapshot, context) => {
+    for (const kind of ["home", "resume"] as const) {
+      const count = snapshot.posts.filter((post) => post.kind === kind).length;
+      if (count !== 1) {
+        context.addIssue({
+          code: "custom",
+          path: ["posts"],
+          message: `A publication requires exactly one ${kind} post; found ${count}.`,
+        });
+      }
+    }
+  });
 export type PublicationSnapshot = z.infer<typeof PublicationSnapshotSchema>;

@@ -1,0 +1,19 @@
+{{/* The hand-drawn mark as WebP at 1x/2x/3x of its CSS box height, so each
+     screen downloads only the density it needs. The box itself is sized in
+     chrome.css/content.css, so layout never depends on the image file. */}}
+{{ $sources := dict
+	"header" (dict "path" "brand/anna-noelle-mark-header.png" "height" 16)
+	"sketch" (dict "path" "brand/anna-noelle-mark-sketch.png" "height" 72)
+}}
+{{ $source := index $sources .name }}
+{{ $original := resources.Get $source.path }}
+{{ $candidates := slice }}
+{{ $fallback := "" }}
+{{ range $density := slice 1 2 3 }}
+	{{ $image := $original.Process (printf "resize x%d webp q90" (mul $source.height $density)) }}
+	{{ $candidates = $candidates | append (printf "%s %dx" $image.RelPermalink $density) }}
+	{{ if eq $density 1 }}{{ $fallback = $image }}{{ end }}
+{{ end }}
+<span class="brand-mark {{ .class }}"{{ if not .alt }} aria-hidden="true"{{ end }}>
+	<img src="{{ $fallback.RelPermalink }}" srcset="{{ delimit $candidates ", " }}" width="{{ $fallback.Width }}" height="{{ $fallback.Height }}" alt="{{ .alt }}">
+</span>

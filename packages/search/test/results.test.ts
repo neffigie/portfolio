@@ -33,4 +33,17 @@ describe("result row", () => {
       "<script>alert(1)</script>",
     );
   });
+
+  it("formats dates exactly like the server-rendered rows", () => {
+    const time = renderResultRow(result).querySelector("time");
+    expect(time?.getAttribute("datetime")).toBe("2026-09-20");
+    expect(time?.textContent).toBe("Sep 20, 2026");
+  });
+
+  it("keeps an unparseable date as authored text", () => {
+    const time = renderResultRow({ ...result, date: "someday" }).querySelector(
+      "time",
+    );
+    expect(time?.textContent).toBe("someday");
+  });
 });

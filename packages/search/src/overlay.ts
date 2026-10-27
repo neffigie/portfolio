@@ -2,6 +2,7 @@ import {
   SearchController,
   type SearchControllerOptions,
 } from "./controller.js";
+import { debounce } from "./dom.js";
 import { OverlaySearchView } from "./overlay-view.js";
 import { normalizeSearchState } from "./state.js";
 
@@ -26,6 +27,8 @@ export function mountOverlay(
     const state = view.readState();
     void controller.run(state);
   }
+
+  const typing = debounce(update, 150);
 
   function open(source: HTMLElement): void {
     if (dialog.open) return;
@@ -68,7 +71,7 @@ export function mountOverlay(
   view.form.addEventListener("submit", (event) => event.preventDefault());
   view.form.addEventListener("input", (event) => {
     if (event.target !== view.query) return;
-    update();
+    typing();
   });
   view.more?.addEventListener("click", () => void controller.loadMore());
 

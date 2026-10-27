@@ -1,51 +1,41 @@
 {{ $publication := hugo.Data.publication }}
-{{ if ne (int $publication.schemaVersion) 1 }}
-	{{ errorf "Unsupported publication snapshot schema version %v; expected 1" $publication.schemaVersion }}
+{{ if ne (int $publication.schemaVersion) 2 }}
+	{{ errorf "Unsupported publication snapshot schema version %v; expected 2" $publication.schemaVersion }}
 {{ end }}
 
-{{ range $publication.entries }}
-	{{ $content := dict "mediaType" "text/html" "value" .html }}
-	{{ $dates := dict "date" (time.AsTime .date) "lastmod" (time.AsTime .updated) }}
-	{{ $params := dict
-		"sourceId" .sourceId
-		"previewText" .previewText
-		"entryType" .type
-		"tags" .tags
-		"pinOrder" .pinOrder
-		"searchableText" .searchableText
-		"entryContentFingerprint" .entryContentFingerprint
-	}}
+{{/* Every post becomes one Hugo page; its kind selects the layout. The home
+     post is headless: home.html renders it, so it has no route of its own. */}}
+{{ $layouts := dict "home" "home-post" "resume" "resume" "writing" "entry" "project" "entry" }}
+{{ range $publication.posts }}
+	{{ $dates := dict "lastmod" (time.AsTime .updated) }}
+	{{ with .date }}{{ $dates = merge $dates (dict "date" (time.AsTime .)) }}{{ end }}
 	{{ $page := dict
-		"content" $content
+		"content" (dict "mediaType" "text/html" "value" .html)
 		"dates" $dates
 		"kind" "page"
-		"params" $params
+		"params" (dict
+			"postKind" .kind
+			"sourceId" .sourceId
+			"previewText" .previewText
+			"tags" .tags
+			"pinOrder" .pinOrder
+			"asset" .asset
+			"contentFingerprint" .contentFingerprint
+		)
 		"path" .slug
 		"title" .title
-		"type" "entry"
+		"type" (index $layouts .kind)
 	}}
+	{{ if eq .kind "home" }}
+		{{ $page = merge $page (dict "build" (dict "render" "never" "list" "never")) }}
+	{{ end }}
 	{{ $.AddPage $page }}
-{{ end }}
-
-{{ with $publication.reserved.resume }}
-	{{ $content := dict "mediaType" "text/html" "value" .html }}
-	{{ $dates := dict "lastmod" (time.AsTime .updated) }}
-	{{ $params := dict "sourceId" .sourceId "asset" .asset }}
-	{{ $.AddPage (dict
-		"content" $content
-		"dates" $dates
-		"kind" "page"
-		"params" $params
-		"path" "resume"
-		"title" .title
-		"type" "resume"
-	)
-	}}
 {{ end }}
 
 {{ $.AddPage (dict
 	"content" (dict "mediaType" "text/html" "value" "")
 	"kind" "page"
+	"params" (dict "previewText" "Browse every published project and piece of writing.")
 	"path" "index"
 	"title" "Index"
 	"type" "corpus-index"

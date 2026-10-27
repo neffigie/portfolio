@@ -1,0 +1,29 @@
+{{- /* The feed lists published posts only: the headless home post and
+       generated pages such as the index are never feed items. */ -}}
+{{- $pages := where site.RegularPages "Params.postKind" "in" (slice "resume" "writing" "project") -}}
+{{- $pages = sort $pages "Date" "desc" -}}
+{{- $rfc822 := "Mon, 02 Jan 2006 15:04:05 -0700" -}}
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>{{ site.Title }}</title>
+		<link>{{ .Permalink }}</link>
+		<description>{{ site.Params.description }}</description>
+		<language>{{ site.Language.Locale }}</language>
+		{{- with $pages }}
+		<lastBuildDate>{{ (index (sort . "Lastmod" "desc") 0).Lastmod.Format $rfc822 }}</lastBuildDate>
+		{{- end }}
+		{{- with .OutputFormats.Get "rss" }}
+		{{ printf "<atom:link href=%q rel=\"self\" type=%q />" .Permalink .MediaType | safeHTML }}
+		{{- end }}
+		{{- range $pages }}
+		<item>
+			<title>{{ .Title }}</title>
+			<link>{{ .Permalink }}</link>
+			<guid>{{ .Permalink }}</guid>
+			<pubDate>{{ (cond .Date.IsZero .Lastmod .Date).Format $rfc822 }}</pubDate>
+			<description>{{ .Params.previewText }}</description>
+		</item>
+		{{- end }}
+	</channel>
+</rss>

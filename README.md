@@ -39,10 +39,25 @@ The deployed site remains on its last successful version while another build
 is running. Because every build reads the complete current collection, one
 successful build also recovers any changes missed during a webhook outage.
 
+## Posts
+
+Every PocketBase entry is a post. The publisher gives each post a `kind`, and
+Hugo turns every post into one page whose layout follows that kind:
+
+| Kind | Recognized by | Page |
+| --- | --- | --- |
+| `home` | slug `home` (type ignored) | Introduction on `/`; no route of its own |
+| `resume` | slug `resume` (type ignored) | `/resume/` plus its PDF |
+| `writing`, `project` | type, with any other slug | `/<slug>/`, listed on the index, feed, and pins |
+
+Entries with no type and no special slug are drafts and are never published.
+Templates read Hugo pages only, so links, dates, and feed membership all come
+from one place.
+
 ## Résumé
 
-The résumé is a reserved PocketBase entry whose slug is `resume`. It is the
-source for the permanent `/resume/` page and its downloadable PDF.
+The résumé is the special post whose slug is `resume`. It is the source for
+the permanent `/resume/` page and its downloadable PDF.
 
 During publication, the publisher validates the record, downloads its current
 PDF, and writes the file to a content-addressed static path. Updating either the
@@ -63,6 +78,7 @@ entry, so the page, asset, metadata, and search index are deployed together.
 ├── fixtures/            Deterministic records, media, schema, and expected output
 ├── tests/               PocketBase hook regression and browser integration checks
 ├── amplify.yml          Amplify build and artifact configuration
+├── customHttp.yml       Long-lived caching for fingerprinted static files
 └── package.json         Workspace scripts and tool versions
 ```
 

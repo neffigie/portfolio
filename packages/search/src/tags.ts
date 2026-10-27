@@ -62,7 +62,17 @@ export class TagPicker {
   }
 
   render(tags: readonly string[]): void {
-    this.selected = normalizeSearchState({ tags }).tags;
+    // Pagefind filters match exactly, so shared URLs such as ?tag=app must
+    // resolve to the published label ("App").
+    const labels = new Map(
+      this.options.map((option) => [
+        option.value.toLocaleLowerCase(),
+        option.value,
+      ]),
+    );
+    this.selected = normalizeSearchState({ tags }).tags.map(
+      (tag) => labels.get(tag.toLocaleLowerCase()) ?? tag,
+    );
     this.sync();
   }
 

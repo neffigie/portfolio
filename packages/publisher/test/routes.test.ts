@@ -18,6 +18,20 @@ describe("route manifest", () => {
     expect(resolveRoute(slug, type)).toEqual(expected);
   });
 
+  it.each(["writing", "project"] as const)(
+    "recognizes special posts by slug alone, even with type %s",
+    (type) => {
+      expect(resolveRoute("resume", type)).toEqual({
+        classification: "reserved",
+        route: "/resume",
+      });
+      expect(resolveRoute("Home", type)).toEqual({
+        classification: "reserved",
+        route: "/",
+      });
+    },
+  );
+
   it("rejects protected published slugs", () => {
     expect(resolveRoute("index", "writing")).toMatchObject({
       classification: "invalid",

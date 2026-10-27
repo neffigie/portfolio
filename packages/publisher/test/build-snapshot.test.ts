@@ -108,7 +108,7 @@ function dependencies(outputDirectory: string): BuildPublicationDependencies {
   return {
     outputDirectory,
     generatedAt: "2026-09-20T15:00:00.000Z",
-    siteOrigin: "https://neffigie.dev",
+    siteOrigin: "https://www.neffigie.com",
     compilerVersion: "0.0.0",
     contentPipelineVersion: 1,
     assetFetcher: {
@@ -162,17 +162,23 @@ describe("buildPublicationSnapshot", () => {
       dependencies(outputDirectory),
     );
 
-    expect(artifacts.snapshot.entries.map(({ route }) => route)).toEqual([
-      "/project-one",
-      "/writing-one",
+    const { posts } = artifacts.snapshot;
+    expect(posts.map(({ kind, route }) => [kind, route])).toEqual([
+      ["home", "/"],
+      ["resume", "/resume"],
+      ["project", "/project-one"],
+      ["writing", "/writing-one"],
     ]);
-    expect(artifacts.snapshot.pins.map(({ route }) => route)).toEqual([
-      "/writing-one",
-      "/project-one",
-    ]);
-    expect(artifacts.snapshot.reserved.resume.html).toBe("");
-    expect(artifacts.snapshot.reserved.resume.asset.path).toMatch(
+    expect(
+      posts.filter(({ pinOrder }) => pinOrder !== null).map(({ slug }) => slug),
+    ).toEqual(["project-one", "writing-one"]);
+    const resume = posts.find(({ kind }) => kind === "resume");
+    expect(resume?.html).toBe("");
+    expect(resume?.asset?.path).toMatch(
       /^\/assets\/resume\/[0-9a-f]{64}\/anna-noelle-resume\.pdf$/u,
+    );
+    expect(posts.find(({ kind }) => kind === "home")?.previewText).toBe(
+      "Selected work and writing. I build durable systems.",
     );
     expect(artifacts.diagnostics).toEqual([]);
     expect(artifacts.mediaWrites.length).toBeGreaterThan(0);
@@ -181,9 +187,7 @@ describe("buildPublicationSnapshot", () => {
       "project-id",
       "writing-id",
     ]);
-    expect(artifacts.snapshot.entries[0]?.mediaHashes).toEqual(
-      artifacts.snapshot.entries[1]?.mediaHashes,
-    );
+    expect(posts[2]?.mediaHashes).toEqual(posts[3]?.mediaHashes);
 
     const snapshotJson = await readFile(
       join(outputDirectory, "snapshot.json"),
@@ -239,15 +243,14 @@ describe("buildPublicationSnapshot", () => {
     );
 
     expect(
-      artifacts.snapshot.entries.find(
-        ({ sourceId }) => sourceId === "writing-id",
-      )?.title,
+      artifacts.snapshot.posts.find(({ sourceId }) => sourceId === "writing-id")
+        ?.title,
     ).toBe("Revised Writing");
     const written = JSON.parse(
       await readFile(join(outputDirectory, "snapshot.json"), "utf8"),
-    ) as { entries: Array<{ sourceId: string; title: string }> };
+    ) as { posts: Array<{ sourceId: string; title: string }> };
     expect(
-      written.entries.find(({ sourceId }) => sourceId === "writing-id")?.title,
+      written.posts.find(({ sourceId }) => sourceId === "writing-id")?.title,
     ).toBe("Revised Writing");
   });
 

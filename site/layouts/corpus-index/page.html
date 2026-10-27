@@ -1,8 +1,8 @@
 {{ define "main" }}
-{{ $publication := hugo.Data.publication }}
+{{ $posts := partial "listed-posts.html" . }}
 <main class="site-main index-page" id="main-content" data-index-root>
 	<h1>{{ .Title }}</h1>
-	<p>Browse every published project and piece of writing.</p>
+	<p>{{ .Params.previewText }}</p>
 	<form class="search-filters" data-search-filters role="search">
 		<label>
 			<span>Search</span>
@@ -16,7 +16,7 @@
 				<option value="project">Projects</option>
 			</select>
 		</label>
-		{{ partial "tag-picker.html" . }}
+		{{ partial "tag-picker.html" $posts }}
 		<label>
 			<span>Sort</span>
 			<select name="sort" data-search-sort>
@@ -27,9 +27,9 @@
 			</select>
 		</label>
 	</form>
-	<p class="search-status" role="status" aria-live="polite" data-search-status></p>
+	<p class="search-status" role="status" aria-live="polite" data-search-status>{{ len $posts }} {{ cond (eq (len $posts) 1) "result" "results" }}</p>
 	<ul class="search-results" data-search-results>
-		{{ range $publication.entries }}
+		{{ range $posts }}
 			{{ partial "index-row.html" . }}
 		{{ end }}
 	</ul>

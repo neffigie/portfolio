@@ -47,7 +47,7 @@
     "id": "writing-one-id",
     "title": "Search as Navigation",
     "slug": "writing-one",
-    "bodyHtml": "<h2>One corpus</h2><p>The index is the information architecture: query, type, and tags reveal the same body of work from different angles.</p><pre><code class=\"language-ts\">const index = entries.filter(matchesIntent);</code></pre>",
+    "bodyHtml": "<h2>One corpus</h2><p>The index is the information architecture: query, type, and tags reveal the same body of work from different angles.</p><pre><code class=\"language-ts\">const index = entries.filter(matchesIntent);</code></pre><h2>Reading notes</h2><ul><li>Query, type, and tags are one state.</li><li>Every view is a link.<ul><li>Shared links restore that view.</li></ul></li></ul><p>Reference: https://doi.org/10.5824/example.2022.01.003.an-unbroken-citation-that-is-wider-than-a-phone</p>",
     "type": "writing",
     "tags": ["TypeScript", "Search", "Systems"],
     "date": "2026-08-20",

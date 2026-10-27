@@ -67,18 +67,19 @@ export function resolveRoute(
     };
   }
 
-  if (type === null) {
-    if (isReservedSlug(canonical)) {
-      return {
-        classification: "reserved",
-        route: ROUTE_MANIFEST.reserved[canonical],
-      };
-    }
+  // Special posts are identified by slug alone; their type is irrelevant.
+  if (isReservedSlug(canonical)) {
+    return {
+      classification: "reserved",
+      route: ROUTE_MANIFEST.reserved[canonical],
+    };
+  }
 
+  if (type === null) {
     return { classification: "draft", route: null };
   }
 
-  if (isReservedSlug(canonical) || isProtectedSlug(slug, canonical)) {
+  if (isProtectedSlug(slug, canonical)) {
     return {
       classification: "invalid",
       route: null,

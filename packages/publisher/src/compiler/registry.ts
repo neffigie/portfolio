@@ -6,14 +6,6 @@ import { proseNormalizationPlugin } from "./plugins/prose.js";
 import { semanticStructuresPlugin } from "./plugins/structures.js";
 import type { ContentPlugin } from "./types.js";
 
-export const CORE_CONTENT_PLUGINS: readonly ContentPlugin[] = [
-  proseNormalizationPlugin,
-  headingAnchorsPlugin,
-  linkClassificationPlugin,
-  semanticStructuresPlugin,
-  responsiveImagesPlugin,
-];
-
 export function createContentPlugins(
   corpusLanguages: ReadonlySet<string>,
 ): ContentPlugin[] {

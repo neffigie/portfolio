@@ -1,0 +1,21 @@
+# Amplify Hosting response headers. Every path below is content-addressed
+# (fingerprinted filename or hash directory), so a changed file always gets a
+# new URL and browsers may keep these forever. HTML, feeds, favicons, and the
+# Pagefind entry files keep Amplify's default revalidating policy.
+customHeaders:
+  - pattern: "/css/*"
+    headers:
+      - key: Cache-Control
+        value: public, max-age=31536000, immutable
+  - pattern: "/js/*"
+    headers:
+      - key: Cache-Control
+        value: public, max-age=31536000, immutable
+  - pattern: "/brand/*"
+    headers:
+      - key: Cache-Control
+        value: public, max-age=31536000, immutable
+  - pattern: "/assets/**/*"
+    headers:
+      - key: Cache-Control
+        value: public, max-age=31536000, immutable

@@ -55,7 +55,7 @@ export async function runCli(
       return 1;
     }
     io.stdout(
-      `Published ${artifacts.snapshot.entries.length} entries to ${resolve(options.out)}.`,
+      `Published ${artifacts.snapshot.posts.length} posts to ${resolve(options.out)}.`,
     );
     return 0;
   } catch (error) {

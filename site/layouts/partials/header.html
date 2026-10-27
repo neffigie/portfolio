@@ -1,9 +1,7 @@
 <header class="site-header">
 	<div class="site-frame site-header-inner">
 		<a class="site-identity" href="/">
-			<span class="brand-mark site-mark" aria-hidden="true">
-				<img src="/images/anna-noelle-mark-header.png" alt="">
-			</span>
+			{{ partial "brand-mark.html" (dict "name" "header" "class" "site-mark" "alt" "") }}
 			<span class="site-name">Anna Noelle</span>
 		</a>
 		<nav aria-label="Primary">

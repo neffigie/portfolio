@@ -4,9 +4,8 @@ import { resolve } from "node:path";
 import { DirectoryArtifactSink } from "./artifacts/directory-sink.js";
 import { StagedPublicationDirectory } from "./artifacts/publish-directory.js";
 import { canonicalStringify, sourceRevisionFingerprint } from "./canonical.js";
-import { compileEntry } from "./compile-entry.js";
+import { compilePost } from "./compile-post.js";
 import { detectCorpusLanguages } from "./compiler/code-languages.js";
-import { compileDocument } from "./compiler/processor.js";
 import { createContentPlugins } from "./compiler/registry.js";
 import {
   CompilationFailure,
@@ -18,9 +17,9 @@ import { MediaResolver } from "./media/resolver.js";
 import type { AssetFetcher, MediaSourceResolver } from "./media/types.js";
 import {
   type NormalizedEntry,
+  type Post,
   type PublicationSnapshot,
   PublicationSnapshotSchema,
-  type ReservedContent,
   type SourceRecord,
 } from "./model.js";
 import { normalizeRecords } from "./normalize.js";
@@ -97,30 +96,6 @@ export async function buildPublicationSnapshot(
         dependencies.resolveMediaSource,
         diagnostics,
       );
-    const compileReserved = async (
-      entry: NormalizedEntry,
-    ): Promise<ReservedContent> => {
-      const document = await compileDocument(
-        entry.bodyHtml,
-        {
-          recordId: entry.sourceId,
-          route: entry.route ?? "/",
-          siteOrigin: dependencies.siteOrigin,
-          diagnostics,
-          media: collector(entry),
-        },
-        plugins,
-      );
-      return {
-        sourceId: entry.sourceId,
-        title: entry.title,
-        html: document.html,
-        updated: entry.updated,
-      };
-    };
-
-    const compiledHome = await compileReserved(home);
-    const compiledResume = await compileReserved(resume);
     if (resume.asset === null) {
       throw new TypeError("Normalized résumé has no asset.");
     }
@@ -131,16 +106,20 @@ export async function buildPublicationSnapshot(
       diagnostics,
       resume.sourceId,
     );
-    const entries = [];
-    for (const entry of corpus.entries) {
-      entries.push(
-        await compileEntry(entry, {
-          sourceRevisionFingerprint: revisionFingerprint,
-          siteOrigin: dependencies.siteOrigin,
-          diagnostics,
-          media: collector(entry),
-          plugins,
-        }),
+    const posts: Post[] = [];
+    for (const entry of [home, resume, ...corpus.entries]) {
+      posts.push(
+        await compilePost(
+          entry,
+          {
+            sourceRevisionFingerprint: revisionFingerprint,
+            siteOrigin: dependencies.siteOrigin,
+            diagnostics,
+            media: collector(entry),
+            plugins,
+          },
+          entry === resume ? resumeAsset : null,
+        ),
       );
     }
     diagnostics.throwIfErrors();
@@ -148,11 +127,7 @@ export async function buildPublicationSnapshot(
     const snapshot = assembleSnapshot({
       sourceRevisionFingerprint: revisionFingerprint,
       generatedAt: dependencies.generatedAt,
-      reserved: {
-        home: compiledHome,
-        resume: { ...compiledResume, asset: resumeAsset },
-      },
-      entries,
+      posts,
       media: mediaResolver.manifest(),
       compiler: {
         version: dependencies.compilerVersion,

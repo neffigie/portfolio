@@ -2,6 +2,7 @@ import {
   SearchController,
   type SearchControllerOptions,
 } from "./controller.js";
+import { debounce } from "./dom.js";
 import { parseSearchParams, stateToIndexUrl } from "./state.js";
 import { DomSearchView } from "./view.js";
 
@@ -15,10 +16,12 @@ export function mountIndexPage(
   function restoreFromUrl(): void {
     const params = new URLSearchParams(window.location.search);
     view.setSortExplicit(params.has("sort"));
-    void controller.run(parseSearchParams(params));
+    view.renderFilters(parseSearchParams(params));
+    void controller.run(view.readState());
   }
 
   function update(): void {
+    typing.cancel();
     const state = view.readState();
     window.history.replaceState(
       window.history.state,
@@ -28,10 +31,13 @@ export function mountIndexPage(
     void controller.run(state);
   }
 
+  // Typing waits for a pause; filter changes search at once and supersede it.
+  const typing = debounce(update, 150);
+
   view.form.addEventListener("submit", (event) => event.preventDefault());
   view.form.addEventListener("input", (event) => {
     if (event.target !== view.query) return;
-    update();
+    typing();
   });
   view.form.addEventListener("change", (event) => {
     if (!(event.target instanceof HTMLSelectElement)) return;
@@ -41,5 +47,6 @@ export function mountIndexPage(
   view.root.addEventListener("search:tags-change", update);
   view.more?.addEventListener("click", () => void controller.loadMore());
   window.addEventListener("popstate", restoreFromUrl);
-  restoreFromUrl();
+  // Hugo already rendered the unfiltered list; only a shared URL needs a search.
+  if (window.location.search) restoreFromUrl();
 }

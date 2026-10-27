@@ -1,0 +1,3 @@
+{{/* Writing and project posts, newest first. */}}
+{{ $posts := where site.RegularPages "Params.postKind" "in" (slice "writing" "project") }}
+{{ return sort $posts "Date" "desc" }}

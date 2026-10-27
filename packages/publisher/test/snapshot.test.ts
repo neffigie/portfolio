@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import {
   assembleSnapshot,
-  type CompiledEntry,
   type MediaManifestEntry,
+  type Post,
   type SnapshotInput,
 } from "../src/index.js";
 
@@ -13,25 +13,26 @@ const hashC = "c".repeat(64);
 const sourceHashA = "d".repeat(64);
 const sourceHashB = "e".repeat(64);
 
-const entryA: CompiledEntry = {
+const entryA: Post = {
   sourceId: "entry-a",
+  kind: "project",
   title: "Compiler Design",
   slug: "compiler-design",
   route: "/compiler-design",
   previewText: "Content",
-  type: "project",
   tags: [{ key: "typescript", label: "TypeScript" }],
   date: "2026-09-20T00:00:00.000Z",
   updated: "2026-09-20T12:00:00.000Z",
   pinOrder: 2,
   html: "<p>Compiler body</p>",
   searchableText: "Compiler body",
+  asset: null,
   mediaHashes: [hashA],
-  entryContentFingerprint: hashA,
+  contentFingerprint: hashA,
   sourceRevisionFingerprint: sourceHashA,
 };
 
-const entryB: CompiledEntry = {
+const entryB: Post = {
   ...entryA,
   sourceId: "entry-b",
   title: "Search Everywhere",
@@ -40,7 +41,41 @@ const entryB: CompiledEntry = {
   date: "2026-08-01T00:00:00.000Z",
   pinOrder: 1,
   mediaHashes: [],
-  entryContentFingerprint: hashB,
+  contentFingerprint: hashB,
+};
+
+const home: Post = {
+  ...entryA,
+  sourceId: "home-id",
+  kind: "home",
+  title: "Anna Noelle",
+  slug: "home",
+  route: "/",
+  previewText: "Introduction",
+  tags: [],
+  date: null,
+  pinOrder: null,
+  html: "<p>Introduction</p>",
+  searchableText: "Introduction",
+  mediaHashes: [],
+};
+
+const resume: Post = {
+  ...home,
+  sourceId: "resume-id",
+  kind: "resume",
+  title: "Résumé",
+  slug: "resume",
+  route: "/resume",
+  previewText: "",
+  html: "",
+  searchableText: "",
+  asset: {
+    hash: hashB,
+    path: "/assets/resume/anna-noelle-resume.pdf",
+    fileName: "anna-noelle-resume.pdf",
+    mimeType: "application/pdf",
+  },
 };
 
 const mediaA: MediaManifestEntry = {
@@ -63,27 +98,7 @@ const mediaA: MediaManifestEntry = {
 const baseInput: SnapshotInput = {
   sourceRevisionFingerprint: sourceHashA,
   generatedAt: "2026-09-20T15:00:00.000Z",
-  reserved: {
-    home: {
-      sourceId: "home-id",
-      title: "Anna Noelle",
-      html: "<p>Introduction</p>",
-      updated: "2026-09-20T12:00:00.000Z",
-    },
-    resume: {
-      sourceId: "resume-id",
-      title: "Résumé",
-      html: "",
-      updated: "2026-09-20T12:00:00.000Z",
-      asset: {
-        hash: hashB,
-        path: "/assets/resume/anna-noelle-resume.pdf",
-        fileName: "anna-noelle-resume.pdf",
-        mimeType: "application/pdf",
-      },
-    },
-  },
-  entries: [entryB, entryA],
+  posts: [entryB, resume, entryA, home],
   media: [mediaA],
   compiler: {
     version: "0.0.0",
@@ -95,45 +110,38 @@ function withInput(overrides: Partial<SnapshotInput>): SnapshotInput {
   return { ...baseInput, ...overrides };
 }
 
+function replacePost(sourceId: string, change: Partial<Post>): Post[] {
+  return baseInput.posts.map((post) =>
+    post.sourceId === sourceId ? ({ ...post, ...change } as Post) : post,
+  );
+}
+
 describe("assembleSnapshot", () => {
   it("assembles a validated, deterministically ordered snapshot", () => {
     const snapshot = assembleSnapshot(baseInput);
 
-    expect(snapshot.schemaVersion).toBe(1);
-    expect(snapshot.entries.map(({ sourceId }) => sourceId)).toEqual([
+    expect(snapshot.schemaVersion).toBe(2);
+    expect(snapshot.posts.map(({ sourceId }) => sourceId)).toEqual([
+      "home-id",
+      "resume-id",
       "entry-a",
       "entry-b",
-    ]);
-    expect(snapshot.pins).toEqual([
-      { sourceId: "entry-b", route: "/search-everywhere", pinOrder: 1 },
-      { sourceId: "entry-a", route: "/compiler-design", pinOrder: 2 },
     ]);
     expect(snapshot.fullContentFingerprint).toMatch(/^[0-9a-f]{64}$/u);
   });
 
   it("keeps the full-content identity stable across clocks and source revisions", () => {
-    const inputA = baseInput;
     const inputB = withInput({
       generatedAt: "2026-09-21T15:00:00.000Z",
       sourceRevisionFingerprint: sourceHashB,
-      reserved: {
-        resume: {
-          ...baseInput.reserved.resume,
-          updated: "2026-09-21T12:00:00.000Z",
-        },
-        home: {
-          ...baseInput.reserved.home,
-          updated: "2026-09-21T12:00:00.000Z",
-        },
-      },
-      entries: baseInput.entries.map((entry) => ({
-        ...entry,
+      posts: baseInput.posts.map((post) => ({
+        ...post,
         updated: "2026-09-21T12:00:00.000Z",
         sourceRevisionFingerprint: sourceHashB,
       })),
     });
 
-    expect(assembleSnapshot(inputA).fullContentFingerprint).toBe(
+    expect(assembleSnapshot(baseInput).fullContentFingerprint).toBe(
       assembleSnapshot(inputB).fullContentFingerprint,
     );
   });
@@ -143,20 +151,19 @@ describe("assembleSnapshot", () => {
       label: "compiled body HTML",
       change: () =>
         withInput({
-          entries: [{ ...entryA, html: "<p>Changed</p>" }, entryB],
+          posts: replacePost("entry-a", { html: "<p>Changed</p>" }),
         }),
     },
     {
       label: "résumé asset hash",
       change: () =>
         withInput({
-          reserved: {
-            ...baseInput.reserved,
-            resume: {
-              ...baseInput.reserved.resume,
-              asset: { ...baseInput.reserved.resume.asset, hash: hashC },
+          posts: replacePost("resume-id", {
+            asset: {
+              ...(resume.asset as NonNullable<Post["asset"]>),
+              hash: hashC,
             },
-          },
+          }),
         }),
     },
     {
@@ -176,29 +183,50 @@ describe("assembleSnapshot", () => {
       label: "tag display label",
       change: () =>
         withInput({
-          entries: [
-            {
-              ...entryA,
-              tags: [{ key: "typescript", label: "Typescript" }],
-            },
-            entryB,
-          ],
+          posts: replacePost("entry-a", {
+            tags: [{ key: "typescript", label: "Typescript" }],
+          }),
         }),
     },
     {
       label: "pin ordering",
       change: () =>
         withInput({
-          entries: [
-            { ...entryA, pinOrder: 1 },
-            { ...entryB, pinOrder: 2 },
-          ],
+          posts: replacePost("entry-a", { pinOrder: 1 }).map((post) =>
+            post.sourceId === "entry-b" ? { ...post, pinOrder: 2 } : post,
+          ),
         }),
     },
   ])("changes identity when $label changes", ({ change }) => {
     expect(assembleSnapshot(change()).fullContentFingerprint).not.toBe(
       assembleSnapshot(baseInput).fullContentFingerprint,
     );
+  });
+
+  it("requires exactly one home and one résumé post", () => {
+    expect(() =>
+      assembleSnapshot(
+        withInput({
+          posts: baseInput.posts.filter(({ kind }) => kind !== "resume"),
+        }),
+      ),
+    ).toThrow(/exactly one resume/u);
+    expect(() =>
+      assembleSnapshot(withInput({ posts: [...baseInput.posts, home] })),
+    ).toThrow(/exactly one home/u);
+  });
+
+  it("rejects a listed post without a date and a pinned special post", () => {
+    expect(() =>
+      assembleSnapshot(
+        withInput({ posts: replacePost("entry-a", { date: null }) }),
+      ),
+    ).toThrow(/requires a date/u);
+    expect(() =>
+      assembleSnapshot(
+        withInput({ posts: replacePost("home-id", { pinOrder: 1 }) }),
+      ),
+    ).toThrow(/cannot be pinned/u);
   });
 
   it("rejects an invalid generation timestamp at the schema boundary", () => {

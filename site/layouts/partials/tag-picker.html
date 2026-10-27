@@ -1,6 +1,6 @@
 {{ $tagLabels := dict }}
-{{ range hugo.Data.publication.entries }}
-	{{ range .tags }}
+{{ range . }}
+	{{ range .Params.tags }}
 		{{ $tagLabels = merge $tagLabels (dict .key .label) }}
 	{{ end }}
 {{ end }}

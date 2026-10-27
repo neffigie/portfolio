@@ -141,3 +141,39 @@ test("index reconstructs state after browser history navigation", async ({
   ).toHaveCount(1);
   await expect(indexResults(page)).toHaveText(["Search as Navigation"]);
 });
+
+test("the unfiltered index is served complete without loading search", async ({
+  page,
+}) => {
+  const searchRequests: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/pagefind/"))
+      searchRequests.push(request.url());
+  });
+  await page.goto("/index/");
+  await expect(
+    page.locator("[data-index-root] [data-search-status]"),
+  ).toHaveText("2 results");
+  await expect(indexResults(page)).toHaveText([
+    "Publication Compiler",
+    "Search as Navigation",
+  ]);
+  await expect(page.locator("[data-index-root] time").first()).toHaveText(
+    "Sep 20, 2026",
+  );
+  await page.waitForLoadState("networkidle");
+  expect(searchRequests).toEqual([]);
+});
+
+test("shared tag links match regardless of letter case", async ({ page }) => {
+  await page.goto("/index/?tag=systems");
+  await expect(
+    page.locator('[data-index-root] [data-remove-tag="Systems"]'),
+  ).toHaveCount(1);
+  await expect(
+    page.locator("[data-index-root] [data-search-status]"),
+  ).toHaveText("2 results");
+  await expect(page.locator("[data-index-root] time").first()).toHaveText(
+    "Sep 20, 2026",
+  );
+});

@@ -1,10 +1,10 @@
 <li class="pinned-entry" data-pinned-entry>
 	<div>
-		<a href="{{ .route }}">{{ .title }}</a>
-		{{ with .previewText }}<p>{{ . }}</p>{{ end }}
+		<a href="{{ .RelPermalink }}">{{ .Title }}</a>
+		{{ with .Params.previewText }}<p>{{ . }}</p>{{ end }}
 	</div>
 	<div class="pinned-entry-meta">
-		<span>{{ .type }}</span>
-		<time datetime="{{ time.Format "2006-01-02" .date }}">{{ time.Format "Jan 2, 2006" .date }}</time>
+		<span>{{ .Params.postKind }}</span>
+		<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
 	</div>
 </li>
