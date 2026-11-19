@@ -28,6 +28,16 @@ const entryFields = [
   "collectionId",
 ].join(",");
 
+const socialLinkFields = [
+  "id",
+  "service",
+  "label",
+  "href",
+  "sort_order",
+  "enabled",
+  "updated",
+].join(",");
+
 export interface PocketBaseCredentials {
   url: string;
   superuserEmail: string;
@@ -75,6 +85,12 @@ export async function createPocketBaseSource(
         totalPages: result.totalPages,
         items: result.items,
       };
+    },
+    async listSocialLinks() {
+      return client.collection("social_links").getFullList({
+        sort: "id",
+        fields: socialLinkFields,
+      });
     },
   };
   const fileGateway: PocketBaseFileGateway = {

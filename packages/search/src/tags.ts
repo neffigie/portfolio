@@ -62,8 +62,6 @@ export class TagPicker {
   }
 
   render(tags: readonly string[]): void {
-    // Pagefind filters match exactly, so shared URLs such as ?tag=app must
-    // resolve to the published label ("App").
     const labels = new Map(
       this.options.map((option) => [
         option.value.toLocaleLowerCase(),
@@ -99,7 +97,7 @@ export class TagPicker {
       button.type = "button";
       button.className = "tag-pill";
       button.dataset.removeTag = tag;
-      button.setAttribute("aria-label", `Remove ${tag} tag`);
+      button.setAttribute("aria-label", `remove ${tag} tag`);
       button.textContent = `${tag} ×`;
       return button;
     });

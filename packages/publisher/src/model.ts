@@ -38,6 +38,44 @@ export const SourceRecordSchema = z.strictObject({
 });
 export type SourceRecord = z.infer<typeof SourceRecordSchema>;
 
+export const SocialServiceSchema = z.enum([
+  "email",
+  "linkedin",
+  "github",
+  "tiktok",
+  "instagram",
+  "youtube",
+  "x",
+  "itchio",
+  "twitch",
+]);
+export type SocialService = z.infer<typeof SocialServiceSchema>;
+
+export const SourceSocialLinkSchema = z.strictObject({
+  id: z.string().min(1),
+  service: SocialServiceSchema,
+  label: z.string().min(1),
+  href: z.string().min(1),
+  sortOrder: z.number().int().positive(),
+  enabled: z.boolean(),
+  updated: z.string().min(1),
+});
+export type SourceSocialLink = z.infer<typeof SourceSocialLinkSchema>;
+
+export const SocialLinkSchema = z.strictObject({
+  service: SocialServiceSchema,
+  label: z.string().min(1),
+  href: z
+    .string()
+    .refine(
+      (value) =>
+        /^https:\/\//u.test(value) || /^mailto:[^@\s]+@[^@\s]+$/u.test(value),
+      "Social link href must use HTTPS or mailto.",
+    ),
+  sortOrder: z.number().int().positive(),
+});
+export type SocialLink = z.infer<typeof SocialLinkSchema>;
+
 export const NormalizedTagSchema = z.strictObject({
   key: z.string().min(1),
   label: z.string().min(1),
@@ -156,6 +194,7 @@ export const PublicationSnapshotSchema = z
     fullContentFingerprint: fingerprintSchema,
     generatedAt: instantSchema,
     posts: z.array(PostSchema),
+    socialLinks: z.array(SocialLinkSchema),
     media: z.array(MediaManifestEntrySchema),
     compiler: z.strictObject({
       name: z.literal("@portfolio/publisher"),

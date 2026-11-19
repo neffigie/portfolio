@@ -92,5 +92,5 @@ export function serializeSearchParams(
 
 export function stateToIndexUrl(input: SearchStateInput): string {
   const query = serializeSearchParams(input).toString();
-  return query ? `/index/?${query}` : "/index/";
+  return query ? `/posts/?${query}` : "/posts/";
 }

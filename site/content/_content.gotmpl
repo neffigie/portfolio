@@ -1,6 +1,6 @@
 {{ $publication := hugo.Data.publication }}
-{{ if ne (int $publication.schemaVersion) 2 }}
-	{{ errorf "Unsupported publication snapshot schema version %v; expected 2" $publication.schemaVersion }}
+{{ if ne (int $publication.schemaVersion) 3 }}
+	{{ errorf "Unsupported publication snapshot schema version %v; expected 3" $publication.schemaVersion }}
 {{ end }}
 
 {{/* Every post becomes one Hugo page; its kind selects the layout. The home
@@ -9,6 +9,8 @@
 {{ range $publication.posts }}
 	{{ $dates := dict "lastmod" (time.AsTime .updated) }}
 	{{ with .date }}{{ $dates = merge $dates (dict "date" (time.AsTime .)) }}{{ end }}
+	{{ $path := .slug }}
+	{{ if or (eq .kind "writing") (eq .kind "project") }}{{ $path = printf "p/%s" .slug }}{{ end }}
 	{{ $page := dict
 		"content" (dict "mediaType" "text/html" "value" .html)
 		"dates" $dates
@@ -22,7 +24,7 @@
 			"asset" .asset
 			"contentFingerprint" .contentFingerprint
 		)
-		"path" .slug
+		"path" $path
 		"title" .title
 		"type" (index $layouts .kind)
 	}}
@@ -32,12 +34,21 @@
 	{{ $.AddPage $page }}
 {{ end }}
 
+{{/* The breaking post prefix is a routing namespace, not a browsable section. */}}
+{{ $.AddPage (dict
+	"build" (dict "render" "never" "list" "never")
+	"content" (dict "mediaType" "text/html" "value" "")
+	"kind" "section"
+	"path" "p"
+	"title" "posts"
+) }}
+
 {{ $.AddPage (dict
 	"content" (dict "mediaType" "text/html" "value" "")
 	"kind" "page"
-	"params" (dict "previewText" "Browse every published project and piece of writing.")
-	"path" "index"
-	"title" "Index"
+	"params" (dict "previewText" "")
+	"path" "posts"
+	"title" "posts"
 	"type" "corpus-index"
 )
 }}

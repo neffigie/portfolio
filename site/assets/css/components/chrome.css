@@ -1,6 +1,5 @@
 @layer components {
-  .site-header,
-  .site-footer {
+  .site-header {
     border-block: 1px solid var(--border-default);
     padding-block: var(--space-3);
   }
@@ -12,9 +11,8 @@
   .site-identity {
     display: inline-flex;
     align-items: baseline;
-    gap: 0.5em;
-    font-size: 1.2rem;
-    font-weight: 700;
+    justify-self: start;
+    font-size: var(--type-body);
     line-height: 1;
     text-decoration: none;
     white-space: nowrap;
@@ -37,35 +35,26 @@
   }
 
   .site-mark {
-    --brand-mark-height: 0.85rem;
+    --brand-mark-height: 1.125rem;
     --brand-mark-ratio: 1.606;
-    transform: translateY(0.1em);
   }
 
-  .social-link {
-    display: grid;
-    width: 2rem;
-    height: 2rem;
-    place-items: center;
-    color: var(--text-muted);
+  .primary-navigation a,
+  .search-launcher {
+    font-size: var(--type-body);
+  }
+
+  .primary-navigation a {
     text-decoration: none;
   }
 
-  .social-link:hover {
-    color: var(--text-primary);
+  .primary-navigation a[aria-current="page"] {
+    background-image: linear-gradient(currentcolor, currentcolor);
+    background-size: 100% 1px;
   }
 
-  .social-icon {
-    width: 1rem;
-    height: 1rem;
-    fill: currentcolor;
-  }
-
-  .social-link-email .social-icon {
-    fill: none;
-    stroke: currentcolor;
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+  .search-launcher {
+    border: 0;
+    padding-inline: 0;
   }
 }

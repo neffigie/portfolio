@@ -1,72 +1,157 @@
-[
-  {
-    "id": "home-id",
-    "title": "Anna Noelle",
-    "slug": "home",
-    "bodyHtml": "<p><strong>Anna Noelle</strong> is a software engineer building durable publishing and search systems.</p><p>I design tools that make complex work legible and calm infrastructure easier to operate.</p><p>I keep fieldnotes on systems, interfaces, and the decisions that make them durable.</p>",
-    "type": null,
-    "tags": [],
-    "date": null,
-    "pinOrder": null,
-    "asset": null,
-    "created": "2026-09-01T12:00:00.000Z",
-    "updated": "2026-09-20T12:00:00.000Z"
-  },
-  {
-    "id": "resume-id",
-    "title": "Résumé",
-    "slug": "resume",
-    "bodyHtml": "",
-    "type": null,
-    "tags": [],
-    "date": null,
-    "pinOrder": null,
-    "asset": {
-      "kind": "pocketbase-file",
-      "recordId": "resume-id",
-      "collectionId": "entries",
-      "fileName": "anna-noelle-resume.pdf"
+{
+  "records": [
+    {
+      "id": "home-id",
+      "title": "Anna Noelle",
+      "slug": "home",
+      "bodyHtml": "<p><strong>Anna Noelle</strong> is a software engineer building durable publishing and search systems.</p><p>I design tools that make complex work legible and calm infrastructure easier to operate.</p><p>I keep fieldnotes on systems, interfaces, and the decisions that make them durable.</p>",
+      "type": null,
+      "tags": [],
+      "date": null,
+      "pinOrder": null,
+      "asset": null,
+      "created": "2026-09-01T12:00:00.000Z",
+      "updated": "2026-09-20T12:00:00.000Z"
     },
-    "created": "2026-09-01T12:00:00.000Z",
-    "updated": "2026-09-20T12:00:00.000Z"
-  },
-  {
-    "id": "project-one-id",
-    "title": "Publication Compiler",
-    "slug": "project-one",
-    "bodyHtml": "<h2>Durable publishing</h2><p>Canonical snapshots keep deployments reproducible without coupling the website to its authoring service.</p><blockquote><p>Publishing is a boundary, not a runtime dependency.</p></blockquote>",
-    "type": "project",
-    "tags": ["TypeScript", "AWS", "Systems"],
-    "date": "2026-09-20",
-    "pinOrder": 2,
-    "asset": null,
-    "created": "2026-09-01T12:00:00.000Z",
-    "updated": "2026-09-20T12:00:00.000Z"
-  },
-  {
-    "id": "writing-one-id",
-    "title": "Search as Navigation",
-    "slug": "writing-one",
-    "bodyHtml": "<h2>One corpus</h2><p>The index is the information architecture: query, type, and tags reveal the same body of work from different angles.</p><pre><code class=\"language-ts\">const index = entries.filter(matchesIntent);</code></pre><h2>Reading notes</h2><ul><li>Query, type, and tags are one state.</li><li>Every view is a link.<ul><li>Shared links restore that view.</li></ul></li></ul><p>Reference: https://doi.org/10.5824/example.2022.01.003.an-unbroken-citation-that-is-wider-than-a-phone</p>",
-    "type": "writing",
-    "tags": ["TypeScript", "Search", "Systems"],
-    "date": "2026-08-20",
-    "pinOrder": 1,
-    "asset": null,
-    "created": "2026-09-01T12:00:00.000Z",
-    "updated": "2026-09-20T12:00:00.000Z"
-  },
-  {
-    "id": "draft-id",
-    "title": "Unpublished Notes",
-    "slug": "draft-notes",
-    "bodyHtml": "<p>draft-only-canary</p>",
-    "type": null,
-    "tags": ["Draft"],
-    "date": null,
-    "pinOrder": null,
-    "asset": null,
-    "created": "2026-09-01T12:00:00.000Z",
-    "updated": "2026-09-20T12:00:00.000Z"
-  }
-]
+    {
+      "id": "resume-id",
+      "title": "Résumé",
+      "slug": "resume",
+      "bodyHtml": "",
+      "type": null,
+      "tags": [],
+      "date": null,
+      "pinOrder": null,
+      "asset": {
+        "kind": "pocketbase-file",
+        "recordId": "resume-id",
+        "collectionId": "entries",
+        "fileName": "anna-noelle-resume.pdf"
+      },
+      "created": "2026-09-01T12:00:00.000Z",
+      "updated": "2026-09-20T12:00:00.000Z"
+    },
+    {
+      "id": "project-one-id",
+      "title": "Publication Compiler",
+      "slug": "project-one",
+      "bodyHtml": "<h2>Durable publishing</h2><p>Canonical snapshots keep deployments reproducible without coupling the website to its authoring service.</p><blockquote><p>Publishing is a boundary, not a runtime dependency.</p></blockquote>",
+      "type": "project",
+      "tags": ["typescript", "aws", "systems"],
+      "date": "2026-09-20",
+      "pinOrder": 2,
+      "asset": null,
+      "created": "2026-09-01T12:00:00.000Z",
+      "updated": "2026-09-20T12:00:00.000Z"
+    },
+    {
+      "id": "writing-one-id",
+      "title": "Search as Navigation",
+      "slug": "writing-one",
+      "bodyHtml": "<h2>One corpus</h2><p>The index is the information architecture: query, type, and tags reveal the same body of work from different angles.</p><pre><code class=\"language-ts\">const index = entries.filter(matchesIntent);</code></pre><h2>Reading notes</h2><ul><li>Query, type, and tags are one state.</li><li>Every view is a link.<ul><li>Shared links restore that view.</li></ul></li></ul><p>Reference: https://doi.org/10.5824/example.2022.01.003.an-unbroken-citation-that-is-wider-than-a-phone</p>",
+      "type": "writing",
+      "tags": ["typescript", "search", "systems"],
+      "date": "2026-08-20",
+      "pinOrder": 1,
+      "asset": null,
+      "created": "2026-09-01T12:00:00.000Z",
+      "updated": "2026-09-20T12:00:00.000Z"
+    },
+    {
+      "id": "draft-id",
+      "title": "Unpublished Notes",
+      "slug": "draft-notes",
+      "bodyHtml": "<p>draft-only-canary</p>",
+      "type": null,
+      "tags": ["draft"],
+      "date": null,
+      "pinOrder": null,
+      "asset": null,
+      "created": "2026-09-01T12:00:00.000Z",
+      "updated": "2026-09-20T12:00:00.000Z"
+    }
+  ],
+  "socialLinks": [
+    {
+      "id": "email-id",
+      "service": "email",
+      "label": "anna@neffigie.com",
+      "href": "mailto:anna@neffigie.com",
+      "sortOrder": 1,
+      "enabled": true,
+      "updated": "2026-11-18T12:00:00.000Z"
+    },
+    {
+      "id": "linkedin-id",
+      "service": "linkedin",
+      "label": "linkedin",
+      "href": "https://www.linkedin.com/in/anna-noelle/",
+      "sortOrder": 2,
+      "enabled": true,
+      "updated": "2026-11-18T12:00:00.000Z"
+    },
+    {
+      "id": "github-id",
+      "service": "github",
+      "label": "github",
+      "href": "https://github.com/neffigie",
+      "sortOrder": 3,
+      "enabled": true,
+      "updated": "2026-11-18T12:00:00.000Z"
+    },
+    {
+      "id": "tiktok-id",
+      "service": "tiktok",
+      "label": "tiktok",
+      "href": "https://www.tiktok.com/@its.neffigie",
+      "sortOrder": 10,
+      "enabled": true,
+      "updated": "2026-11-18T12:00:00.000Z"
+    },
+    {
+      "id": "instagram-id",
+      "service": "instagram",
+      "label": "instagram",
+      "href": "https://www.instagram.com/neffigie/",
+      "sortOrder": 11,
+      "enabled": true,
+      "updated": "2026-11-18T12:00:00.000Z"
+    },
+    {
+      "id": "youtube-id",
+      "service": "youtube",
+      "label": "youtube",
+      "href": "https://www.youtube.com/@neffigie",
+      "sortOrder": 12,
+      "enabled": true,
+      "updated": "2026-11-18T12:00:00.000Z"
+    },
+    {
+      "id": "x-id",
+      "service": "x",
+      "label": "x/twitter",
+      "href": "https://x.com/neffigie",
+      "sortOrder": 13,
+      "enabled": true,
+      "updated": "2026-11-18T12:00:00.000Z"
+    },
+    {
+      "id": "itchio-id",
+      "service": "itchio",
+      "label": "itch.io",
+      "href": "https://neffigie.itch.io/",
+      "sortOrder": 20,
+      "enabled": false,
+      "updated": "2026-11-18T12:00:00.000Z"
+    },
+    {
+      "id": "twitch-id",
+      "service": "twitch",
+      "label": "twitch",
+      "href": "https://www.twitch.tv/neffigie",
+      "sortOrder": 21,
+      "enabled": false,
+      "updated": "2026-11-18T12:00:00.000Z"
+    }
+  ]
+}

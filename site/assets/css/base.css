@@ -14,8 +14,29 @@
   }
 
   a {
+    background-image: linear-gradient(
+      90deg,
+      #ff3d81,
+      #ff9f1c,
+      #ffe66d,
+      #2ec4b6,
+      #3a86ff,
+      #8338ec
+    );
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
     color: var(--interactive);
-    text-underline-offset: 0.2em;
+    text-decoration: none;
+    transition: background-size 150ms ease-out;
+  }
+
+  a:not(.site-identity):is(:hover, :focus-visible) {
+    background-size: 100% 1px;
+  }
+
+  .site-identity {
+    background-image: none;
   }
 
   button,

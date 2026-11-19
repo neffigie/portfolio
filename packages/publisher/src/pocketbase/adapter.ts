@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 import type { AssetFetcher, MediaSourceResolver } from "../media/types.js";
-import type { SourceRecord } from "../model.js";
-import { mapPocketBaseEntry } from "./types.js";
+import type { SourceRecord, SourceSocialLink } from "../model.js";
+import { mapPocketBaseEntry, mapPocketBaseSocialLink } from "./types.js";
 
 const pageSchema = z.object({
   page: z.number().int().positive(),
@@ -35,10 +35,12 @@ export interface PocketBaseRecordGateway {
     page: number,
     perPage: number,
   ): Promise<{ page: number; totalPages: number; items: unknown[] }>;
+  listSocialLinks?(): Promise<unknown[]>;
 }
 
 export interface PocketBaseSource {
   listSourceRecords(): Promise<SourceRecord[]>;
+  listSourceSocialLinks(): Promise<SourceSocialLink[]>;
   assetFetcher: AssetFetcher;
   resolveMediaSource: MediaSourceResolver;
 }
@@ -71,7 +73,7 @@ export function toPocketBaseSourceError(error: unknown): PocketBaseSourceError {
 
 export function createPocketBaseSourceFromGateway(
   gateway: PocketBaseRecordGateway,
-): Pick<PocketBaseSource, "listSourceRecords"> {
+): Pick<PocketBaseSource, "listSourceRecords" | "listSourceSocialLinks"> {
   return {
     async listSourceRecords(): Promise<SourceRecord[]> {
       const records: unknown[] = [];
@@ -91,6 +93,19 @@ export function createPocketBaseSourceFromGateway(
 
         return records
           .map((record) => mapPocketBaseEntry(record))
+          .sort((left, right) => left.id.localeCompare(right.id));
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          throw new PocketBaseSourceError("pocketbase.response");
+        }
+        throw toPocketBaseSourceError(error);
+      }
+    },
+    async listSourceSocialLinks(): Promise<SourceSocialLink[]> {
+      try {
+        const items = (await gateway.listSocialLinks?.()) ?? [];
+        return items
+          .map(mapPocketBaseSocialLink)
           .sort((left, right) => left.id.localeCompare(right.id));
       } catch (error) {
         if (error instanceof z.ZodError) {

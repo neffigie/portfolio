@@ -166,8 +166,8 @@ describe("buildPublicationSnapshot", () => {
     expect(posts.map(({ kind, route }) => [kind, route])).toEqual([
       ["home", "/"],
       ["resume", "/resume"],
-      ["project", "/project-one"],
-      ["writing", "/writing-one"],
+      ["project", "/p/project-one"],
+      ["writing", "/p/writing-one"],
     ]);
     expect(
       posts.filter(({ pinOrder }) => pinOrder !== null).map(({ slug }) => slug),

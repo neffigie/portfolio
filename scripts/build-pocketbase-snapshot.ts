@@ -21,7 +21,10 @@ const outputDirectory = resolve(
 
 const credentials = readPocketBaseEnvironment(process.env);
 const source = await createPocketBaseSource(credentials);
-const records = await source.listSourceRecords();
+const [records, socialLinks] = await Promise.all([
+  source.listSourceRecords(),
+  source.listSourceSocialLinks(),
+]);
 const artifacts = await buildPublicationSnapshot(records, {
   outputDirectory,
   generatedAt: new Date().toISOString(),
@@ -30,6 +33,7 @@ const artifacts = await buildPublicationSnapshot(records, {
   contentPipelineVersion: CONTENT_PIPELINE_VERSION,
   assetFetcher: source.assetFetcher,
   resolveMediaSource: source.resolveMediaSource,
+  socialLinks,
 });
 await installPublication(outputDirectory);
 

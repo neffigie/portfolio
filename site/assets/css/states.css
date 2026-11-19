@@ -21,5 +21,9 @@
     *::after {
       scroll-behavior: auto;
     }
+
+    a {
+      transition-duration: 0s;
+    }
   }
 }

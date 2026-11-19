@@ -1,15 +1,19 @@
 <header class="site-header">
+	{{ $path := .RelPermalink }}
+	{{ $homeActive := .IsHome }}
+	{{ $resumeActive := eq $path "/resume/" }}
+	{{ $postsActive := or (eq $path "/posts/") (strings.HasPrefix $path "/p/") }}
 	<div class="site-frame site-header-inner">
-		<a class="site-identity" href="/">
+		<a class="site-identity" href="/" aria-label="home">
 			{{ partial "brand-mark.html" (dict "name" "header" "class" "site-mark" "alt" "") }}
-			<span class="site-name">Anna Noelle</span>
 		</a>
-		<nav aria-label="Primary">
+		<nav class="primary-navigation-wrap" aria-label="primary">
 			<ul class="primary-navigation">
-				<li><a href="/resume/">Résumé</a></li>
-				<li><a href="/index/">Index</a></li>
+				<li><a href="/"{{ if $homeActive }} aria-current="page"{{ end }}>home</a></li>
+				<li><a href="/resume/"{{ if $resumeActive }} aria-current="page"{{ end }}>resume</a></li>
+				<li><a href="/posts/"{{ if $postsActive }} aria-current="page"{{ end }}>posts</a></li>
 			</ul>
 		</nav>
-		<button type="button" aria-haspopup="dialog" aria-controls="search-everywhere" data-search-open>Search</button>
+		<button class="search-launcher" type="button" aria-haspopup="dialog" aria-controls="search-everywhere" data-search-open>search</button>
 	</div>
 </header>

@@ -1,6 +1,11 @@
 import { z } from "zod";
 
-import { type SourceRecord, SourceRecordSchema } from "../model.js";
+import {
+  type SourceRecord,
+  SourceRecordSchema,
+  type SourceSocialLink,
+  SourceSocialLinkSchema,
+} from "../model.js";
 
 export const PocketBaseEntryRecordSchema = z.strictObject({
   id: z.string().min(1),
@@ -18,6 +23,16 @@ export const PocketBaseEntryRecordSchema = z.strictObject({
 });
 
 export type PocketBaseEntryRecord = z.infer<typeof PocketBaseEntryRecordSchema>;
+
+export const PocketBaseSocialLinkRecordSchema = z.strictObject({
+  id: z.string().min(1),
+  service: z.string(),
+  label: z.string(),
+  href: z.string(),
+  sort_order: z.number().int().nonnegative(),
+  enabled: z.boolean(),
+  updated: z.string().min(1),
+});
 
 const blockElement =
   "address|article|aside|blockquote|dd|details|div|dl|dt|fieldset|figcaption|figure|footer|form|h[1-6]|header|hr|li|main|nav|ol|p|pre|section|table|ul";
@@ -56,6 +71,21 @@ export function mapPocketBaseEntry(recordInput: unknown): SourceRecord {
             fileName: record.asset,
           },
     created: record.created,
+    updated: record.updated,
+  });
+}
+
+export function mapPocketBaseSocialLink(
+  recordInput: unknown,
+): SourceSocialLink {
+  const record = PocketBaseSocialLinkRecordSchema.parse(recordInput);
+  return SourceSocialLinkSchema.parse({
+    id: record.id,
+    service: record.service,
+    label: record.label,
+    href: record.href,
+    sortOrder: record.sort_order,
+    enabled: record.enabled,
     updated: record.updated,
   });
 }

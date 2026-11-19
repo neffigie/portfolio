@@ -8,7 +8,7 @@ import {
   buildPublicationSnapshot,
 } from "../build-snapshot.js";
 import { CompilationFailure, formatDiagnostics } from "../diagnostics.js";
-import { SourceRecordSchema } from "../model.js";
+import { SourceRecordSchema, SourceSocialLinkSchema } from "../model.js";
 import { CONTENT_PIPELINE_VERSION, PUBLISHER_VERSION } from "../version.js";
 import { parseCliArguments, unexpectedDiagnostics } from "./arguments.js";
 import {
@@ -33,8 +33,11 @@ export async function runCli(
   try {
     const options = parseCliArguments(args);
     const sourcePath = resolve(options.source);
-    const records = z
-      .array(SourceRecordSchema)
+    const source = z
+      .object({
+        records: z.array(SourceRecordSchema),
+        socialLinks: z.array(SourceSocialLinkSchema).default([]),
+      })
       .parse(JSON.parse(await readFile(sourcePath, "utf8")));
     const dependencies: BuildPublicationDependencies = {
       outputDirectory: resolve(options.out),
@@ -44,8 +47,12 @@ export async function runCli(
       contentPipelineVersion: CONTENT_PIPELINE_VERSION,
       assetFetcher: createLocalAssetFetcher(dirname(sourcePath)),
       resolveMediaSource: resolveLocalMediaSource,
+      socialLinks: source.socialLinks,
     };
-    const artifacts = await buildPublicationSnapshot(records, dependencies);
+    const artifacts = await buildPublicationSnapshot(
+      source.records,
+      dependencies,
+    );
     const unexpected = unexpectedDiagnostics(
       artifacts.diagnostics,
       options.allowedWarnings,

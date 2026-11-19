@@ -29,6 +29,7 @@ export interface SearchResult {
   type: "writing" | "project";
   date: string;
   tags: string[];
+  pinOrder: number | null;
 }
 
 export interface SearchResponse {
@@ -80,6 +81,9 @@ function toSearchResult(data: PagefindResultData): SearchResult {
     type: data.meta.type === "writing" ? "writing" : "project",
     date: data.meta.date ?? "",
     tags: parseTags(data.meta.tags),
+    pinOrder: /^[1-9]\d*$/u.test(data.meta.pinOrder ?? "")
+      ? Number(data.meta.pinOrder)
+      : null,
   };
 }
 
@@ -104,10 +108,31 @@ export async function searchEntries(
   const response = await client.search(state.query || null, options);
   const offset = Math.max(0, page.offset ?? 0);
   const limit = Math.max(1, page.limit ?? 20);
-  const batch = response.results.slice(offset, offset + limit);
-  const results = await Promise.all(
-    batch.map(async (result) => toSearchResult(await result.data())),
-  );
+  let allResults: SearchResult[] | null = null;
+
+  if (!state.query && state.sort === "newest") {
+    allResults = await Promise.all(
+      response.results.map(async (result) =>
+        toSearchResult(await result.data()),
+      ),
+    );
+    allResults.sort((left, right) => {
+      if (left.pinOrder !== null && right.pinOrder !== null) {
+        return left.pinOrder - right.pinOrder;
+      }
+      if (left.pinOrder !== null) return -1;
+      if (right.pinOrder !== null) return 1;
+      return right.date.localeCompare(left.date);
+    });
+  }
+
+  const results = allResults
+    ? allResults.slice(offset, offset + limit)
+    : await Promise.all(
+        response.results
+          .slice(offset, offset + limit)
+          .map(async (result) => toSearchResult(await result.data())),
+      );
 
   return {
     total: response.results.length,

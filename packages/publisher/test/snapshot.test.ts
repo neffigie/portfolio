@@ -99,6 +99,14 @@ const baseInput: SnapshotInput = {
   sourceRevisionFingerprint: sourceHashA,
   generatedAt: "2026-09-20T15:00:00.000Z",
   posts: [entryB, resume, entryA, home],
+  socialLinks: [
+    {
+      service: "email",
+      label: "anna@neffigie.com",
+      href: "mailto:anna@neffigie.com",
+      sortOrder: 1,
+    },
+  ],
   media: [mediaA],
   compiler: {
     version: "0.0.0",
@@ -120,7 +128,7 @@ describe("assembleSnapshot", () => {
   it("assembles a validated, deterministically ordered snapshot", () => {
     const snapshot = assembleSnapshot(baseInput);
 
-    expect(snapshot.schemaVersion).toBe(2);
+    expect(snapshot.schemaVersion).toBe(3);
     expect(snapshot.posts.map(({ sourceId }) => sourceId)).toEqual([
       "home-id",
       "resume-id",
@@ -128,6 +136,7 @@ describe("assembleSnapshot", () => {
       "entry-b",
     ]);
     expect(snapshot.fullContentFingerprint).toMatch(/^[0-9a-f]{64}$/u);
+    expect(snapshot.socialLinks).toEqual(baseInput.socialLinks);
   });
 
   it("keeps the full-content identity stable across clocks and source revisions", () => {

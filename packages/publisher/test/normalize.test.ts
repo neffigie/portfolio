@@ -84,7 +84,7 @@ describe("normalizeRecords", () => {
     expect(corpus).not.toHaveProperty("about");
     expect(corpus.resume?.route).toBe("/resume");
     expect(corpus.drafts.map(({ slug }) => slug)).toEqual(["rough-notes"]);
-    expect(corpus.entries.map(({ route }) => route)).toEqual(["/my-project"]);
+    expect(corpus.entries.map(({ route }) => route)).toEqual(["/p/my-project"]);
   });
 
   it("reports every missing reserved record with a stable code", () => {
@@ -110,7 +110,7 @@ describe("normalizeRecords", () => {
         ...reservedRecords(),
         record("one", { slug: "My Project" }),
         record("two", { slug: "my-project", type: "project" }),
-        record("three", { slug: "index" }),
+        record("three", { slug: "posts" }),
       ],
       diagnostics,
     );

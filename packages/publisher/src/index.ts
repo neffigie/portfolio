@@ -29,4 +29,5 @@ export * from "./pocketbase/schema.js";
 export * from "./pocketbase/types.js";
 export * from "./routes.js";
 export * from "./snapshot.js";
+export * from "./social-links.js";
 export * from "./version.js";

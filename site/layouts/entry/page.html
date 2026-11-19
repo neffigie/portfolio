@@ -3,6 +3,7 @@
 {{ range .Params.tags }}{{ $labels = $labels | append .label }}{{ end }}
 <meta data-pagefind-meta="tags[content]" content="{{ $labels | jsonify }}">
 <meta data-pagefind-meta="preview[content]" content="{{ .Params.previewText }}">
+{{ with .Params.pinOrder }}<meta data-pagefind-meta="pinOrder[content]" content="{{ . }}">{{ end }}
 {{ end }}
 {{ define "main" }}
 <main class="site-main" id="main-content">

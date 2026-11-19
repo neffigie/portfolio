@@ -31,7 +31,6 @@ export function mountIndexPage(
     void controller.run(state);
   }
 
-  // Typing waits for a pause; filter changes search at once and supersede it.
   const typing = debounce(update, 150);
 
   view.form.addEventListener("submit", (event) => event.preventDefault());
@@ -47,6 +46,5 @@ export function mountIndexPage(
   view.root.addEventListener("search:tags-change", update);
   view.more?.addEventListener("click", () => void controller.loadMore());
   window.addEventListener("popstate", restoreFromUrl);
-  // Hugo already rendered the unfiltered list; only a shared URL needs a search.
   if (window.location.search) restoreFromUrl();
 }

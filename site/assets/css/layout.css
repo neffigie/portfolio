@@ -16,7 +16,7 @@
 
   .page-main-centered {
     display: grid;
-    align-content: center;
+    place-items: center;
     gap: var(--space-4);
   }
 
@@ -33,11 +33,10 @@
   }
 
   .site-header-inner {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    gap: var(--space-3);
-    justify-content: space-between;
+    gap: var(--space-2);
   }
 
   .site-footer-inner {
@@ -49,37 +48,24 @@
   }
 
   .primary-navigation,
-  .tag-list,
-  .social-links {
+  .tag-list {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
     list-style: none;
   }
 
-  .social-links {
-    flex-wrap: nowrap;
-    gap: 0.25rem;
+  .primary-navigation-wrap {
+    grid-column: 2;
   }
 
-  .search-filters {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-    align-items: start;
-    gap: var(--space-2);
+  .search-launcher {
+    justify-self: end;
   }
 
   .search-filters label {
     display: grid;
     gap: var(--space-1);
-  }
-
-  .search-filters > label > span {
-    line-height: 1.5rem;
-  }
-
-  .search-filters > label > :is(input, select) {
-    height: 2.5rem;
   }
 
   .search-query-row {
@@ -93,12 +79,8 @@
   }
 
   @media (max-width: 44rem) {
-    .site-header-inner {
-      align-items: flex-start;
-    }
-
     .primary-navigation {
-      width: 100%;
+      gap: var(--space-1);
     }
   }
 }

@@ -18,6 +18,7 @@ function clientWithResults(count = 0): PagefindClient {
             type: "project",
             date: "2026-09-20",
             tags: '["AWS","Hugo"]',
+            pinOrder: index === 10 ? "2" : undefined,
           },
         }),
       })),
@@ -65,7 +66,7 @@ describe("Pagefind search adapter", () => {
     });
   });
 
-  it("loads only the requested result batch", async () => {
+  it("paginates the pinned-first default result order", async () => {
     const client = clientWithResults(25);
 
     const response = await searchEntries(client, {}, { offset: 10, limit: 5 });
@@ -73,20 +74,89 @@ describe("Pagefind search adapter", () => {
     expect(response.total).toBe(25);
     expect(response.hasMore).toBe(true);
     expect(response.results.map((result) => result.url)).toEqual([
-      "/entry-10/",
+      "/entry-9/",
       "/entry-11/",
       "/entry-12/",
       "/entry-13/",
       "/entry-14/",
     ]);
     expect(response.results[0]).toEqual({
-      url: "/entry-10/",
-      title: "Entry 10",
-      supportingText: "Opening preview 10",
+      url: "/entry-9/",
+      title: "Entry 9",
+      supportingText: "Opening preview 9",
       type: "project",
       date: "2026-09-20",
       tags: ["AWS", "Hugo"],
+      pinOrder: null,
     });
+  });
+
+  it("orders an empty newest view by pin order before unpinned recency", async () => {
+    const client: PagefindClient = {
+      search: vi.fn(async () => ({
+        results: [
+          {
+            id: "newest",
+            data: async () => ({
+              url: "/newest/",
+              meta: { title: "Newest", date: "2026-11-01" },
+            }),
+          },
+          {
+            id: "pin-two",
+            data: async () => ({
+              url: "/pin-two/",
+              meta: { title: "Pin two", date: "2026-01-01", pinOrder: "2" },
+            }),
+          },
+          {
+            id: "pin-one",
+            data: async () => ({
+              url: "/pin-one/",
+              meta: { title: "Pin one", date: "2025-01-01", pinOrder: "1" },
+            }),
+          },
+        ],
+      })),
+    };
+
+    const response = await searchEntries(client, {});
+
+    expect(response.results.map(({ url }) => url)).toEqual([
+      "/pin-one/",
+      "/pin-two/",
+      "/newest/",
+    ]);
+  });
+
+  it("preserves Pagefind relevance order when a query is present", async () => {
+    const client: PagefindClient = {
+      search: vi.fn(async () => ({
+        results: [
+          {
+            id: "relevant",
+            data: async () => ({
+              url: "/relevant/",
+              meta: { title: "Relevant" },
+            }),
+          },
+          {
+            id: "pinned",
+            data: async () => ({
+              url: "/pinned/",
+              meta: { title: "Pinned", pinOrder: "1" },
+            }),
+          },
+        ],
+      })),
+    };
+
+    const response = await searchEntries(client, { query: "match" });
+
+    expect(response.results.map(({ url }) => url)).toEqual([
+      "/relevant/",
+      "/pinned/",
+    ]);
   });
 
   it("uses a relevant body passage but falls back to opening prose for title-only matches", async () => {

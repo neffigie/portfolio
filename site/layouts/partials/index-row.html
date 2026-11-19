@@ -1,9 +1,9 @@
 <li class="search-result" data-search-result>
-	<a class="search-result-link" href="{{ .RelPermalink }}">{{ .Title }}</a>
+	<a class="search-result-link" href="{{ .RelPermalink }}">{{ with .Params.pinOrder }}{{ partial "pin-icon.html" $ }}{{ end }}<span class="search-result-title">{{ .Title }}</span></a>
 	{{ with .Params.previewText }}<p class="search-result-preview" data-result-preview>{{ . }}</p>{{ end }}
 	<div class="search-result-meta">
 		<span>{{ .Params.postKind }}</span>
-		<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+		<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" | lower }}</time>
 		{{ range .Params.tags }}<span data-result-tag>{{ .label }}</span>{{ end }}
 	</div>
 </li>

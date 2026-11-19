@@ -1,19 +1,12 @@
 {{ define "main" }}
-{{ $home := site.GetPage "/home" }}
-<main class="site-main page-main-centered" id="main-content">
-	<section class="home-introduction reading-column" aria-labelledby="home-title">
+<main class="site-main page-main-centered home-page" id="main-content">
+	<section class="home-introduction" aria-labelledby="home-title">
 		<h1 id="home-title">
 			{{ partial "brand-mark.html" (dict "name" "sketch" "class" "home-mark" "alt" "Anna Noelle") }}
 		</h1>
-		<div class="prose">{{ $home.Content }}</div>
-		<p><a href="/resume/">View résumé</a></p>
-	</section>
-
-	<section class="pinned-entries reading-column" aria-labelledby="pinned-title">
-		<h2 id="pinned-title">Pinned</h2>
-		<ul class="pinned-list">
-			{{ range sort (where (partial "listed-posts.html" .) "Params.pinOrder" "!=" nil) "Params.pinOrder" }}
-				{{ partial "pinned-row.html" . }}
+		<ul class="home-social-links" aria-label="social links">
+			{{ range hugo.Data.publication.socialLinks }}
+				<li><a class="home-social-link" href="{{ .href }}"{{ if ne .service "email" }} rel="me"{{ end }}>{{ partial "social-icon.html" .service }}<span>{{ .label }}</span></a></li>
 			{{ end }}
 		</ul>
 	</section>

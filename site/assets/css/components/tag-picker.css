@@ -71,8 +71,7 @@
   }
 
   .tag-picker summary::after {
-    content: "⌄";
-    margin-left: auto;
+    content: none;
   }
 
   .tag-pill-list:not(:empty) + details summary span {

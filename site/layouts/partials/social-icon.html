@@ -1,0 +1,19 @@
+{{ $paths := dict
+	"email" "brand/social/email.svg"
+	"linkedin" "brand/social/linkedin.png"
+	"github" "brand/social/github.svg"
+	"tiktok" "brand/social/tiktok.png"
+	"instagram" "brand/social/instagram.png"
+	"youtube" "brand/social/youtube.png"
+	"x" "brand/social/x.svg"
+	"itchio" "brand/social/itchio.svg"
+	"twitch" "brand/social/twitch.svg"
+}}
+{{ $path := index $paths . }}
+{{ $asset := resources.Get $path }}
+{{ $url := $asset.RelPermalink }}
+{{ if strings.HasSuffix $path ".png" }}
+	{{ $asset = $asset.Process "resize x48 webp q92" }}
+	{{ $url = $asset.RelPermalink }}
+{{ end }}
+<span class="home-social-icon" aria-hidden="true"><img src="{{ $url }}" alt="" width="24" height="24"></span>

@@ -5,6 +5,7 @@ import {
   type Post,
   type PublicationSnapshot,
   PublicationSnapshotSchema,
+  type SocialLink,
 } from "./model.js";
 import { compareText } from "./ordering.js";
 import { CONTRACT_VERSION } from "./version.js";
@@ -13,6 +14,7 @@ export interface SnapshotInput {
   sourceRevisionFingerprint: string;
   generatedAt: string;
   posts: readonly Post[];
+  socialLinks?: readonly SocialLink[];
   media: readonly MediaManifestEntry[];
   compiler: {
     version: string;
@@ -63,6 +65,7 @@ function contentIdentityMaterial(snapshot: PublicationSnapshot): unknown {
         ...post
       }) => post,
     ),
+    socialLinks: snapshot.socialLinks,
     media: snapshot.media,
     compiler: snapshot.compiler,
   };
@@ -75,6 +78,7 @@ export function assembleSnapshot(input: SnapshotInput): PublicationSnapshot {
     fullContentFingerprint: "0".repeat(64),
     generatedAt: input.generatedAt,
     posts: [...input.posts].sort(comparePosts),
+    socialLinks: [...(input.socialLinks ?? [])],
     media: normalizeMedia(input.media),
     compiler: {
       name: "@portfolio/publisher",

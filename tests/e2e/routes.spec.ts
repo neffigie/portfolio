@@ -1,26 +1,35 @@
 import { expect, test } from "@playwright/test";
 
 const routes = [
-  { path: "/", title: "Anna Noelle", canonical: "https://www.neffigie.com/" },
   {
-    path: "/index/",
-    title: "Index · Anna Noelle",
-    canonical: "https://www.neffigie.com/index/",
+    path: "/",
+    title: "Anna Noelle",
+    canonical: "https://www.neffigie.com/",
+    activeNav: "home",
+  },
+  {
+    path: "/posts/",
+    title: "posts · Anna Noelle",
+    canonical: "https://www.neffigie.com/posts/",
+    activeNav: "posts",
   },
   {
     path: "/resume/",
     title: "Résumé · Anna Noelle",
     canonical: "https://www.neffigie.com/resume/",
+    activeNav: "resume",
   },
   {
-    path: "/project-one/",
+    path: "/p/project-one/",
     title: "Publication Compiler · Anna Noelle",
-    canonical: "https://www.neffigie.com/project-one/",
+    canonical: "https://www.neffigie.com/p/project-one/",
+    activeNav: "posts",
   },
   {
-    path: "/writing-one/",
+    path: "/p/writing-one/",
     title: "Search as Navigation · Anna Noelle",
-    canonical: "https://www.neffigie.com/writing-one/",
+    canonical: "https://www.neffigie.com/p/writing-one/",
+    activeNav: "posts",
   },
 ];
 
@@ -44,9 +53,42 @@ for (const route of routes) {
     await expect(page.getByRole("navigation", { name: "Primary" })).toHaveCount(
       1,
     );
-    await expect(page.locator("body > footer")).toHaveCount(1);
+    await expect(
+      page.locator('.primary-navigation a[aria-current="page"]'),
+    ).toHaveText(route.activeNav);
+    await expect(page.locator("body > footer")).toHaveCount(0);
   });
 }
+
+test("text links animate a rainbow underline while active navigation stays black", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const inactive = page.getByRole("link", { name: "resume", exact: true });
+  const active = page.locator('.primary-navigation a[aria-current="page"]');
+
+  const inactiveBefore = await inactive.evaluate((link) => {
+    const style = getComputedStyle(link);
+    return {
+      backgroundImage: style.backgroundImage,
+      backgroundSize: style.backgroundSize,
+      transitionDuration: style.transitionDuration,
+      transitionTimingFunction: style.transitionTimingFunction,
+    };
+  });
+  expect(inactiveBefore.backgroundImage).toContain("linear-gradient");
+  expect(inactiveBefore.backgroundSize).toBe("0% 1px");
+  expect(inactiveBefore.transitionDuration).toContain("0.15s");
+  expect(inactiveBefore.transitionTimingFunction).toContain("ease-out");
+
+  await inactive.hover();
+  await expect(inactive).toHaveCSS("background-size", "100% 1px");
+  await expect(active).toHaveCSS("background-size", "100% 1px");
+  const activeGradient = await active.evaluate(
+    (link) => getComputedStyle(link).backgroundImage,
+  );
+  expect(activeGradient.match(/rgb\(/gu)?.length).toBe(2);
+});
 
 test("the hand-drawn mark leads the page without creating horizontal overflow", async ({
   page,
@@ -70,9 +112,18 @@ test("the hand-drawn mark leads the page without creating horizontal overflow", 
     "Anna Noelle",
   );
   await expect(page.locator("#home-title .home-name")).toHaveCount(0);
-  await expect(
-    page.locator(".home-introduction .prose p").first().locator("strong"),
-  ).toHaveText("Anna Noelle");
+  await expect(page.locator(".home-introduction .prose")).toHaveCount(0);
+  await expect(page.locator(".home-social-link")).toHaveText([
+    "anna@neffigie.com",
+    "linkedin",
+    "github",
+    "tiktok",
+    "instagram",
+    "youtube",
+    "x/twitter",
+  ]);
+  await expect(page.getByRole("link", { name: "itch.io" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "twitch" })).toHaveCount(0);
 
   const homeMarkBox = await page
     .locator("#home-title .brand-mark")
@@ -85,14 +136,23 @@ test("the hand-drawn mark leads the page without creating horizontal overflow", 
   const bannerMarkBox = await page
     .locator(".site-identity .brand-mark")
     .boundingBox();
-  const bannerNameBox = await page
-    .locator(".site-identity .site-name")
-    .boundingBox();
-  if (!bannerMarkBox || !bannerNameBox) {
-    throw new Error("The banner mark and name must both have layout boxes");
+  if (!bannerMarkBox) {
+    throw new Error("The banner mark must have a layout box");
   }
-  expect(bannerMarkBox.height).toBeGreaterThan(16);
-  expect(bannerMarkBox.height).toBeLessThanOrEqual(bannerNameBox.height);
+  expect(bannerMarkBox.height).toBeGreaterThanOrEqual(12);
+  expect(bannerMarkBox.height).toBeGreaterThanOrEqual(17);
+  expect(bannerMarkBox.height).toBeLessThanOrEqual(21);
+
+  for (const control of [
+    page.locator(".primary-navigation a").first(),
+    page.locator(".search-launcher"),
+  ]) {
+    expect(
+      Number.parseFloat(
+        await control.evaluate((node) => getComputedStyle(node).fontSize),
+      ),
+    ).toBeGreaterThanOrEqual(16);
+  }
 
   const favicon16 = page.locator("link[rel='icon'][sizes='16x16']");
   const favicon32 = page.locator("link[rel='icon'][sizes='32x32']");
@@ -162,7 +222,7 @@ test("the public sitemap and feed exclude drafts and retired routes", async ({
   const sitemap = await (await request.get("/sitemap.xml")).text();
   const feed = await (await request.get("/index.xml")).text();
 
-  for (const path of ["/project-one/", "/writing-one/"]) {
+  for (const path of ["/p/project-one/", "/p/writing-one/"]) {
     expect(sitemap).toContain(path);
     expect(feed).toContain(path);
   }
@@ -170,15 +230,16 @@ test("the public sitemap and feed exclude drafts and retired routes", async ({
     expect(sitemap).not.toContain(path);
     expect(feed).not.toContain(path);
   }
-  expect(sitemap).toContain("/index/");
-  expect(feed).not.toContain("/index/");
+  expect(sitemap).toContain("/posts/");
+  expect(feed).not.toContain("/posts/");
+  expect(sitemap).not.toContain("/index/");
 });
 
 test("authored posts keep their rhythm inside a phone viewport", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/writing-one/");
+  await page.goto("/p/writing-one/");
 
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth),
@@ -236,14 +297,18 @@ test("unknown and removed routes show the navigable 404 page", async ({
   for (const route of ["/not-a-real-entry/", "/about/"]) {
     const response = await page.goto(route);
     expect(response?.status(), route).toBe(404);
-    await expect(
-      page.getByRole("heading", { name: "Page not found" }),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "error" })).toBeVisible();
     await expect(
       page.getByRole("navigation", { name: "Primary" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("link", { name: "Return home" }),
+      page.locator('.primary-navigation a[aria-current="page"]'),
+    ).toHaveCount(0);
+    await expect(
+      page.getByRole("link", { name: "return home" }),
     ).toHaveAttribute("href", "/");
+    await expect(page.locator(".not-found-content > p").first()).toHaveText(
+      "page not found",
+    );
   }
 });

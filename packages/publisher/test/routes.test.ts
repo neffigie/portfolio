@@ -6,13 +6,13 @@ describe("route manifest", () => {
   it.each([
     ["home", null, { classification: "reserved", route: "/" }],
     ["about", null, { classification: "draft", route: null }],
-    ["about", "writing", { classification: "published", route: "/about" }],
+    ["about", "writing", { classification: "published", route: "/p/about" }],
     ["resume", null, { classification: "reserved", route: "/resume" }],
     ["rough-notes", null, { classification: "draft", route: null }],
     [
       "My Project",
       "project",
-      { classification: "published", route: "/my-project" },
+      { classification: "published", route: "/p/my-project" },
     ],
   ] as const)("resolves %s according to its type", (slug, type, expected) => {
     expect(resolveRoute(slug, type)).toEqual(expected);
@@ -33,7 +33,7 @@ describe("route manifest", () => {
   );
 
   it("rejects protected published slugs", () => {
-    expect(resolveRoute("index", "writing")).toMatchObject({
+    expect(resolveRoute("posts", "writing")).toMatchObject({
       classification: "invalid",
       route: null,
       code: "route.protected-slug",

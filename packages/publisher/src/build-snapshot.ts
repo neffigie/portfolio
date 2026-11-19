@@ -21,10 +21,12 @@ import {
   type PublicationSnapshot,
   PublicationSnapshotSchema,
   type SourceRecord,
+  type SourceSocialLink,
 } from "./model.js";
 import { normalizeRecords } from "./normalize.js";
 import { publishResumeAsset } from "./resume-asset.js";
 import { assembleSnapshot } from "./snapshot.js";
+import { prepareSocialLinks } from "./social-links.js";
 
 export interface BuildPublicationDependencies {
   outputDirectory: string;
@@ -34,6 +36,7 @@ export interface BuildPublicationDependencies {
   contentPipelineVersion: number;
   assetFetcher: AssetFetcher;
   resolveMediaSource: MediaSourceResolver;
+  socialLinks?: readonly SourceSocialLink[];
 }
 
 export interface PublicationArtifacts {
@@ -128,6 +131,7 @@ export async function buildPublicationSnapshot(
       sourceRevisionFingerprint: revisionFingerprint,
       generatedAt: dependencies.generatedAt,
       posts,
+      socialLinks: prepareSocialLinks(dependencies.socialLinks ?? []),
       media: mediaResolver.manifest(),
       compiler: {
         version: dependencies.compilerVersion,

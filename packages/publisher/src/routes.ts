@@ -2,7 +2,7 @@ import type { EntryType } from "./model.js";
 
 export const ROUTE_MANIFEST = {
   reserved: { home: "/", resume: "/resume" },
-  protectedSegments: ["index", "resume", "assets", "pagefind", "404.html"],
+  protectedSegments: ["posts", "resume", "assets", "pagefind", "404.html"],
 } as const;
 
 export type ReservedSlug = keyof typeof ROUTE_MANIFEST.reserved;
@@ -67,7 +67,6 @@ export function resolveRoute(
     };
   }
 
-  // Special posts are identified by slug alone; their type is irrelevant.
   if (isReservedSlug(canonical)) {
     return {
       classification: "reserved",
@@ -87,5 +86,5 @@ export function resolveRoute(
     };
   }
 
-  return { classification: "published", route: `/${canonical}` };
+  return { classification: "published", route: `/p/${canonical}` };
 }

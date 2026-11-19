@@ -90,10 +90,10 @@ describe("search URL state", () => {
     expect(parseSearchParams(serializeSearchParams(state))).toEqual(state);
   });
 
-  it("builds the canonical index URL", () => {
+  it("builds the canonical posts URL", () => {
     expect(stateToIndexUrl({ query: "search", tags: ["systems", "AWS"] })).toBe(
-      "/index/?q=search&tag=systems&tag=AWS",
+      "/posts/?q=search&tag=systems&tag=AWS",
     );
-    expect(stateToIndexUrl({})).toBe("/index/");
+    expect(stateToIndexUrl({})).toBe("/posts/");
   });
 });

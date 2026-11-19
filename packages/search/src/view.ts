@@ -23,7 +23,7 @@ export class SearchResultsView {
 
   renderLoading(): void {
     this.root.setAttribute("aria-busy", "true");
-    this.status.textContent = "Searching…";
+    this.status.textContent = "searching…";
   }
 
   renderResults(response: SearchResponse, append = false): void {
@@ -57,6 +57,8 @@ export class DomSearchView extends SearchResultsView {
   readonly type: HTMLSelectElement;
   readonly tags: TagPicker;
   readonly sort: HTMLSelectElement;
+  readonly filterSummary: HTMLElement;
+  readonly filterCount: HTMLElement;
   private sortExplicit = false;
 
   constructor(root: HTMLElement) {
@@ -68,6 +70,12 @@ export class DomSearchView extends SearchResultsView {
       requiredElement(root, "[data-tag-picker]", "search"),
     );
     this.sort = requiredElement(root, "[data-search-sort]", "search");
+    this.filterSummary = requiredElement(
+      root,
+      "[data-filter-summary]",
+      "search",
+    );
+    this.filterCount = requiredElement(root, "[data-filter-count]", "search");
   }
 
   markSortExplicit(): void {
@@ -97,5 +105,19 @@ export class DomSearchView extends SearchResultsView {
     this.sort.value = state.sort;
     const defaultSort = state.query ? "relevance" : "newest";
     if (state.sort !== defaultSort) this.sortExplicit = true;
+
+    const activeFilterCount =
+      (state.type ? 1 : 0) +
+      state.tags.length +
+      (state.sort !== defaultSort ? 1 : 0);
+    this.filterCount.textContent = String(activeFilterCount);
+    this.filterCount.hidden = activeFilterCount === 0;
+    this.filterSummary.toggleAttribute("data-filtering", activeFilterCount > 0);
+    this.filterSummary.setAttribute(
+      "aria-label",
+      activeFilterCount === 0
+        ? "filters, none active"
+        : `filters, ${activeFilterCount} active`,
+    );
   }
 }

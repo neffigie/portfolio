@@ -3,8 +3,6 @@ import { copyFile, cp, mkdir, rename, rm } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-// The one public address of the site. Hugo's baseURL and the publisher's
-// internal-link origin are both derived from it.
 export const SITE_ORIGIN = "https://www.neffigie.com";
 
 export const repositoryRoot = fileURLToPath(new URL("../", import.meta.url));
@@ -19,7 +17,6 @@ function isMissing(error: unknown): boolean {
   );
 }
 
-/** Installs a committed publication directory into the Hugo site atomically. */
 export async function installPublication(
   outputDirectory: string,
 ): Promise<void> {

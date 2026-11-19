@@ -2,30 +2,35 @@
 {{ $posts := partial "listed-posts.html" . }}
 <main class="site-main index-page" id="main-content" data-index-root>
 	<h1>{{ .Title }}</h1>
-	<p>{{ .Params.previewText }}</p>
 	<form class="search-filters" data-search-filters role="search">
-		<label>
-			<span>Search</span>
-			<input type="search" name="q" autocomplete="off" data-search-query>
-		</label>
-		<label>
-			<span>Type</span>
-			<select name="type" data-search-type>
-				<option value="">All types</option>
-				<option value="writing">Writing</option>
-				<option value="project">Projects</option>
-			</select>
-		</label>
-		{{ partial "tag-picker.html" $posts }}
-		<label>
-			<span>Sort</span>
-			<select name="sort" data-search-sort>
-				<option value="newest">Newest</option>
-				<option value="oldest">Oldest</option>
-				<option value="title">Title</option>
-				<option value="relevance">Relevance</option>
-			</select>
-		</label>
+		<div class="posts-query-bar">
+			<label class="visually-hidden" for="posts-query">search posts</label>
+			<svg class="posts-query-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+			<input id="posts-query" type="search" name="q" placeholder="search posts" autocomplete="off" data-search-query>
+			<details class="posts-filter-disclosure">
+				<summary aria-label="filters, none active" data-filter-summary><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M7 12h10m-7 6h4"/></svg><span class="filter-label">filters</span><span class="filter-count" data-filter-count hidden>0</span></summary>
+			</details>
+			<div class="posts-filter-panel">
+					<label>
+						<span>type</span>
+						<select class="filter-value-control" name="type" data-search-type>
+							<option value="">all types</option>
+							<option value="writing">writing</option>
+							<option value="project">projects</option>
+						</select>
+					</label>
+					{{ partial "tag-picker.html" $posts }}
+					<label>
+						<span>sort</span>
+						<select class="filter-value-control" name="sort" data-search-sort>
+							<option value="newest">newest</option>
+							<option value="oldest">oldest</option>
+							<option value="title">title</option>
+							<option value="relevance">relevance</option>
+						</select>
+					</label>
+			</div>
+		</div>
 	</form>
 	<p class="search-status" role="status" aria-live="polite" data-search-status>{{ len $posts }} {{ cond (eq (len $posts) 1) "result" "results" }}</p>
 	<ul class="search-results" data-search-results>
@@ -33,6 +38,6 @@
 			{{ partial "index-row.html" . }}
 		{{ end }}
 	</ul>
-	<button type="button" data-search-more hidden>Show more results</button>
+	<button type="button" data-search-more hidden>show more results</button>
 </main>
 {{ end }}

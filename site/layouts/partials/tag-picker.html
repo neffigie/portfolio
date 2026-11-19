@@ -5,22 +5,22 @@
 	{{ end }}
 {{ end }}
 <div class="tag-picker" data-tag-picker>
-	<span class="tag-picker-label">Tags</span>
+	<span class="tag-picker-label">tags</span>
 	<div class="tag-picker-field" data-tag-field>
 		<div class="tag-pill-list" data-tag-pills aria-live="polite"></div>
 		<details data-tag-disclosure>
-			<summary aria-label="Add tags"><span>Add tags</span></summary>
+			<summary class="filter-value-control" aria-label="add tags"><span>add tags</span></summary>
 			<div class="tag-picker-menu">
 				<label>
-					<span>Find a tag</span>
+					<span>find a tag</span>
 					<input type="search" autocomplete="off" data-tag-filter>
 				</label>
-				<div class="tag-picker-options" role="group" aria-label="Available tags">
+				<div class="tag-picker-options" role="group" aria-label="available tags">
 					{{ range $key, $label := $tagLabels }}
 						<label><input type="checkbox" value="{{ $label }}" data-tag-option> {{ $label }}</label>
 					{{ end }}
 				</div>
-				<p data-tag-empty hidden>No matching tags.</p>
+				<p data-tag-empty hidden>no matching tags.</p>
 			</div>
 		</details>
 	</div>

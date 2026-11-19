@@ -1,3 +1,5 @@
-{{/* Writing and project posts, newest first. */}}
 {{ $posts := where site.RegularPages "Params.postKind" "in" (slice "writing" "project") }}
-{{ return sort $posts "Date" "desc" }}
+{{ $pinned := sort (where $posts "Params.pinOrder" "!=" nil) "Params.pinOrder" }}
+{{ $unpinned := sort (where $posts "Params.pinOrder" "=" nil) "Date" "desc" }}
+{{ $ordered := $pinned | append $unpinned }}
+{{ return $ordered }}

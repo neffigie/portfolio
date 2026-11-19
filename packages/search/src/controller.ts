@@ -62,7 +62,7 @@ export class SearchController {
 
       if (response.total === 0) {
         this.view.renderEmpty();
-        this.view.announce("No results");
+        this.view.announce("no results");
         return;
       }
 
@@ -72,7 +72,7 @@ export class SearchController {
       );
     } catch {
       if (requestId !== this.requestId) return;
-      const message = "Search is unavailable. Please try again.";
+      const message = "search is unavailable. please try again.";
       this.view.renderError(message);
       this.view.announce(message);
     }
@@ -96,7 +96,7 @@ export class SearchController {
       this.view.announce(`${this.nextOffset} of ${response.total} results`);
     } catch {
       if (requestId !== this.requestId) return;
-      const message = "Search is unavailable. Please try again.";
+      const message = "search is unavailable. please try again.";
       this.view.renderError(message);
       this.view.announce(message);
     } finally {

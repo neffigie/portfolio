@@ -12,6 +12,7 @@ const oneResult: SearchResponse = {
       url: "/project-one/",
       title: "Publication Compiler",
       supportingText: "A durable pipeline.",
+      pinOrder: null,
       type: "project",
       date: "2026-09-20",
       tags: ["AWS"],
@@ -156,9 +157,9 @@ describe("shared search controller", () => {
 
     await controller.run({ query: "compiler" });
 
-    expect(events).toContain("error:Search is unavailable. Please try again.");
+    expect(events).toContain("error:search is unavailable. please try again.");
     expect(events).toContain(
-      "announce:Search is unavailable. Please try again.",
+      "announce:search is unavailable. please try again.",
     );
   });
 
