@@ -81,7 +81,7 @@ export function mapPocketBaseSocialLink(
   const record = PocketBaseSocialLinkRecordSchema.parse(recordInput);
   return SourceSocialLinkSchema.parse({
     id: record.id,
-    service: record.service,
+    service: record.service === "x/twitter" ? "x" : record.service,
     label: record.label,
     href: record.href,
     sortOrder: record.sort_order,

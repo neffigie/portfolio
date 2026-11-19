@@ -86,6 +86,28 @@ describe("mapPocketBaseSocialLink", () => {
     });
   });
 
+  it("normalizes the PocketBase x/twitter service key", () => {
+    expect(
+      mapPocketBaseSocialLink({
+        id: "x-id",
+        service: "x/twitter",
+        label: "x/twitter",
+        href: "https://x.com/neffigie",
+        sort_order: 13,
+        enabled: true,
+        updated: "2026-11-18 12:00:00.000Z",
+      }),
+    ).toEqual({
+      id: "x-id",
+      service: "x",
+      label: "x/twitter",
+      href: "https://x.com/neffigie",
+      sortOrder: 13,
+      enabled: true,
+      updated: "2026-11-18 12:00:00.000Z",
+    });
+  });
+
   it("rejects unsupported service keys", () => {
     expect(() =>
       mapPocketBaseSocialLink({
