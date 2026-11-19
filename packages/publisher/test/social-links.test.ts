@@ -17,7 +17,6 @@ function social(
     href: `https://example.com/${service}`,
     sortOrder: 10,
     enabled: true,
-    updated: "2026-11-18T12:00:00.000Z",
     ...overrides,
   };
 }
@@ -73,7 +72,6 @@ describe("mapPocketBaseSocialLink", () => {
         href: "https://www.youtube.com/@neffigie",
         sort_order: 12,
         enabled: true,
-        updated: "2026-11-18 12:00:00.000Z",
       }),
     ).toEqual({
       id: "youtube-id",
@@ -82,7 +80,6 @@ describe("mapPocketBaseSocialLink", () => {
       href: "https://www.youtube.com/@neffigie",
       sortOrder: 12,
       enabled: true,
-      updated: "2026-11-18 12:00:00.000Z",
     });
   });
 
@@ -95,7 +92,6 @@ describe("mapPocketBaseSocialLink", () => {
         href: "https://x.com/neffigie",
         sort_order: 13,
         enabled: true,
-        updated: "2026-11-18 12:00:00.000Z",
       }),
     ).toEqual({
       id: "x-id",
@@ -104,7 +100,26 @@ describe("mapPocketBaseSocialLink", () => {
       href: "https://x.com/neffigie",
       sortOrder: 13,
       enabled: true,
-      updated: "2026-11-18 12:00:00.000Z",
+    });
+  });
+
+  it("maps collections without an updated autodate field", () => {
+    expect(
+      mapPocketBaseSocialLink({
+        id: "email-id",
+        service: "email",
+        label: "anna@neffigie.com",
+        href: "mailto:anna@neffigie.com",
+        sort_order: 1,
+        enabled: true,
+      }),
+    ).toEqual({
+      id: "email-id",
+      service: "email",
+      label: "anna@neffigie.com",
+      href: "mailto:anna@neffigie.com",
+      sortOrder: 1,
+      enabled: true,
     });
   });
 
@@ -117,7 +132,6 @@ describe("mapPocketBaseSocialLink", () => {
         href: "https://example.com",
         sort_order: 1,
         enabled: true,
-        updated: "2026-11-18 12:00:00.000Z",
       }),
     ).toThrow(/service/u);
   });

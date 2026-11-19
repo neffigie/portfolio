@@ -31,7 +31,6 @@ export const PocketBaseSocialLinkRecordSchema = z.strictObject({
   href: z.string(),
   sort_order: z.number().int().nonnegative(),
   enabled: z.boolean(),
-  updated: z.string().min(1),
 });
 
 const blockElement =
@@ -86,6 +85,5 @@ export function mapPocketBaseSocialLink(
     href: record.href,
     sortOrder: record.sort_order,
     enabled: record.enabled,
-    updated: record.updated,
   });
 }

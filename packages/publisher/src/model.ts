@@ -58,7 +58,6 @@ export const SourceSocialLinkSchema = z.strictObject({
   href: z.string().min(1),
   sortOrder: z.number().int().positive(),
   enabled: z.boolean(),
-  updated: z.string().min(1),
 });
 export type SourceSocialLink = z.infer<typeof SourceSocialLinkSchema>;
 

@@ -78,8 +78,7 @@
       "label": "anna@neffigie.com",
       "href": "mailto:anna@neffigie.com",
       "sortOrder": 1,
-      "enabled": true,
-      "updated": "2026-11-18T12:00:00.000Z"
+      "enabled": true
     },
     {
       "id": "linkedin-id",
@@ -87,8 +86,7 @@
       "label": "linkedin",
       "href": "https://www.linkedin.com/in/anna-noelle/",
       "sortOrder": 2,
-      "enabled": true,
-      "updated": "2026-11-18T12:00:00.000Z"
+      "enabled": true
     },
     {
       "id": "github-id",
@@ -96,8 +94,7 @@
       "label": "github",
       "href": "https://github.com/neffigie",
       "sortOrder": 3,
-      "enabled": true,
-      "updated": "2026-11-18T12:00:00.000Z"
+      "enabled": true
     },
     {
       "id": "tiktok-id",
@@ -105,8 +102,7 @@
       "label": "tiktok",
       "href": "https://www.tiktok.com/@its.neffigie",
       "sortOrder": 10,
-      "enabled": true,
-      "updated": "2026-11-18T12:00:00.000Z"
+      "enabled": true
     },
     {
       "id": "instagram-id",
@@ -114,8 +110,7 @@
       "label": "instagram",
       "href": "https://www.instagram.com/neffigie/",
       "sortOrder": 11,
-      "enabled": true,
-      "updated": "2026-11-18T12:00:00.000Z"
+      "enabled": true
     },
     {
       "id": "youtube-id",
@@ -123,8 +118,7 @@
       "label": "youtube",
       "href": "https://www.youtube.com/@neffigie",
       "sortOrder": 12,
-      "enabled": true,
-      "updated": "2026-11-18T12:00:00.000Z"
+      "enabled": true
     },
     {
       "id": "x-id",
@@ -132,8 +126,7 @@
       "label": "x/twitter",
       "href": "https://x.com/neffigie",
       "sortOrder": 13,
-      "enabled": true,
-      "updated": "2026-11-18T12:00:00.000Z"
+      "enabled": true
     },
     {
       "id": "itchio-id",
@@ -141,8 +134,7 @@
       "label": "itch.io",
       "href": "https://neffigie.itch.io/",
       "sortOrder": 20,
-      "enabled": false,
-      "updated": "2026-11-18T12:00:00.000Z"
+      "enabled": false
     },
     {
       "id": "twitch-id",
@@ -150,8 +142,7 @@
       "label": "twitch",
       "href": "https://www.twitch.tv/neffigie",
       "sortOrder": 21,
-      "enabled": false,
-      "updated": "2026-11-18T12:00:00.000Z"
+      "enabled": false
     }
   ]
 }

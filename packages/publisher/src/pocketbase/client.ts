@@ -35,7 +35,6 @@ const socialLinkFields = [
   "href",
   "sort_order",
   "enabled",
-  "updated",
 ].join(",");
 
 export interface PocketBaseCredentials {
