@@ -14,7 +14,7 @@
   }
 
   a {
-    background-image: linear-gradient(
+    --link-rainbow: linear-gradient(
       90deg,
       #ff3d81,
       #ff9f1c,
@@ -23,6 +23,8 @@
       #3a86ff,
       #8338ec
     );
+
+    background-image: var(--link-rainbow);
     background-position: left bottom;
     background-repeat: no-repeat;
     background-size: 0% 1px;

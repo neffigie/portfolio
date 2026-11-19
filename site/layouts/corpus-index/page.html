@@ -11,24 +11,45 @@
 				<summary aria-label="filters, none active" data-filter-summary><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M7 12h10m-7 6h4"/></svg><span class="filter-label">filters</span><span class="filter-count" data-filter-count hidden>0</span></summary>
 			</details>
 			<div class="posts-filter-panel">
-					<label>
+					<div class="filter-group">
 						<span>type</span>
-						<select class="filter-value-control" name="type" data-search-type>
-							<option value="">all types</option>
-							<option value="writing">writing</option>
-							<option value="project">projects</option>
-						</select>
-					</label>
+						<div class="filter-select" data-filter-select="type">
+							<select class="filter-select-native" name="type" data-search-type tabindex="-1" aria-hidden="true">
+								<option value="">all types</option>
+								<option value="writing">writing</option>
+								<option value="project">projects</option>
+							</select>
+							<details>
+								<summary class="filter-value-control" aria-label="type, all types"><span data-filter-select-label>all types</span></summary>
+								<div class="filter-select-menu" role="group" aria-label="type options">
+									<button type="button" data-filter-select-option data-value="">all types</button>
+									<button type="button" data-filter-select-option data-value="writing">writing</button>
+									<button type="button" data-filter-select-option data-value="project">projects</button>
+								</div>
+							</details>
+						</div>
+					</div>
 					{{ partial "tag-picker.html" $posts }}
-					<label>
+					<div class="filter-group">
 						<span>sort</span>
-						<select class="filter-value-control" name="sort" data-search-sort>
-							<option value="newest">newest</option>
-							<option value="oldest">oldest</option>
-							<option value="title">title</option>
-							<option value="relevance">relevance</option>
-						</select>
-					</label>
+						<div class="filter-select" data-filter-select="sort">
+							<select class="filter-select-native" name="sort" data-search-sort tabindex="-1" aria-hidden="true">
+								<option value="newest">newest</option>
+								<option value="oldest">oldest</option>
+								<option value="title">title</option>
+								<option value="relevance">relevance</option>
+							</select>
+							<details>
+								<summary class="filter-value-control" aria-label="sort, newest"><span data-filter-select-label>newest</span></summary>
+								<div class="filter-select-menu" role="group" aria-label="sort options">
+									<button type="button" data-filter-select-option data-value="newest">newest</button>
+									<button type="button" data-filter-select-option data-value="oldest">oldest</button>
+									<button type="button" data-filter-select-option data-value="title">title</button>
+									<button type="button" data-filter-select-option data-value="relevance">relevance</button>
+								</div>
+							</details>
+						</div>
+					</div>
 			</div>
 		</div>
 	</form>

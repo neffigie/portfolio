@@ -61,11 +61,26 @@ describe("link classification", () => {
     );
 
     expect(result.html).toContain(
-      'href="https://example.com" rel="nofollow noopener noreferrer" data-link-kind="external"',
+      'href="https://example.com" rel="nofollow noopener noreferrer" data-link-kind="external">No target<span class="external-link-icon" aria-hidden="true"></span>',
     );
     expect(result.html).toContain(
-      'href="https://example.org" target="_blank" data-link-kind="external" rel="noopener noreferrer"',
+      'href="https://example.org" target="_blank" data-link-kind="external" rel="noopener noreferrer">Authored target<span class="external-link-icon" aria-hidden="true"></span>',
     );
+  });
+
+  it("turns bare HTTP URLs into classified external links", async () => {
+    const href =
+      "https://doi.org/10.5824/example.2022.01.003.an-unbroken-citation-that-is-wider-than-a-phone";
+    const result = await compileDocument(
+      `<p>Reference: ${href}</p><pre><code>${href}</code></pre>`,
+      createCompilationContext(),
+      [linkClassificationPlugin, proseNormalizationPlugin],
+    );
+
+    expect(result.html).toContain(
+      `Reference: <a href="${href}" data-link-kind="external" rel="noopener noreferrer">${href}<span class="external-link-icon" aria-hidden="true"></span></a>`,
+    );
+    expect(result.html.match(/href=/gu)).toHaveLength(1);
   });
 
   it("leaves mail links intact and rejects javascript links", async () => {

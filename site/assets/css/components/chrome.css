@@ -55,6 +55,18 @@
 
   .search-launcher {
     border: 0;
-    padding-inline: 0;
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border-radius: 999px;
+    padding: 0;
+  }
+
+  .search-launcher svg {
+    width: 1.15rem;
+    height: 1.15rem;
+    stroke: currentcolor;
+    stroke-width: 1.75;
   }
 }

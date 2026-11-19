@@ -153,6 +153,8 @@ test("the hand-drawn mark leads the page without creating horizontal overflow", 
       ),
     ).toBeGreaterThanOrEqual(16);
   }
+  await expect(page.locator(".search-launcher svg")).toHaveCount(1);
+  await expect(page.locator(".search-launcher")).toHaveText("");
 
   const favicon16 = page.locator("link[rel='icon'][sizes='16x16']");
   const favicon32 = page.locator("link[rel='icon'][sizes='32x32']");
@@ -214,6 +216,38 @@ test("the hand-drawn mark leads the page without creating horizontal overflow", 
       await page.evaluate(() => document.documentElement.scrollWidth),
     ).toBeLessThanOrEqual(width);
   }
+});
+
+test("the resume download uses the quieter external-link treatment", async ({
+  page,
+}) => {
+  await page.goto("/resume/");
+  const link = page.locator(".resume-download");
+  await expect(link.locator(".external-link-icon")).toHaveCount(1);
+  expect(await link.evaluate((node) => getComputedStyle(node).color)).toBe(
+    "rgb(95, 99, 104)",
+  );
+  expect(
+    await link.evaluate((node) => getComputedStyle(node).backgroundSize),
+  ).toBe("0% 1px, 100% 1px");
+  await link.hover();
+  await expect
+    .poll(() => link.evaluate((node) => getComputedStyle(node).backgroundSize))
+    .toBe("100% 1px, 100% 1px");
+  const iconBox = await link.locator(".external-link-icon").boundingBox();
+  const fontSize = Number.parseFloat(
+    await link.evaluate((node) => getComputedStyle(node).fontSize),
+  );
+  expect(iconBox?.width ?? 0).toBeGreaterThanOrEqual(fontSize * 0.95);
+});
+
+test("bare authored URLs become external links", async ({ page }) => {
+  const href =
+    "https://doi.org/10.5824/example.2022.01.003.an-unbroken-citation-that-is-wider-than-a-phone";
+  await page.goto("/p/writing-one/");
+  const link = page.locator(`.prose a[href="${href}"]`);
+  await expect(link).toHaveAttribute("data-link-kind", "external");
+  await expect(link.locator(".external-link-icon")).toHaveCount(1);
 });
 
 test("the public sitemap and feed exclude drafts and retired routes", async ({

@@ -1,4 +1,5 @@
 import { requiredElement } from "./dom.js";
+import { FilterSelect } from "./filter-select.js";
 import type { SearchResponse } from "./pagefind.js";
 import { renderResultRow } from "./results.js";
 import {
@@ -59,6 +60,8 @@ export class DomSearchView extends SearchResultsView {
   readonly sort: HTMLSelectElement;
   readonly filterSummary: HTMLElement;
   readonly filterCount: HTMLElement;
+  private readonly typeControl: FilterSelect;
+  private readonly sortControl: FilterSelect;
   private sortExplicit = false;
 
   constructor(root: HTMLElement) {
@@ -70,6 +73,14 @@ export class DomSearchView extends SearchResultsView {
       requiredElement(root, "[data-tag-picker]", "search"),
     );
     this.sort = requiredElement(root, "[data-search-sort]", "search");
+    this.typeControl = new FilterSelect(
+      requiredElement(root, '[data-filter-select="type"]', "search"),
+      this.type,
+    );
+    this.sortControl = new FilterSelect(
+      requiredElement(root, '[data-filter-select="sort"]', "search"),
+      this.sort,
+    );
     this.filterSummary = requiredElement(
       root,
       "[data-filter-summary]",
@@ -99,10 +110,12 @@ export class DomSearchView extends SearchResultsView {
   renderFilters(state: SearchState): void {
     if (this.query.value.trim() !== state.query) this.query.value = state.query;
     this.type.value = state.type ?? "";
+    this.typeControl.sync();
 
     this.tags.render(state.tags);
 
     this.sort.value = state.sort;
+    this.sortControl.sync();
     const defaultSort = state.query ? "relevance" : "newest";
     if (state.sort !== defaultSort) this.sortExplicit = true;
 

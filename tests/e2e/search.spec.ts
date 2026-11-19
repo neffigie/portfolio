@@ -67,11 +67,21 @@ test("type, tag intersection, and sort operate on the same corpus", async ({
   ).toHaveText("2 results");
   await openFilters(page);
   await page
-    .locator("[data-index-root] [data-search-type]")
-    .selectOption("writing");
+    .locator('[data-index-root] [data-filter-select="type"] summary')
+    .click();
+  await page
+    .locator('[data-index-root] [data-filter-select="type"]')
+    .getByRole("button", { name: "writing", exact: true })
+    .click();
   await expect(indexResults(page)).toHaveText(["Search as Navigation"]);
 
-  await page.locator("[data-index-root] [data-search-type]").selectOption("");
+  await page
+    .locator('[data-index-root] [data-filter-select="type"] summary')
+    .click();
+  await page
+    .locator('[data-index-root] [data-filter-select="type"]')
+    .getByRole("button", { name: "all types", exact: true })
+    .click();
   const index = page.locator("[data-index-root]");
   await index.locator("[data-tag-picker] summary").click();
   await index.getByRole("checkbox", { name: "aws" }).check();
@@ -87,15 +97,23 @@ test("type, tag intersection, and sort operate on the same corpus", async ({
   await index.getByRole("button", { name: "remove aws tag" }).click();
   await index.getByRole("button", { name: "remove search tag" }).click();
   await page
-    .locator("[data-index-root] [data-search-sort]")
-    .selectOption("oldest");
+    .locator('[data-index-root] [data-filter-select="sort"] summary')
+    .click();
+  await page
+    .locator('[data-index-root] [data-filter-select="sort"]')
+    .getByRole("button", { name: "oldest", exact: true })
+    .click();
   await expect(indexResults(page)).toHaveText([
     "Search as Navigation",
     "Publication Compiler",
   ]);
   await page
-    .locator("[data-index-root] [data-search-sort]")
-    .selectOption("title");
+    .locator('[data-index-root] [data-filter-select="sort"] summary')
+    .click();
+  await page
+    .locator('[data-index-root] [data-filter-select="sort"]')
+    .getByRole("button", { name: "title", exact: true })
+    .click();
   await expect(indexResults(page)).toHaveText([
     "Publication Compiler",
     "Search as Navigation",
@@ -143,7 +161,11 @@ test("filters expand inline, stay open, and report active criteria", async ({
   for (const control of await filterControls.all())
     await expect(control).toBeVisible();
 
-  await index.locator("[data-search-type]").selectOption("writing");
+  await index.locator('[data-filter-select="type"] summary').click();
+  await index
+    .locator('[data-filter-select="type"]')
+    .getByRole("button", { name: "writing", exact: true })
+    .click();
   await expect(disclosure).toHaveAttribute("open", "");
   await expect(disclosure.locator("[data-filter-count]")).toHaveText("1");
   await expect(disclosure.locator(":scope > summary")).toHaveAttribute(
@@ -152,6 +174,9 @@ test("filters expand inline, stay open, and report active criteria", async ({
   );
 
   await index.locator("[data-tag-picker] summary").click();
+  await expect(
+    index.getByRole("searchbox", { name: "find a tag" }),
+  ).toHaveCount(0);
   await index.getByRole("checkbox", { name: "systems" }).check();
   await expect(disclosure).toHaveAttribute("open", "");
   await expect(disclosure.locator("[data-filter-count]")).toHaveText("2");

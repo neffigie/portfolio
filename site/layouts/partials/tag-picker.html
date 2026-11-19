@@ -11,16 +11,11 @@
 		<details data-tag-disclosure>
 			<summary class="filter-value-control" aria-label="add tags"><span>add tags</span></summary>
 			<div class="tag-picker-menu">
-				<label>
-					<span>find a tag</span>
-					<input type="search" autocomplete="off" data-tag-filter>
-				</label>
 				<div class="tag-picker-options" role="group" aria-label="available tags">
 					{{ range $key, $label := $tagLabels }}
 						<label><input type="checkbox" value="{{ $label }}" data-tag-option> {{ $label }}</label>
 					{{ end }}
 				</div>
-				<p data-tag-empty hidden>no matching tags.</p>
 			</div>
 		</details>
 	</div>

@@ -76,6 +76,36 @@
     overflow-wrap: anywhere;
   }
 
+  .prose a[data-link-kind="external"],
+  .resume-download {
+    background-image:
+      var(--link-rainbow),
+      linear-gradient(rgb(95 99 104 / 45%), rgb(95 99 104 / 45%));
+    background-size:
+      0% 1px,
+      100% 1px;
+    color: var(--text-muted);
+  }
+
+  .prose a[data-link-kind="external"]:is(:hover, :focus-visible),
+  .resume-download:is(:hover, :focus-visible) {
+    background-size:
+      100% 1px,
+      100% 1px;
+  }
+
+  .external-link-icon {
+    display: inline-block;
+    width: 1.05em;
+    height: 1.05em;
+    margin-left: 0.24em;
+    background: currentcolor;
+    mask:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M9 2h5v5h-1.5V4.56L7.03 10.03 5.97 8.97 11.44 3.5H9V2Z'/%3E%3Cpath d='M3.5 3H7v1.5H4.5v7h7V9H13v3.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5Z'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+    vertical-align: -0.14em;
+  }
+
   .prose > * + * {
     margin-top: var(--space-4);
   }
