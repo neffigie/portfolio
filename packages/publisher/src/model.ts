@@ -162,13 +162,6 @@ export const PostSchema = z
           message: `A ${post.kind} post requires a date.`,
         });
       }
-      if (post.html.length === 0) {
-        context.addIssue({
-          code: "custom",
-          path: ["html"],
-          message: `A ${post.kind} post requires a body.`,
-        });
-      }
     } else if (post.pinOrder !== null) {
       context.addIssue({
         code: "custom",

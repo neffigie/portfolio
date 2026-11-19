@@ -140,7 +140,7 @@ describe("normalizeRecords", () => {
     expect(corpus.entries).toEqual([]);
   });
 
-  it("reports every missing field required for publication", () => {
+  it("reports missing titles and dates without requiring a body", () => {
     const diagnostics = new DiagnosticCollector();
 
     normalizeRecords(
@@ -157,7 +157,7 @@ describe("normalizeRecords", () => {
 
     expect(
       codes(diagnostics).filter((code) => code === "schema.published-field"),
-    ).toHaveLength(3);
+    ).toHaveLength(2);
   });
 
   it("rejects draft pins and duplicate published pin orders", () => {

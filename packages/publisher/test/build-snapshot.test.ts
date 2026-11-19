@@ -205,6 +205,24 @@ describe("buildPublicationSnapshot", () => {
     );
   });
 
+  it("publishes every record kind with an empty body", async () => {
+    const outputDirectory = await temporaryOutput("empty-bodies");
+    const records = (await corpus()).map((entry) => ({
+      ...entry,
+      bodyHtml: "",
+    }));
+
+    const artifacts = await buildPublicationSnapshot(
+      records,
+      dependencies(outputDirectory),
+    );
+
+    expect(artifacts.snapshot.posts).toHaveLength(4);
+    expect(artifacts.snapshot.posts.every(({ html }) => html === "")).toBe(
+      true,
+    );
+  });
+
   it("produces byte-identical output with a fixed clock", async () => {
     const firstDirectory = await temporaryOutput("repeat-a");
     const secondDirectory = await temporaryOutput("repeat-b");

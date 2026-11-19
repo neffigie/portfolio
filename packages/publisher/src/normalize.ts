@@ -59,7 +59,6 @@ function reportPublishedFields(
 ): void {
   const missing = [
     ["title", entry.title],
-    ["body", entry.bodyHtml],
     ["date", entry.date],
   ] as const;
 
@@ -87,10 +86,7 @@ function reportReservedFields(
           ["title", entry.title],
           ["asset", entry.asset],
         ]
-      : [
-          ["title", entry.title],
-          ["body", entry.bodyHtml],
-        ];
+      : [["title", entry.title]];
 
   for (const [field, value] of values) {
     if (value === null || (typeof value === "string" && value.length === 0)) {
